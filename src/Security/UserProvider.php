@@ -77,7 +77,7 @@ final class UserProvider implements CasUserProviderInterface
         if (!$user instanceof CasUserInterface) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
         }
-        $this->logger->debug('****REFRESH USER**** = '.$user->getUserIdentifier());
+        // $this->logger->debug('****REFRESH USER**** = '.$user->getUserIdentifier());
 
         $processedUser = $this->lookup->processUser($user->getUserIdentifier());
         if ($processedUser->getStatus() !== 1) {
@@ -89,12 +89,22 @@ final class UserProvider implements CasUserProviderInterface
             $this->generateLoggedInFlashMessage($processedUser);
         }
 
-        // return $processedUser;
-
         $spoofStorage = array();
         $spoofStorage['user'] = $user->getUserIdentifier();
         $spoofStorage['proxyGrantingTicket'] = $user->getPgt();
         $spoofStorage['attributes'] = $user->getAttributes();
+
+        $spoofStorage['attributes']['profile']['id'] = $processedUser->getId();
+        $spoofStorage['attributes']['profile']['un'] = $processedUser->getUsername();
+        $spoofStorage['attributes']['profile']['org_id'] = $processedUser->getOrgID();
+        $spoofStorage['attributes']['profile']['dn'] = $processedUser->getDisplayName();
+        $spoofStorage['attributes']['profile']['email'] = $processedUser->getEMail();
+        $spoofStorage['attributes']['profile']['category'] = $processedUser->getCategory();
+        $spoofStorage['attributes']['profile']['status'] = $processedUser->getStatus();
+        $spoofStorage['attributes']['profile']['frozen'] = $processedUser->getFrozen();
+        $spoofStorage['attributes']['profile']['loaded_from'] = $processedUser->getLoadedFrom();
+        $spoofStorage['attributes']['profile']['created'] = $processedUser->getCreated();
+        $spoofStorage['attributes']['profile']['updated'] = $processedUser->getUpdated();
         $spoofStorage['attributes']['profile']['roles'] = $processedUser->getRoles();
 
         return new CasUser($spoofStorage);

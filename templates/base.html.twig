@@ -115,9 +115,9 @@
                     <div class="position-sticky pt-4 sidebar-sticky px-0 d-flex align-items-start flex-column h-100">
 
                         <nav role="navigation" class="mb-auto">
-                            {% if app.user.roles|default() %}
+                            {% if app.user.attributes.profile.roles|default() %}
                             <ul class="nav navbar-nav flex-column">
-                                {% if 'ROLE_ADMIN' in app.user.roles %}
+                                {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
                                 <li class="dropdown nav-item">
                                     <a class="nav-link dropdown-btn" id="dropdown-manager" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-sitemap fa-fw me-2"></i>Manager</a>
                                     <div class="dropdown-menu" aria-labelledby="dropdown-manager">
@@ -133,7 +133,7 @@
                                     </div>
                                 </li>
                                 {% endif %}
-                                {% if 'ROLE_ADMIN' in app.user.roles %}
+                                {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
                                 <li class="dropdown nav-item">
                                     <a class="nav-link dropdown-btn" id="dropdown-coordinator" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-folder-tree fa-fw me-2"></i>Coordinator</a>
                                     <div class="dropdown-menu" aria-labelledby="dropdown-coordinator">
@@ -166,7 +166,7 @@
                                     </div>
                                 </li>
                                 {% endif %}
-                                {% if 'ROLE_ADMIN' in app.user.roles %}
+                                {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
                                 <li class="dropdown nav-item">
                                     <a class="nav-link dropdown-btn" id="dropdown-observer" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-glasses fa-fw me-2"></i>Observer</a>
                                     <div class="dropdown-menu" aria-labelledby="dropdown-observer">
@@ -196,7 +196,7 @@
                                     </div>
                                 </li>
                                 {% endif %}
-                                {% if 'ROLE_ADMIN' in app.user.roles %}
+                                {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
                                 <li class="dropdown nav-item">
                                     <a class="nav-link dropdown-btn" id="dropdown-assignee" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-diagram-next fa-fw me-2"></i>Assignee</a>
                                     <div class="dropdown-menu" aria-labelledby="dropdown-assignee">
@@ -230,7 +230,7 @@
                                     </div>
                                 </li>
                                 {% endif %}
-                                {% if 'ROLE_ADMIN' in app.user.roles %}
+                                {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
                                 <li class="dropdown nav-item">
                                     <a class="nav-link dropdown-btn" id="dropdown-requester" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-folder-closed fa-fw me-2"></i>Requester</a>
                                     <div class="dropdown-menu" aria-labelledby="dropdown-requester">
@@ -250,7 +250,7 @@
                                     </div>
                                 </li>
                                 {% endif %}
-                                {% if 'ROLE_USER' in app.user.roles %}
+                                {% if 'ROLE_USER' in app.user.attributes.profile.roles %}
                                 <li class="dropdown nav-item">
                                     <a class="nav-link dropdown-btn" id="dropdown-roles" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-user-gear fa-fw me-2"></i>My Roles</a>
                                     <div class="dropdown-menu" aria-labelledby="dropdown-roles">
