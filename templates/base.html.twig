@@ -115,7 +115,7 @@
                     <div class="position-sticky pt-4 sidebar-sticky px-0 d-flex align-items-start flex-column h-100">
 
                         <nav role="navigation" class="mb-auto">
-
+                            {% if app.user.roles|default() %}
                             <ul class="nav navbar-nav flex-column">
                                 {% if 'ROLE_ADMIN' in app.user.roles %}
                                 <li class="dropdown nav-item">
@@ -263,7 +263,7 @@
                                 </li>
                                 {% endif %}
                             </ul>
-
+                            {% endif %}
                         </nav>
 
                         <div class="sidebar-bottom pt-3">
