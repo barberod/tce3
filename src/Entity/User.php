@@ -62,10 +62,6 @@ class User implements UserInterface
     #[ORM\Column(nullable: true)]
     private array $roles = [];
 
-    // For spoofing CAS User
-    private array $storage;
-    private ?string $pgt;
-
     public function getId(): ?Uuid
     {
         return $this->id;
@@ -218,21 +214,4 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function setStorage(array $data): void
-    {
-        $this->storage = $data;
-    }
-    public function getStorage(): array
-    {
-        return $this->storage;
-    }
-
-    public function setPgt(?string $input): void
-    {
-        $this->pgt = $input;
-    }
-    public function getPgt(): ?string
-    {
-        return $this->pgt;
-    }
 }

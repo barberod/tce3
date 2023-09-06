@@ -89,15 +89,15 @@ final class UserProvider implements CasUserProviderInterface
             $this->generateLoggedInFlashMessage($processedUser);
         }
 
-        $roles = $processedUser->getRoles();
-        array_push($roles, 'ROLE_CAS_AUTHENTICATED'); // spoof!
-        array_push($roles, 'IS_AUTHENTICATED_FULLY'); // spoof!
-        $processedUser->setRoles($roles);
+        // return $processedUser;
 
-        $processedUser->setPgt($user->getPgt()); // spoof!
+        $spoofStorage = array();
+        $spoofStorage['user'] = $user->getUserIdentifier();
+        $spoofStorage['proxyGrantingTicket'] = $user->getPgt();
+        $spoofStorage['attributes'] = $user->getAttributes();
+        $spoofStorage['profile']['roles'] = $processedUser->getRoles();
 
-        return $processedUser;
-        // return $user;
+        return new CasUser($spoofStorage);
     }
 
     public function supportsClass(string $class): bool
