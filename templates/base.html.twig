@@ -1,66 +1,486 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{% block site_title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛠️</text></svg>">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-        {% block stylesheets %}
-        {% endblock %}
-    </head>
-    <body>
-        <div class="col-lg-8 mx-auto p-4 py-md-5">
+<!DOCTYPE html>
+<html class="no-js" lang="en" dir="ltr"
+    prefix="content: http://purl.org/rss/1.0/modules/content/  dc: http://purl.org/dc/terms/  foaf: http://xmlns.com/foaf/0.1/  og: http://ogp.me/ns#  rdfs: http://www.w3.org/2000/01/rdf-schema#  schema: http://schema.org/  sioc: http://rdfs.org/sioc/ns#  sioct: http://rdfs.org/sioc/types#  skos: http://www.w3.org/2004/02/skos/core#  xsd: http://www.w3.org/2001/XMLSchema# ">
 
-            {% for label, messages in app.flashes(['danger', 'info', 'success', 'warning']) %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endfor %}
-            {% endfor %}
+<head>
+    <meta charset="utf-8" />
+    <meta name="MobileOptimized" content="width" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="title" content="Transfer Credit Evaluation" />
+    <meta name="description" content="A theme suitable for a business form" />
+    <meta name="keywords" content="business, form" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="barberod" />
 
-            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
-                {% block heading %}
-                <h1 class="text-body-emphasis">Hello, world.</h1>
-                {% endblock %}
-            </header>
-            <main>
-                <div class="col-md-6">
-                {% block content %}
-                <p class="fs-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut aliquam tortor.</p>
-                {% endblock %}
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#ffc40d">
+    <meta name="theme-color" content="#ffffff">
+
+    <meta name="DC.title" content="Atlanta" />
+    <meta name="geo.region" content="US-GA" />
+    <meta name="geo.placename" content="Atlanta" />
+    <meta name="geo.position" content="33.772337;-84.394711" />
+    <meta name="ICBM" content="33.772337, -84.394711" />
+
+    <meta property="og:url" content="https://www.gatech.edu" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Some Page @ Transfer Credit Evaluation" />
+    <meta property="og:site_name" content="Transfer Credit Evaluation">
+    <meta property="og:description" content="A theme suitable for a business form" />
+    <meta property="og:image" content="../img/meta_500x326.jpg" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Some Page @ Transfer Credit Evaluation" />
+    <meta name="twitter:description" content="A theme suitable for a business form" />
+    <meta name="twitter:url" content="https://www.gatech.edu" />
+    <meta name="twitter:image" content="../img/twitter_500x326.jpg" />
+    <meta name="twitter:image:alt" content="Alt text for image">
+
+    <title>Transfer Credit Evaluation</title>
+    <link href="../css/styles.css" rel="stylesheet" />
+    <link href="../css/cookie-alert.css" rel="stylesheet" />
+    <link href="../css/cdn-pics.css" rel="stylesheet" />
+    <link href="../css/browser.css" rel="stylesheet" />
+
+    <!-- Google Fonts: Abel, Roboto, Roboto Condensed -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Abel:wght@400;700&family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@500&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome Free -->
+    <script src="https://kit.fontawesome.com/d781e20338.js" crossorigin="anonymous"></script>
+
+    <!-- Font Awesome Pro -->
+    <link rel="stylesheet" href="../vendor/fontawesome/css/fontawesome.min.css" media="screen">
+    <link rel="stylesheet" href="../vendor/fontawesome/css/duotone.min.css" media="screen">
+    <link rel="stylesheet" href="../vendor/fontawesome/css/regular.min.css" media="screen">
+    <link rel="stylesheet" href="../vendor/fontawesome/css/brands.min.css" media="screen">
+
+    <!-- Google tag (gtag.js) + cookie-alert.js -->
+    <!--
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-987654321"></script>
+	<script>
+	var disableStr = 'ga-disable-G-987654321';
+	if (document.cookie.indexOf(disableStr + '=true') > -1) {
+		window['ga-disable-G-987654321'] = true;
+	} else {
+	  	window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-987654321');
+	}
+	</script>
+    -->
+</head>
+
+<body id="top">
+    <a href="#main-content" class="visually-hidden focusable skip-link">Skip to main content</a>
+    
+        <header id="navbar-main" class="navbar navbar-main border-bottom sticky-top flex-md-nowrap p-0">
+
+            <a id="navbar-logo-area" aria-label="Navigate to the Georgia Tech main website"
+                class="navbar-brand col-12 col-sm-4 col-md-3 col-xl-2 me-0 border-end border-bottom d-flex justify-content-start"
+                href="https://www.gatech.edu">
+                <div id="navbar-logo" class="w-100 mx-2"></div>
+            </a>
+
+            <div id="navbar-site-name" class="col-4 fs-4 my-0 ms-0 me-auto py-3 py-sm-2 my-md-3 px-4 text-nowrap">Registrar's Office</div>
+
+            <div class="navbar-nav d-none d-md-block">
+                <div class="nav-item text-nowrap">
+                    <a class="nav-link px-4" href="https://www.gatech.edu">Service Status<i class="fa-solid fa-external-link ms-2"></i></a>
                 </div>
+            </div>
 
-                {% if (is_granted('ROLE_USER') or is_granted('ROLE_CAS_AUTHENTICATED'))%}
-                    <div class="col-md-6 mt-5">
-                    <p>UUID: {{ app.user.id }}</p>
-                    <p>Username: {{ app.user.username }}</p>
-                    <p>Org ID: {{ app.user.orgID }}</p>
-                    <p>Display Name: {{ app.user.displayName }}</p>
-                    <p>Email: {{ app.user.email }}</p>
-                    <p>Category: {{ app.user.category }}</p>
-                    <p>Status: {{ app.user.status }}</p>
-                    <p>Frozen: {{ app.user.frozen }}</p>
-                    <p>Loaded From: {{ app.user.loadedFrom }}</p>
-                    <p>Created: {{ app.user.created | date('Y-m-d h:i:s')}}</p>
-                    <p>Updated: {{ app.user.updated | date('Y-m-d h:i:s')}}</p>
-                    <p>
-                    Roles:
-                    {% for role in app.user.roles %}
-                    ({{ role }}) 
-                    {% endfor %}
-                    </p>
+            <button class="navbar-toggler d-md-none me-4 collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+                aria-label="Toggle navigation" onclick="scrollToTop()">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+        </header>
+
+        <div class="container-fluid">
+            <div class="row d-flex">
+
+                <!-- Sidebar -->
+                <nav id="sidebarMenu" class="col-md-3 col-xl-2 d-md-block border-end sidebar collapse">
+                    <div class="position-sticky pt-4 sidebar-sticky px-0 d-flex align-items-start flex-column h-100">
+
+                        <nav role="navigation" class="mb-auto">
+
+                            <ul class="nav navbar-nav flex-column">
+                                <li class="dropdown nav-item">
+                                    <a class="nav-link dropdown-btn" id="dropdown-manager" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-sitemap fa-fw me-2"></i>Manager</a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdown-manager">
+                                        <hr>
+                                        <a class="dropdown-item" href="../manager" target="_blank">
+                                            <i class="fa-solid fa-home fa-fw me-2"></i>Home
+                                        </a>
+                                        <hr>
+                                        <a class="dropdown-item" href="../manager/reports" target="_blank">
+                                            <i class="fa-solid fa-chart-simple fa-fw me-2"></i>Manager Reports
+                                        </a>
+                                        <hr>
+                                    </div>
+                                </li>
+                                <li class="dropdown nav-item">
+                                    <a class="nav-link dropdown-btn" id="dropdown-coordinator" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-folder-tree fa-fw me-2"></i>Coordinator</a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdown-coordinator">
+                                        <hr>
+                                        <a class="dropdown-item" href="../coordinator" target="_blank">
+                                            <i class="fa-solid fa-home fa-fw me-2"></i>Home
+                                        </a>
+                                        <hr>
+                                        <a class="dropdown-item" href="../coordinator/evaluations" target="_blank">
+                                            <i class="fa-solid fa-table fa-fw me-2"></i>Evaluations Tables
+                                        </a>
+                                        <hr>
+                                        <a class="dropdown-item" href="../coordinator/lookup" target="_blank">
+                                            <i class="fa-solid fa-search fa-fw me-2"></i>GTID Lookup
+                                        </a>
+                                        <hr>
+                                        <a class="dropdown-item" href="../coordinator/activity" target="_blank">
+                                            <i class="fa-solid fa-caret-right fa-fw me-2"></i>Activity
+                                        </a>
+                                        <a class="dropdown-item" href="../coordinator/courses" target="_blank">
+                                            <i class="fa-solid fa-caret-right fa-fw me-2"></i>Courses
+                                        </a>
+                                        <a class="dropdown-item" href="../coordinator/departments" target="_blank">
+                                            <i class="fa-solid fa-caret-right fa-fw me-2"></i>Departments
+                                        </a>
+                                        <a class="dropdown-item" href="../coordinator/universities" target="_blank">
+                                            <i class="fa-solid fa-caret-right fa-fw me-2"></i>Universities
+                                        </a>
+                                        <hr>
+                                    </div>
+                                </li>
+                                <li class="dropdown nav-item">
+                                    <a class="nav-link dropdown-btn" id="dropdown-observer" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-glasses fa-fw me-2"></i>Observer</a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdown-observer">
+                                        <hr>
+                                        <a class="dropdown-item" href="../observer" target="_blank">
+                                            <i class="fa-solid fa-home fa-fw me-2"></i>Home
+                                        </a>
+                                        <hr>
+                                        <a class="dropdown-item" href="../observer/evaluations" target="_blank">
+                                            <i class="fa-solid fa-table fa-fw me-2"></i>Evaluations Tables
+                                        </a>
+                                        <hr>
+                                        <a class="dropdown-item" href="../observer/lookup" target="_blank">
+                                            <i class="fa-solid fa-search fa-fw me-2"></i>GTID Lookup
+                                        </a>
+                                        <hr>
+                                        <a class="dropdown-item" href="../observer/courses" target="_blank">
+                                            <i class="fa-solid fa-caret-right fa-fw me-2"></i>Courses
+                                        </a>
+                                        <a class="dropdown-item" href="../observer/departments" target="_blank">
+                                            <i class="fa-solid fa-caret-right fa-fw me-2"></i>Departments
+                                        </a>
+                                        <a class="dropdown-item" href="../observer/universities" target="_blank">
+                                            <i class="fa-solid fa-caret-right fa-fw me-2"></i>Universities
+                                        </a>
+                                        <hr>
+                                    </div>
+                                </li>
+                                <li class="dropdown nav-item">
+                                    <a class="nav-link dropdown-btn" id="dropdown-assignee" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-diagram-next fa-fw me-2"></i>Assignee</a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdown-assignee">
+                                        <hr>
+                                        <a class="dropdown-item" href="../assignee" target="_blank">
+                                            <i class="fa-solid fa-home fa-fw me-2"></i>Home
+                                        </a>
+                                        <hr>
+                                        <a class="dropdown-item" href="../assignee/evaluations" target="_blank">
+                                            <i class="fa-solid fa-inbox fa-fw me-2"></i>Need My Attention
+                                        </a>
+                                        <hr>
+                                        <a class="dropdown-item" href="../assignee/history" target="_blank">
+                                            <i class="fa-solid fa-box-archive fa-fw me-2"></i>My Past Evaluations
+                                        </a>
+                                        <hr>
+                                        <a class="dropdown-item" href="../assignee/lookup" target="_blank">
+                                            <i class="fa-solid fa-search fa-fw me-2"></i>GTID Lookup
+                                        </a>
+                                        <hr>
+                                        <a class="dropdown-item" href="../assignee/courses" target="_blank">
+                                            <i class="fa-solid fa-caret-right fa-fw me-2"></i>Courses
+                                        </a>
+                                        <a class="dropdown-item" href="../assignee/departments" target="_blank">
+                                            <i class="fa-solid fa-caret-right fa-fw me-2"></i>Departments
+                                        </a>
+                                        <a class="dropdown-item" href="../assignee/universities" target="_blank">
+                                            <i class="fa-solid fa-caret-right fa-fw me-2"></i>Universities
+                                        </a>
+                                        <hr>
+                                    </div>
+                                </li>
+                                <li class="dropdown nav-item">
+                                    <a class="nav-link dropdown-btn" id="dropdown-requester" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-folder-closed fa-fw me-2"></i>Requester</a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdown-requester">
+                                        <hr>
+                                        <a class="dropdown-item" href="../requester" target="_blank">
+                                            <i class="fa-solid fa-home fa-fw me-2"></i>Home
+                                        </a>
+                                        <hr>
+                                        <a class="dropdown-item" href="../requester/evaluation/create" target="_blank">
+                                            <i class="fa-solid fa-arrow-up-from-bracket fa-fw me-2"></i>Submit an Evaluation
+                                        </a>
+                                        <hr>
+                                        <a class="dropdown-item" href="../requester/evaluations" target="_blank">
+                                            <i class="fa-solid fa-table fa-fw me-2"></i>My Evaluations
+                                        </a>
+                                        <hr>
+                                    </div>
+                                </li>
+                                <li class="dropdown nav-item">
+                                    <a class="nav-link dropdown-btn" id="dropdown-roles" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-user-gear fa-fw me-2"></i>My Roles</a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdown-roles">
+                                        <hr>
+                                        <a class="dropdown-item" href="../roles" target="_blank">
+                                            <i class="fa-solid fa-gear fa-fw me-2"></i>Choose Your Role
+                                        </a>
+                                        <hr>
+                                    </div>
+                                </li>
+                            </ul>
+
+                        </nav>
+
+                        <div class="sidebar-bottom pt-3">
+                            <div class="sidebar-heading text-uppercase"><small>Did you know?</small></div>
+                            <p class="text-muted mb-4">ChipTest, Hydra, Deep Blue, and HiTech are all computers or computer programs developed to play chess.</p>
+                        </div>
+
                     </div>
-                {% endif %}
-            </main>
-            <footer class="pt-5 my-5 text-body-secondary border-top">
-                Made with 🍕 by barberod &middot; &copy; 2023
-            </footer>
+                </nav>
+                <!-- end of sidebar -->
+
+                <!-- Main -->
+                <div class="col-md-9 ms-sm-auto col-xl-10 px-0 d-flex flex-column h-100 mt-3 mt-sm-0">
+                    <main id="main" class="d-flex p-4">
+
+                        <div class="container-fluid px-0">
+                            <div class="row g-0">
+
+                                <div class="col-12">
+                                    <nav clsss="row" aria-label="breadcrumb">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                            <li class="breadcrumb-item"><a href="#">Library</a></li>
+                                            <li class="breadcrumb-item active" aria-current="page">Data</li>
+                                        </ol>
+                                    </nav>
+                                </div>
+
+                                <div class="col-12">
+                                    <section class="row region region-top-header">
+                                        <div class="block-page-title-block">
+                                            <div class="content">
+                                                <h1 class="title border-bottom pb-3 mb-4">Transfer Credit Evaluation</h1>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="main-content w-100" id="content" role="main">
+                                        <section class="section">
+                                            <a id="main-content" tabindex="-1"></a>
+                                            <div class="content">
+                                                
+                                                <div class="row">
+
+                                                    <!-- Alerts -->
+                                                    <div id="browser"></div>
+                                                    <div id="features"></div>
+                                                    <div id="messages"></div>
+
+                                                    <div class="col-12 order-0 order-lg-1">
+                                                        <div class="card mb-3">
+                                                            <h2 class="card-header h5">
+                                                                Announcements
+                                                            </h2>
+                                                            <div class="card-body">
+                                                                <span id="announcements">There are no announcements at this time.</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-12 order-1 order-lg-0">
+                                                        <div class="card mb-3">
+                                                            <div class="card-body">
+                                                                <h2>Welcome to Transfer Credit Evaluation</h2>
+                                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce imperdiet aliquam turpis, vitae molestie quam lobortis at. Suspendisse in mauris vitae metus sodales eleifend. Praesent facilisis euismod sem, eget tempor mauris accumsan vel. Fusce non commodo nibh, eu facilisis purus. Cras nec eleifend lectus. Cras metus ex, blandit nec lobortis vel, iaculis ac mauris. Nunc nisl est, posuere sit amet risus et, vulputate maximus enim. Donec luctus porttitor arcu, vitae dignissim purus. Suspendisse ultricies egestas eleifend. Morbi convallis non elit eu maximus.</p>
+
+                                                                <ul>
+                                                                    <li><a href="#">Basic page</a></li>
+                                                                    <li><a href="record">Record</a></li>
+                                                                    <li><a href="table">Table</a></li>
+                                                                    <li><a href="oscar">OSCAR</a></li>
+                                                                </ul>
+
+                                                                <p>Praesent cursus pretium facilisis. Donec molestie ultrices tincidunt. Sed et massa aliquet, accumsan sem nec, ornare odio. Ut efficitur at diam ut elementum. Maecenas sem quam, egestas sed dapibus consectetur, condimentum ac orci. Sed vulputate auctor nisl eu laoreet. Nullam pharetra egestas lacus non tempus. Aenean nec mi et ex fringilla aliquet ut elementum magna. Integer lobortis dui sed ligula accumsan mollis. Aenean aliquam nisi lectus, in aliquet erat congue quis. Proin ac malesuada mi. Phasellus dui ligula, tincidunt eu condimentum ut, ornare eget sapien. Maecenas gravida condimentum felis nec convallis.</p>
+                                                                <p>Nullam gravida felis non est gravida, ut tincidunt elit tincidunt. Morbi accumsan quam eu diam viverra euismod. Ut quis magna luctus, luctus tellus tristique, iaculis nibh. Ut non malesuada leo, eget maximus eros. Aliquam iaculis est in massa pretium semper. Morbi congue sollicitudin orci, sed varius mauris euismod nec. Vestibulum venenatis tellus nec pharetra vestibulum. Aliquam a tincidunt odio. Etiam malesuada, sapien quis iaculis feugiat, velit velit fringilla arcu, quis auctor mi neque et nisi.</p>
+                                                                <p>Donec ut dui nec magna aliquam volutpat. Fusce fermentum nulla vel molestie pharetra. Vivamus molestie vitae sapien sed molestie. Nulla placerat a dui sit amet tincidunt. Donec eget orci eget dui ullamcorper posuere rhoncus a neque. Suspendisse feugiat augue ut est aliquet, eget hendrerit purus fermentum. Suspendisse vestibulum tortor dignissim porta pretium. In consequat hendrerit metus in tristique. Sed dolor risus, rutrum eget auctor ac, hendrerit ac ante. Proin et ante porta, condimentum turpis vel, imperdiet diam. Maecenas justo nulla, lobortis at facilisis sed, finibus dignissim mauris. Praesent posuere est a semper pharetra. Maecenas nisi erat, porta at aliquam vitae, mollis ut lectus.</p>
+                                                                <p>Cras non libero sit amet justo egestas posuere. Cras convallis turpis eget fermentum mattis. Nulla porttitor ex nisi, vel volutpat mauris posuere in. Sed imperdiet ultrices odio quis semper. Duis velit turpis, pulvinar in viverra et, euismod non libero. Vivamus vitae lacinia sem. Mauris eget ligula pellentesque, fermentum quam quis, lobortis ligula. Aliquam tempor porttitor ipsum, a tristique lacus porta nec. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu elit a enim eleifend ornare id eget nibh. Proin finibus leo nunc, nec suscipit erat malesuada vel. Donec gravida ipsum quis nisl consequat, ac hendrerit ipsum auctor. Donec in nibh a ligula gravida sagittis at fringilla orci. Nunc gravida mi non ipsum bibendum, sed pulvinar urna porta. Proin at nunc sit amet turpis lacinia luctus.</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                                <!-- end of tce3 examples -->
+                            </div>
+                        </div>
+                    </main>
+
+                    <footer class="mt-auto">
+                        <div id="app-footer" class="container-fluid">
+                            <div class="row px-4">
+                                <div class="col-12 px-0 py-3 top-bordered">
+                                    <p class="text-muted"><small>Please bookmark this page only. Do not bookmark any pages beyond this point. URLs for subsequent pages are subject to change without notice.</small></p>
+                                    <p class="text-muted"><small>Notwithstanding any language to the contrary, nothing contained herein constitutes nor is intended to constitute an offer, inducement, promise, or contract of any kind. The data contained herein is for informational purposes only and is not represented to be error free. Any links to non-barberod information are provided as a courtesy. They are not intended to nor do they constitute an endorsement by barberod of the linked materials.</small></p>
+                                    <p class="text-muted mb-0"><small>Web app last modified September 1, 2023</small></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="accent-footer" class="container-fluid" style="height: 1.5rem;"></div>
+
+                        <div id="org-footer" class="container-fluid px-5 py-3">
+                            <div class="row pt-1">
+
+                                <div class="col-sm-3">
+                                    <address class="left-bordered">
+                                        <strong>Georgia Institute of Technology</strong><br>
+                                        North Avenue, Atlanta, GA 30332<br>
+                                        404.894.2000
+                                    </address>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div class="left-bordered">
+                                        <p><a href="https://www.directory.gatech.edu/" target="_blank">Directory</a></p>
+                                        <p><a href="http://www.gatech.edu/emergency/" target="_blank">Emergency Information</a></p>
+                                        <p><a href="http://www.gatech.edu/legal/" target="_blank">Legal &amp; Privacy Information</a></p>
+                                        <p><a href="https://gbi.georgia.gov/human-trafficking-notice"target="_blank">Human Trafficking Notice</a></p>
+                                        <p><a href="https://titleix.gatech.edu/" target="_blank">Title IX/Sexual Misconduct</a></p>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div class="left-bordered">
+                                        <p><a href="http://www.gatech.edu/accessibility/" target="_blank">Accessibility</a></p>
+                                        <p><a href="http://www.gatech.edu/accountability/" target="_blank">Accountablility</a></p>
+                                        <p><a href="https://www.gatech.edu/accreditation/" target="_blank">Accreditation</a></p>
+                                        <p><a href="http://www.careers.gatech.edu/" target="_blank">Employment</a></p>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3 align-self-center">
+                                    <div id="accent-logo"></div>
+                                    <p class="copyr">©&nbsp;Georgia Institute of Technology</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </footer>
+
+                    <!-- Back to Top -->
+                    <button onclick="scrollToTop()" id="scroll-top" class="scroll-top" style="display: none;" title="Scroll to top">
+                        <i class="fa-solid fa-angle-up fa-2x"></i>
+                    </button>
+
+                    <!-- Color Mode Toggle -->
+                    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                        <symbol id="check2" viewBox="0 0 16 16">
+                            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                        </symbol>
+                        <symbol id="circle-half" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/>
+                        </symbol>
+                        <symbol id="moon-stars-fill" viewBox="0 0 16 16">
+                            <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
+                            <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"/>
+                        </symbol>
+                        <symbol id="sun-fill" viewBox="0 0 16 16">
+                            <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+                        </symbol>
+                    </svg>
+                    <div class="dropdown bd-mode-toggle">
+                        <button class="btn dropdown-toggle d-flex align-items-center"
+                                id="bd-theme"
+                                type="button"
+                                aria-expanded="false"
+                                data-bs-toggle="dropdown"
+                                aria-label="Toggle theme (auto)">
+                            <svg class="bi my-1 theme-icon-active" width="1em" height="1em"><use href="#circle-half"></use></svg>
+                            <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                                    <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#sun-fill"></use></svg>
+                                    Light
+                                    <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+                                    <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#moon-stars-fill"></use></svg>
+                                    Dark
+                                    <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true">
+                                    <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#circle-half"></use></svg>
+                                    Auto
+                                    <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- end of color mode toggle -->
+
+                    <!-- Cookie Alert -->
+                    <div class="alert text-center cookie-alert" role="alert">
+                        <p>This site uses cookies. Review the <a href="https://www.gatech.edu" target="_blank">Privacy &amp; Legal Notice</a>. Email questions to <a href="mailto:barberod@outlook.com">barberod@outlook.com</a></p>
+                        <button type="button" class="btn btn-warning btn-sm accept-cookies">Accept</button>
+                        <!-- <button type="button" class="btn btn-outline-warning btn-sm reject-cookies">Reject/button> -->
+                    </div>
+
+                </div>
+                <!-- end of main -->
+            </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-        {% block javascripts %}
-        {% endblock %}
-    </body>
+    </div>
+    <script type="module" src="../js/main.js"></script>
+    <script src="../js/scroll.js"></script>
+    <script src="../js/cookie-alert.js"></script>
+    <script src="../js/color-modes.js"></script>
+    <script src="../js/cdn-pics.js"></script>
+
+    <script src="../vendor/moment/moment-with-locales.js"></script>
+    <script src="../vendor/moment/moment-timezone-with-data-1970-2030.js"></script>
+    <script nonce="rZuRQ4J8kK7i">window.page_version = 'live';</script>
+    <script src="../js/announcements.js"></script>
+    <script src="../js/outages.js"></script>
+    <script src="../js/browser.js"></script>
+
+    <script src="../vendor/modernizr/modernizr-custom.js"></script>
+    <script src="../js/features.js"></script>
+</body>
+
 </html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block site_title %}Welcome!{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛠️</text></svg>">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        {% block stylesheets %}
+        {% endblock %}
+    </head>
+    <body>
+        <div class="col-lg-8 mx-auto p-4 py-md-5">
+
+            {% for label, messages in app.flashes(['danger', 'info', 'success', 'warning']) %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                {% block heading %}
+                <h1 class="text-body-emphasis">Hello, world.</h1>
+                {% endblock %}
+            </header>
+            <main>
+                <div class="col-md-6">
+                {% block content %}
+                <p class="fs-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut aliquam tortor.</p>
+                {% endblock %}
+                </div>
+
+                {% if (is_granted('ROLE_USER') or is_granted('ROLE_CAS_AUTHENTICATED'))%}
+                    <div class="col-md-6 mt-5">
+                    <p>UUID: {{ app.user.id }}</p>
+                    <p>Username: {{ app.user.username }}</p>
+                    <p>Org ID: {{ app.user.orgID }}</p>
+                    <p>Display Name: {{ app.user.displayName }}</p>
+                    <p>Email: {{ app.user.email }}</p>
+                    <p>Category: {{ app.user.category }}</p>
+                    <p>Status: {{ app.user.status }}</p>
+                    <p>Frozen: {{ app.user.frozen }}</p>
+                    <p>Loaded From: {{ app.user.loadedFrom }}</p>
+                    <p>Created: {{ app.user.created | date('Y-m-d h:i:s')}}</p>
+                    <p>Updated: {{ app.user.updated | date('Y-m-d h:i:s')}}</p>
+                    <p>
+                    Roles:
+                    {% for role in app.user.roles %}
+                    ({{ role }}) 
+                    {% endfor %}
+                    </p>
+                    </div>
+                {% endif %}
+            </main>
+            <footer class="pt-5 my-5 text-body-secondary border-top">
+                Made with 🍕 by barberod &middot; &copy; 2023
+            </footer>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+        {% block javascripts %}
+        {% endblock %}
+    </body>
+</html>
