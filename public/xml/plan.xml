@@ -1,0 +1,30 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE plan SYSTEM "plan.dtd">
+<plan>
+   <outage>
+      <outageID>downtime_dev1t</outageID>
+      <findClass>link-something</findClass>
+      <addClass>disabled</addClass>
+      <inEffect>
+         <from>20200101123000</from>
+         <until>20291231235959</until>
+      </inEffect>
+      <audience>
+         <livepage>Y</livepage>
+         <downpage>Y</downpage>
+      </audience>
+   </outage>
+   <outage>
+      <outageID>downtime_canvas</outageID>
+      <findClass>link-canvas</findClass>
+      <addClass>disabled</addClass>
+      <inEffect>
+         <from>20230723170000</from>
+         <until>20230723180000</until>
+      </inEffect>
+      <audience>
+         <livepage>Y</livepage>
+         <downpage>Y</downpage>
+      </audience>
+   </outage>
+</plan>

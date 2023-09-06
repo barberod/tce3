@@ -1,0 +1,175 @@
+/* CDN Pics */
+
+.cdn-pic[pic] {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    background-color: transparent;
+    background-image: url(../img/spinner.svg);
+    width: 100%;
+}
+
+.cdn-pic.lazy[pic] {
+    background-image: none;
+}
+
+/* placeholder */
+.cdn-pic.lazy[pic="placeholder"],
+.cdn-pic.lazy[pic="placeholder-sm"] {
+    background-image: none;
+}
+.cdn-pic[pic="placeholder"] {
+    background-image: url(../img/placeholder_1800x1200.jpg);
+}
+.cdn-pic[pic="placeholder-sm"] {
+    background-image: url(../img/placeholder_600x400.jpg);
+}
+
+/* pic1 */
+.cdn-pic.lazy[pic="pic1"],
+.cdn-pic.lazy[pic="pic1-sm"] {
+    background-image: none;
+}
+.cdn-pic[pic="pic1"] {
+    background-image: url(../img/pic1_1800x1200.jpg);
+}
+.cdn-pic[pic="pic1-sm"] {
+    background-image: url(../img/pic1_600x400.jpg);
+}
+
+/* pic2 */
+.cdn-pic.lazy[pic="pic2"],
+.cdn-pic.lazy[pic="pic2-sm"] {
+    background-image: none;
+}
+.cdn-pic[pic="pic2"] {
+    background-image: url(../img/pic2_1800x1200.jpg);
+}
+.cdn-pic[pic="pic2-sm"] {
+    background-image: url(../img/pic2_600x400.jpg);
+}
+
+/* pic3 */
+.cdn-pic.lazy[pic="pic3"],
+.cdn-pic.lazy[pic="pic3-sm"] {
+    background-image: none;
+}
+.cdn-pic[pic="pic3"] {
+    background-image: url(../img/pic3_1800x1200.jpg);
+}
+.cdn-pic[pic="pic3-sm"] {
+    background-image: url(../img/pic3_600x400.jpg);
+}
+
+/* pic4 */
+.cdn-pic.lazy[pic="pic4"],
+.cdn-pic.lazy[pic="pic4-sm"] {
+    background-image: none;
+}
+.cdn-pic[pic="pic4"] {
+    background-image: url(../img/pic4_1800x1200.jpg);
+}
+.cdn-pic[pic="pic4-sm"] {
+    background-image: url(../img/pic4_600x400.jpg);
+}
+
+/* pic5 */
+.cdn-pic.lazy[pic="pic5"],
+.cdn-pic.lazy[pic="pic5-sm"] {
+    background-image: none;
+}
+.cdn-pic[pic="pic5"] {
+    background-image: url(../img/pic5_1800x1200.jpg);
+}
+.cdn-pic[pic="pic5-sm"] {
+    background-image: url(../img/pic5_600x400.jpg);
+}
+
+/* pic6 */
+.cdn-pic.lazy[pic="pic6"],
+.cdn-pic.lazy[pic="pic6-sm"] {
+    background-image: none;
+}
+.cdn-pic[pic="pic6"] {
+    background-image: url(../img/pic6_1800x1200.jpg);
+}
+.cdn-pic[pic="pic6-sm"] {
+    background-image: url(../img/pic6_600x400.jpg);
+}
+
+/* SMALL SCREENS */
+@media (max-width: 991.99px) {
+
+    /* placeholder */
+    .cdn-pic.lazy[pic="placeholder"],
+    .cdn-pic.lazy[pic="placeholder-sm"] {
+        background-image: none;
+    }
+    .cdn-pic[pic="placeholder"],
+    .cdn-pic[pic="placeholder-sm"] {
+        background-image: url(../img/placeholder_600x400.jpg);
+    }
+
+    /* pic1 */
+    .cdn-pic.lazy[pic="pic1"],
+    .cdn-pic.lazy[pic="pic1-sm"] {
+        background-image: none;
+    }
+    .cdn-pic[pic="pic1"],
+    .cdn-pic[pic="pic1-sm"] {
+        background-image: url(../img/pic1_600x400.jpg);
+    }
+
+    /* pic2 */
+    .cdn-pic.lazy[pic="pic2"],
+    .cdn-pic.lazy[pic="pic2-sm"] {
+        background-image: none;
+    }
+    .cdn-pic[pic="pic2"],
+    .cdn-pic[pic="pic2-sm"] {
+        background-image: url(../img/pic2_600x400.jpg);
+    }
+
+    /* pic3 */
+    .cdn-pic.lazy[pic="pic3"],
+    .cdn-pic.lazy[pic="pic3-sm"] {
+        background-image: none;
+    }
+    .cdn-pic[pic="pic3"],
+    .cdn-pic[pic="pic3-sm"] {
+        background-image: url(../img/pic3_600x400.jpg);
+    }
+
+    /* pic4 */
+    .cdn-pic.lazy[pic="pic4"],
+    .cdn-pic.lazy[pic="pic4-sm"] {
+        background-image: none;
+    }
+    .cdn-pic[pic="pic4"],
+    .cdn-pic[pic="pic4-sm"] {
+        background-image: url(../img/pic4_600x400.jpg);
+    }
+
+    /* pic5 */
+    .cdn-pic.lazy[pic="pic5"],
+    .cdn-pic.lazy[pic="pic5-sm"] {
+        background-image: none;
+    }
+    .cdn-pic[pic="pic5"],
+    .cdn-pic[pic="pic5-sm"] {
+        background-image: url(../img/pic5_600x400.jpg);
+    }
+
+    /* pic6 */
+    .cdn-pic.lazy[pic="pic6"],
+    .cdn-pic.lazy[pic="pic6-sm"] {
+        background-image: none;
+    }
+    .cdn-pic[pic="pic6"],
+    .cdn-pic[pic="pic6-sm"] {
+        background-image: url(../img/pic6_600x400.jpg);
+    }
+
+}

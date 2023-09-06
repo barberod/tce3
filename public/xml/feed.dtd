@@ -1,0 +1,15 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+
+<!ELEMENT feed (announcement+)>
+<!ELEMENT announcement (itemID, customClass, customStyle, title, body, display, audience)>
+<!ELEMENT itemID (#PCDATA)>
+<!ELEMENT customClass (#PCDATA)>
+<!ELEMENT customStyle (#PCDATA)>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT body (#PCDATA)>
+<!ELEMENT display (from, until)>
+<!ELEMENT from (#PCDATA)>
+<!ELEMENT until (#PCDATA)>
+<!ELEMENT audience (livepage, downpage)>
+<!ELEMENT livepage (#PCDATA)>
+<!ELEMENT downpage (#PCDATA)>

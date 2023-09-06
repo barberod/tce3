@@ -1,0 +1,13 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+
+<!ELEMENT plan (outage+)>
+<!ELEMENT outage (outageID, findClass, addClass, inEffect, audience)>
+<!ELEMENT outageID (#PCDATA)>
+<!ELEMENT findClass (#PCDATA)>
+<!ELEMENT addClass (#PCDATA)>
+<!ELEMENT inEffect (from, until)>
+<!ELEMENT from (#PCDATA)>
+<!ELEMENT until (#PCDATA)>
+<!ELEMENT audience (livepage, downpage)>
+<!ELEMENT livepage (#PCDATA)>
+<!ELEMENT downpage (#PCDATA)>

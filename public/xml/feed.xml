@@ -1,0 +1,19 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE feed SYSTEM "feed.dtd">
+<feed>
+   <announcement>
+      <itemID>announcement_dev1p</itemID>
+      <customClass>null</customClass>
+      <customStyle>null</customStyle>
+      <title>This is one example announcement.</title>
+      <body><![CDATA[<span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.&nbsp;&nbsp;<a href="https://www.barberod.com" target="_blank">Learn More</a></span>]]></body>
+      <display>
+         <from>20200101123000</from>
+         <until>20291231235959</until>
+      </display>
+      <audience>
+         <livepage>Y</livepage>
+         <downpage>N</downpage>
+      </audience>
+   </announcement>
+</feed>
