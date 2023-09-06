@@ -24,7 +24,16 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/requester', name: 'requester')]
+    #[Route('/secure/roles', name: 'roles')]
+    public function roles(): Response
+    {
+        return $this->render('page/roles.html.twig', [
+            'page_title' => 'Transfer Credit Evaluation',
+            'prepend' => 'Roles'
+        ]);
+    }
+
+    #[Route('/secure/requester', name: 'requester')]
     public function requester(): Response
     {
         return $this->render('page/requester.html.twig', [
@@ -34,7 +43,7 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/requester/evaluation', name: 'requester_evaluation')]
+    #[Route('/secure/requester/evaluation', name: 'requester_evaluation')]
     public function requesterEvaluation(): Response
     {
         return $this->render('evaluation/record.html.twig', [
@@ -44,7 +53,7 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/requester/evaluation/table', name: 'requester_evaluation_table')]
+    #[Route('/secure/requester/evaluation/table', name: 'requester_evaluation_table')]
     public function requesterEvaluationTable(): Response
     {
         return $this->render('evaluation/table.html.twig', [
@@ -54,7 +63,7 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/coordinator', name: 'coordinator')]
+    #[Route('/secure/coordinator', name: 'coordinator')]
     public function coordinator(): Response
     {
         return $this->render('page/coordinator.html.twig', [
@@ -64,7 +73,7 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/coordinator/evaluation', name: 'coordinator_evaluation')]
+    #[Route('/secure/coordinator/evaluation', name: 'coordinator_evaluation')]
     public function coordinatorEvaluation(): Response
     {
         return $this->render('evaluation/record.html.twig', [
@@ -74,7 +83,7 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/coordinator/evaluation/table', name: 'coordinator_evaluation_table')]
+    #[Route('/secure/coordinator/evaluation/table', name: 'coordinator_evaluation_table')]
     public function coordinatorEvaluationTable(): Response
     {
         return $this->render('evaluation/table.html.twig', [
@@ -84,7 +93,7 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/my', name: 'secure_page')]
+    #[Route('/secure/my', name: 'secure_page')]
     public function secure(LoggerInterface $logger): Response
     {
         return $this->render('page/index.html.twig', [
@@ -93,7 +102,7 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/admin', name: 'admin_page')]
+    #[Route('/secure/admin', name: 'admin_page')]
     public function admin(): Response
     {
         return $this->render('page/index.html.twig', [
