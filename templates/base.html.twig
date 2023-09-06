@@ -281,6 +281,30 @@
                     {% block page %}
                     {% endblock %}
 
+                    {% if app.user|default() %}
+                    User..
+                    {% endif %}
+
+                    {% if app.user.roles|default() %}
+                    Roles..
+                    {% endif %}
+
+                    {% if app.user.profile|default() %}
+                    Profile..
+                    {% endif %}
+
+                    {% if app.user.attributes|default() %}
+                    Attributes..
+                    {% endif %}
+
+                    {% if app.user.attributes.profile|default() %}
+                    Attributes-Profile..
+                    {% endif %}
+
+                    {% if app.user.attributes.profile.roles|default() %}
+                    Attributes-Profile-Roles..
+                    {% endif %}
+
                     <footer class="mt-auto">
                         <div id="app-footer" class="container-fluid">
                             <div class="row px-4">
