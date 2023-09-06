@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block site_title %}{{ page_title }} | Georgia Tech{% endblock %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block stylesheets %}
+<style>
+h1 { color: purple; }
+</style>
+{% endblock %}
+
+{% block heading %}
+<h1>{{ page_title }}</h1>
+{% endblock %}
+
+{% block content %}
+<p class="fs-5">{{ page_content }}</p>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+var pageTitle = '{{ page_title | raw }}';
+console.log(`Page titled ${pageTitle} has loaded.`);
+</script>
+{% endblock %}

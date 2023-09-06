@@ -1,0 +1,226 @@
+<?php
+
+namespace App\Service;
+
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Ldap\Entry;
+use Symfony\Component\Ldap\Ldap;
+
+class LookupService
+{
+    private EntityManagerInterface $entityManager;
+    private LoggerInterface $logger;
+
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        LoggerInterface $logger
+    ) {
+        $this->entityManager = $entityManager;
+        $this->logger = $logger;
+    }
+
+    public function processUser(string $givenUsername): User
+    {
+        $existingUser = $this->entityManager->getRepository(User::class)->findOneBy(['username'=>$givenUsername]);
+
+        if (!$existingUser) {
+            $this->saveNewUser($givenUsername);
+        } else {
+            $this->updateExistingUserIfNeeded($existingUser);
+        }
+        
+        return $this->entityManager->getRepository(User::class)->findOneBy(['username'=>$givenUsername]);
+    }
+
+    protected function saveNewUser(string $givenUsername): User {
+        $user = new User();
+        // $userData = $this->getDevUserData($givenUsername);
+        $userData = $this->getUserData($givenUsername);
+
+        $this->logger->debug(print_r($userData,true));
+
+        $user->setUsername($userData['username']);
+        $user->setOrgID($userData['org_id']);
+        $user->setDisplayName($userData['display_name']);
+        $user->setEmail($userData['email']);
+        $user->setCategory($userData['category']);
+        $user->setStatus($userData['status']);
+        $user->setFrozen($userData['frozen']);
+        $user->setLoadedFrom($userData['loaded_from']);
+        $user->setRoles($userData['roles']);
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        return $user;
+    }
+
+    protected function updateExistingUserIfNeeded(User $existingUser): User {
+        if ($existingUser->getFrozen() === 1) {
+            return $existingUser;
+        }
+
+        // $userData = $this->getDevUserData($existingUser->getUsername());
+        $userData = $this->getUserData($existingUser->getUsername());
+        if (
+            $existingUser->getOrgID() !== $userData["org_id"] ||
+            $existingUser->getDisplayName() !== $userData["display_name"] ||
+            $existingUser->getEmail() !== $userData["email"] ||
+            $existingUser->getCategory() !== $userData["category"] ||
+            $existingUser->getStatus() !== $userData["status"] ||
+            $existingUser->getRoles() !== $userData["roles"]
+        ) {
+            $existingUser->setOrgID($userData["org_id"]);
+            $existingUser->setDisplayName($userData["display_name"]);
+            $existingUser->setEmail($userData["email"]);
+            $existingUser->setCategory($userData["category"]);
+            $existingUser->setStatus($userData["status"]);
+            $existingUser->setRoles($userData["roles"]);
+            $existingUser->setLoadedFrom($userData["loaded_from"]);
+            $this->entityManager->flush();
+
+            return $this->entityManager->getRepository(User::class)->findOneBy(['username'=>$existingUser->getUsername()]);
+        }
+
+        return $existingUser;
+    }
+
+    public function getUserData(string $givenUsername): array
+    {
+        $userData = array();
+
+        $ldap = Ldap::create('ext_ldap', ['connection_string' => $_ENV["LDAP_HOST"].':'.(int)$_ENV["LDAP_PORT"]]);
+        $ldap->bind($_ENV["LDAP_DN"], $_ENV["LDAP_PW"]);
+        $query = $ldap->query('ou=accounts,ou=gtaccounts,ou=departments,dc=gted,dc=gatech,dc=edu', "(&(uid={$givenUsername}))");
+        $result = $query->execute();
+        $userData = $this->crosswalkLdapDataToUserData($givenUsername, $result[0]);
+
+        return $userData;
+    }
+
+    private function crosswalkLdapDataToUserData(string $givenUsername, Entry $entry): array {
+        $userData = array();
+        $userData['username'] = $givenUsername;
+        $userData['org_id'] = $this->getIndexZero($entry->getAttribute('gtGTID'));
+        $userData['display_name'] = $this->getIndexZero($entry->getAttribute('displayName'));
+        $userData['email'] = $this->getIndexZero($entry->getAttribute('gtPrimaryEmailAddress'));
+        $userData['category'] = $this->getIndexZero($entry->getAttribute('eduPersonPrimaryAffiliation'));
+        $userData['status'] = 1;
+        $userData['frozen'] = 0;
+        $userData['loaded_from'] = 'ldap-'.$this->generateRandomString(5);
+        $userData['roles'] = $this->determineRoles($entry);
+        return $userData;
+    }
+
+    private function determineRoles(Entry $entry): array {
+        $roles = array();
+        if ($this->isUndergraduateApplicant($entry)) { $roles[] = User::ROLE_UGAPP; };
+        if ($this->isGraduateApplicant($entry)) { $roles[] = User::ROLE_UGAPP; };
+        if ($this->isStudent($entry)) { $roles[] = User::ROLE_STUDENT; };
+        if ($this->isStaff($entry)) { $roles[] = User::ROLE_STAFF; };
+        if ($this->isFaculty($entry)) { $roles[] = User::ROLE_FACULTY; };
+        if ($this->isAdmin($entry)) { $roles[] = User::ROLE_ADMIN; };
+        return $roles;
+    }
+
+    private function isUndergraduateApplicant(Entry $entry): bool {
+        if (in_array("undergrad-applicant@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) {
+            return true;
+        }
+        return false;
+    }
+
+    private function isGraduateApplicant(Entry $entry): bool {
+        if (in_array("grad-applicant@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) {
+            return true;
+        }
+        return false;
+    }
+
+    private function isStudent(Entry $entry): bool {
+        if (
+            (in_array("student@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
+            (in_array("former-credit-student@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
+            (in_array("credit-applicant-confirmed@gt", $entry->getAttribute('eduPersonScopedAffiliation')))
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    private function isStaff(Entry $entry): bool {
+        if (
+            (in_array("staff@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
+            (in_array("faculty@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
+            (in_array("affiliate@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
+            (in_array("retiree@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
+            (in_array("full-time-employee@gt", $entry->getAttribute('eduPersonScopedAffiliation')))
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    private function isFaculty(Entry $entry): bool {
+        if (
+            (in_array("faculty@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
+            (in_array("affiliate@gt", $entry->getAttribute('eduPersonScopedAffiliation')))
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    private function isAdmin(Entry $entry): bool {
+        if (
+            (in_array("staff@enrollment", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
+            (in_array("staff@psdept 653:oit-eis:oit-enterprise information sys", $entry->getAttribute('eduPersonScopedAffiliation')))
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getDevUserData(string $givenUsername): array
+    {
+        $userData = array();
+        $userData['username'] = $givenUsername;
+        $userData['org_id'] = $this->generateRandomID();
+        $userData['display_name'] = $this->generateRandomString(5).' '.$this->generateRandomString(8);
+        $userData['email'] = $this->generateRandomString(6).'@fake.gatech.edu';
+        $userData['category'] = 'dev-user';
+        $userData['status'] = 1;
+        $userData['frozen'] = 0;
+        $userData['loaded_from'] = 'lookup';
+        $userData['roles'] = [User::ROLE_USER];
+        return $userData;
+    }
+
+    private function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    private function generateRandomID() {
+        $characters = '123456789';
+        $randomString = '';
+        for ($i = 0; $i < 9; $i++) {
+            $randomString .= $characters[random_int(0, 8)];
+        }
+        return $randomString;
+    }
+
+    private function getIndexZero(array $someArr): string {
+        if (isset($someArr[0])) {
+            return $someArr[0];
+        }
+        return '';
+    }
+}
