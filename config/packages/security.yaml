@@ -16,12 +16,12 @@ when@prod:
                 security: false
             secured:
                 pattern: ^/secure
-                provider: cas
-                custom_authenticator: EcPhp\CasBundle\Security\CasAuthenticator
+                provider: chained_providers
+                custom_authenticator: App\Security\ProdAuthenticator
                 form_login:
                     check_path: cas_bundle_login
                     login_path: cas_bundle_login
-                entry_point: EcPhp\CasBundle\Security\CasAuthenticator
+                entry_point: App\Security\ProdAuthenticator
             homepage_pass_thru:
                 security: false
                 request_matcher: App\Security\HomepageMatcher
