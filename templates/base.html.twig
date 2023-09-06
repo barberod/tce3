@@ -250,6 +250,7 @@
                                     </div>
                                 </li>
                                 {% endif %}
+                                {% if 'ROLE_USER' in app.user.roles %}
                                 <li class="dropdown nav-item">
                                     <a class="nav-link dropdown-btn" id="dropdown-roles" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-user-gear fa-fw me-2"></i>My Roles</a>
                                     <div class="dropdown-menu" aria-labelledby="dropdown-roles">
@@ -260,6 +261,7 @@
                                         <hr>
                                     </div>
                                 </li>
+                                {% endif %}
                             </ul>
 
                         </nav>
@@ -388,7 +390,7 @@
 
                     <!-- Cookie Alert -->
                     <div class="alert text-center cookie-alert" role="alert">
-                        <p>This site uses cookies. Review the <a href="https://www.gatech.edu" target="_blank">Privacy &amp; Legal Notice</a>. Email questions to <a href="mailto:barberod@outlook.com">barberod@outlook.com</a></p>
+                        <p>This site uses cookies. Review the <a href="https://www.gatech.edu/privacy" target="_blank">Privacy &amp; Legal Notice</a>. Email questions to <a href="mailto:privacy@gatech.edu">privacy@gatech.edu</a></p>
                         <button type="button" class="btn btn-warning btn-sm accept-cookies">Accept</button>
                         <!-- <button type="button" class="btn btn-outline-warning btn-sm reject-cookies">Reject/button> -->
                     </div>
