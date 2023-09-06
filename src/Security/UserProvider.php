@@ -89,8 +89,8 @@ final class UserProvider implements CasUserProviderInterface
             $this->generateLoggedInFlashMessage($processedUser);
         }
 
-        // return $processedUser;
-        return $user;
+        return $processedUser;
+        // return $user;
     }
 
     public function supportsClass(string $class): bool

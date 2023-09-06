@@ -5,18 +5,13 @@ when@prod:
                 entity:
                     class: App\Security\UserProvider
                     property: username
-            database_users:
-                entity: { class: App\Entity\User, property: username }
-            chained_providers:
-                chain:
-                    providers: ['database_users','custom_user_provider']
         firewalls:
             dev:
                 pattern: ^/(_(profiler|wdt)|css|images|js)/
                 security: false
             secured:
                 pattern: ^/secure
-                provider: chained_providers
+                provider: custom_user_provider
                 custom_authenticator: EcPhp\CasBundle\Security\CasAuthenticator
                 form_login:
                     check_path: cas_bundle_login
