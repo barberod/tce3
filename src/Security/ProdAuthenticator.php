@@ -47,7 +47,7 @@ final class ProdAuthenticator extends AbstractAuthenticator implements Authentic
     public function authenticate(Request $request): Passport
     {
         
-        if (!is_null($this->security->getUser()->getUserIdentifier())) {
+        if (!is_null($this->security->getUser())) {
             $response = $this
                 ->cas
                 ->withServerRequest($this->toPsr($request))
