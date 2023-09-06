@@ -18,20 +18,17 @@ when@prod:
                 security: false
                 request_matcher: App\Security\HomepageMatcher
             secured:
-                pattern: ^/
+                lazy: true
                 provider: chained_providers
                 custom_authenticator: EcPhp\CasBundle\Security\CasAuthenticator
                 form_login:
                     check_path: cas_bundle_login
                     login_path: cas_bundle_login
                 entry_point: EcPhp\CasBundle\Security\CasAuthenticator
-                remember_me:
-                    secret: '%kernel.secret%'
-                    always_remember_me: true
         access_control:
-            - { path: ^/secure, roles: ROLE_CAS_AUTHENTICATED }
-            - { path: ^/secure/requestor, roles: ROLE_STAFF }
             - { path: ^/secure/admin, roles: ROLE_ADMIN }
+            - { path: ^/secure/requester, roles: ROLE_STAFF }
+            - { path: ^/secure, roles: ROLE_CAS_AUTHENTICATED }
         role_hierarchy:
             ROLE_ADMIN: [ROLE_FACULTY,ROLE_STAFF,ROLE_STUDENT,ROLE_GSAPP,ROLE_UGAPP,ROLE_USER]
             ROLE_FACULTY: ROLE_USER
