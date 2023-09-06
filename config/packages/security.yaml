@@ -14,17 +14,18 @@ when@prod:
             dev:
                 pattern: ^/(_(profiler|wdt)|css|images|js)/
                 security: false
-            homepage_pass_thru:
-                security: false
-                request_matcher: App\Security\HomepageMatcher
             secured:
-                lazy: true
+                pattern: ^/secure
                 provider: chained_providers
                 custom_authenticator: EcPhp\CasBundle\Security\CasAuthenticator
                 form_login:
                     check_path: cas_bundle_login
                     login_path: cas_bundle_login
                 entry_point: EcPhp\CasBundle\Security\CasAuthenticator
+            homepage_pass_thru:
+                lazy: true
+                security: false
+                request_matcher: App\Security\HomepageMatcher
         access_control:
             - { path: ^/secure/admin, roles: ROLE_ADMIN }
             - { path: ^/secure/requester, roles: ROLE_STAFF }
