@@ -19,7 +19,6 @@ use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface;
 use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,39 +39,34 @@ final class ProdAuthenticator extends AbstractAuthenticator implements Authentic
         private CasUserProviderInterface $userProvider,
         private HttpFoundationFactoryInterface $httpFoundationFactory,
         private HttpMessageFactoryInterface $httpMessageFactory,
-        private Security $security,
     ) {
     }
 
     public function authenticate(Request $request): Passport
     {
-        $user = $this->security->getUser();
+        $response = $this
+            ->cas
+            ->withServerRequest($this->toPsr($request))
+            ->requestTicketValidation();
 
-        if (is_null($user)) {
-            $response = $this
-                ->cas
-                ->withServerRequest($this->toPsr($request))
-                ->requestTicketValidation();
-
-            if (null === $response) {
-                throw new AuthenticationException('Unable to authenticate the user with such service ticket.');
-            }
-
-            try {
-                $introspect = $this->cas->detect($response);
-            } catch (InvalidArgumentException $exception) {
-                throw new AuthenticationException($exception->getMessage(), 0, $exception);
-            }
-
-            if (false === ($introspect instanceof ServiceValidate)) {
-                throw new AuthenticationException(
-                    'Failure in the returned response'
-                );
-            }
-
-            $user = $this->userProvider->loadUserByResponse($response);
+        if (null === $response) {
+            throw new AuthenticationException('Unable to authenticate the user with such service ticket.');
         }
-        
+
+        try {
+            $introspect = $this->cas->detect($response);
+        } catch (InvalidArgumentException $exception) {
+            throw new AuthenticationException($exception->getMessage(), 0, $exception);
+        }
+
+        if (false === ($introspect instanceof ServiceValidate)) {
+            throw new AuthenticationException(
+                'Failure in the returned response'
+            );
+        }
+
+        $user = $this->userProvider->loadUserByResponse($response);
+
         return new SelfValidatingPassport(
             new UserBadge(
                 $user->getUserIdentifier(),

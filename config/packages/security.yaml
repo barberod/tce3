@@ -9,7 +9,7 @@ when@prod:
                 entity: { class: App\Entity\User, property: username }
             chained_providers:
                 chain:
-                    providers: ['cas','custom_user_provider', 'database_users']
+                    providers: ['database_users','custom_user_provider']
         firewalls:
             dev:
                 pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -17,11 +17,11 @@ when@prod:
             secured:
                 pattern: ^/secure
                 provider: chained_providers
-                custom_authenticator: App\Security\ProdAuthenticator
+                custom_authenticator: EcPhp\CasBundle\Security\CasAuthenticator
                 form_login:
                     check_path: cas_bundle_login
                     login_path: cas_bundle_login
-                entry_point: App\Security\ProdAuthenticator
+                entry_point: EcPhp\CasBundle\Security\CasAuthenticator
             homepage_pass_thru:
                 security: false
                 request_matcher: App\Security\HomepageMatcher
