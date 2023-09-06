@@ -16,7 +16,7 @@ when@prod:
                 security: false
             secured:
                 pattern: ^/secure
-                provider: chained_providers
+                provider: cas
                 custom_authenticator: EcPhp\CasBundle\Security\CasAuthenticator
                 form_login:
                     check_path: cas_bundle_login
