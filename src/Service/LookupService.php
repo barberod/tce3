@@ -122,7 +122,6 @@ class LookupService
         if ($this->isStaff($entry)) { $roles[] = User::ROLE_STAFF; };
         if ($this->isFaculty($entry)) { $roles[] = User::ROLE_FACULTY; };
         if ($this->isAdmin($entry)) { $roles[] = User::ROLE_ADMIN; };
-        $roles[] = 'ROLE_CAS_AUTHENTICATED'; // spoof!
         return $roles;
     }
 

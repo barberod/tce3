@@ -89,6 +89,13 @@ final class UserProvider implements CasUserProviderInterface
             $this->generateLoggedInFlashMessage($processedUser);
         }
 
+        $roles = $processedUser->getRoles();
+        array_push($roles, 'ROLE_CAS_AUTHENTICATED'); // spoof!
+        array_push($roles, 'IS_AUTHENTICATED_FULLY'); // spoof!
+        $processedUser->setRoles($roles);
+
+        $processedUser->setPgt($user->getPgt()); // spoof!
+
         return $processedUser;
         // return $user;
     }
