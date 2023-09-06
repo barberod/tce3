@@ -23,7 +23,6 @@ when@prod:
                     login_path: cas_bundle_login
                 entry_point: EcPhp\CasBundle\Security\CasAuthenticator
             homepage_pass_thru:
-                lazy: true
                 security: false
                 request_matcher: App\Security\HomepageMatcher
         access_control:

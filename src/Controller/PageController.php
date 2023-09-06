@@ -24,7 +24,7 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/secure/roles', name: 'roles')]
+    #[Route('/secure', name: 'roles')]
     public function roles(): Response
     {
         return $this->render('page/roles.html.twig', [
