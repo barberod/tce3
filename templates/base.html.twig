@@ -8,7 +8,7 @@
     <meta name="HandheldFriendly" content="true" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <meta name="title" content="Transfer Credit Evaluation" />
+    <meta name="title" content="Transfer Credit Evaluation | Registrar's Office | Georgia Tech" />
     <meta name="description" content="A theme suitable for a business form" />
     <meta name="keywords" content="business, form" />
     <meta name="robots" content="index, follow" />
@@ -33,20 +33,20 @@
     <meta property="og:title" content="Some Page @ Transfer Credit Evaluation" />
     <meta property="og:site_name" content="Transfer Credit Evaluation">
     <meta property="og:description" content="A theme suitable for a business form" />
-    <meta property="og:image" content="../img/meta_500x326.jpg" />
+    <meta property="og:image" content="../../img/meta_500x326.jpg" />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Some Page @ Transfer Credit Evaluation" />
     <meta name="twitter:description" content="A theme suitable for a business form" />
     <meta name="twitter:url" content="https://www.gatech.edu" />
-    <meta name="twitter:image" content="../img/twitter_500x326.jpg" />
+    <meta name="twitter:image" content="../../img/twitter_500x326.jpg" />
     <meta name="twitter:image:alt" content="Alt text for image">
 
-    <title>Transfer Credit Evaluation</title>
-    <link href="../css/styles.css" rel="stylesheet" />
-    <link href="../css/cookie-alert.css" rel="stylesheet" />
-    <link href="../css/cdn-pics.css" rel="stylesheet" />
-    <link href="../css/browser.css" rel="stylesheet" />
+    <title>{% if prepend|default() %}{{ prepend }} | {% endif %}Transfer Credit Evaluation | Registrar's Office | Georgia Tech</title>
+    <link href="../../css/styles.css" rel="stylesheet" />
+    <link href="../../css/cookie-alert.css" rel="stylesheet" />
+    <link href="../../css/cdn-pics.css" rel="stylesheet" />
+    <link href="../../css/browser.css" rel="stylesheet" />
 
     <!-- Google Fonts: Abel, Roboto, Roboto Condensed -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -58,10 +58,10 @@
     <script src="https://kit.fontawesome.com/d781e20338.js" crossorigin="anonymous"></script>
 
     <!-- Font Awesome Pro -->
-    <link rel="stylesheet" href="../vendor/fontawesome/css/fontawesome.min.css" media="screen">
-    <link rel="stylesheet" href="../vendor/fontawesome/css/duotone.min.css" media="screen">
-    <link rel="stylesheet" href="../vendor/fontawesome/css/regular.min.css" media="screen">
-    <link rel="stylesheet" href="../vendor/fontawesome/css/brands.min.css" media="screen">
+    <link rel="stylesheet" href="../../vendor/fontawesome/css/fontawesome.min.css" media="screen">
+    <link rel="stylesheet" href="../../vendor/fontawesome/css/duotone.min.css" media="screen">
+    <link rel="stylesheet" href="../../vendor/fontawesome/css/regular.min.css" media="screen">
+    <link rel="stylesheet" href="../../vendor/fontawesome/css/brands.min.css" media="screen">
 
     <!-- Google tag (gtag.js) + cookie-alert.js -->
     <!--
@@ -117,134 +117,144 @@
                         <nav role="navigation" class="mb-auto">
 
                             <ul class="nav navbar-nav flex-column">
+                                {% if 'ROLE_ADMIN' in app.user.roles %}
                                 <li class="dropdown nav-item">
                                     <a class="nav-link dropdown-btn" id="dropdown-manager" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-sitemap fa-fw me-2"></i>Manager</a>
                                     <div class="dropdown-menu" aria-labelledby="dropdown-manager">
                                         <hr>
-                                        <a class="dropdown-item" href="../manager" target="_blank">
+                                        <a class="dropdown-item" href="../../manager" target="_blank">
                                             <i class="fa-solid fa-home fa-fw me-2"></i>Home
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../manager/reports" target="_blank">
+                                        <a class="dropdown-item" href="../../manager/reports" target="_blank">
                                             <i class="fa-solid fa-chart-simple fa-fw me-2"></i>Manager Reports
                                         </a>
                                         <hr>
                                     </div>
                                 </li>
+                                {% endif %}
+                                {% if 'ROLE_ADMIN' in app.user.roles %}
                                 <li class="dropdown nav-item">
                                     <a class="nav-link dropdown-btn" id="dropdown-coordinator" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-folder-tree fa-fw me-2"></i>Coordinator</a>
                                     <div class="dropdown-menu" aria-labelledby="dropdown-coordinator">
                                         <hr>
-                                        <a class="dropdown-item" href="../coordinator" target="_blank">
+                                        <a class="dropdown-item" href="../../coordinator" target="_blank">
                                             <i class="fa-solid fa-home fa-fw me-2"></i>Home
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../coordinator/evaluations" target="_blank">
+                                        <a class="dropdown-item" href="../../coordinator/evaluation/table" target="_blank">
                                             <i class="fa-solid fa-table fa-fw me-2"></i>Evaluations Tables
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../coordinator/lookup" target="_blank">
+                                        <a class="dropdown-item" href="../../coordinator/lookup" target="_blank">
                                             <i class="fa-solid fa-search fa-fw me-2"></i>GTID Lookup
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../coordinator/activity" target="_blank">
+                                        <a class="dropdown-item" href="../../coordinator/activity" target="_blank">
                                             <i class="fa-solid fa-caret-right fa-fw me-2"></i>Activity
                                         </a>
-                                        <a class="dropdown-item" href="../coordinator/courses" target="_blank">
+                                        <a class="dropdown-item" href="../../coordinator/courses" target="_blank">
                                             <i class="fa-solid fa-caret-right fa-fw me-2"></i>Courses
                                         </a>
-                                        <a class="dropdown-item" href="../coordinator/departments" target="_blank">
+                                        <a class="dropdown-item" href="../../coordinator/departments" target="_blank">
                                             <i class="fa-solid fa-caret-right fa-fw me-2"></i>Departments
                                         </a>
-                                        <a class="dropdown-item" href="../coordinator/universities" target="_blank">
+                                        <a class="dropdown-item" href="../../coordinator/universities" target="_blank">
                                             <i class="fa-solid fa-caret-right fa-fw me-2"></i>Universities
                                         </a>
                                         <hr>
                                     </div>
                                 </li>
+                                {% endif %}
+                                {% if 'ROLE_ADMIN' in app.user.roles %}
                                 <li class="dropdown nav-item">
                                     <a class="nav-link dropdown-btn" id="dropdown-observer" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-glasses fa-fw me-2"></i>Observer</a>
                                     <div class="dropdown-menu" aria-labelledby="dropdown-observer">
                                         <hr>
-                                        <a class="dropdown-item" href="../observer" target="_blank">
+                                        <a class="dropdown-item" href="../../observer" target="_blank">
                                             <i class="fa-solid fa-home fa-fw me-2"></i>Home
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../observer/evaluations" target="_blank">
+                                        <a class="dropdown-item" href="../../observer/evaluations" target="_blank">
                                             <i class="fa-solid fa-table fa-fw me-2"></i>Evaluations Tables
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../observer/lookup" target="_blank">
+                                        <a class="dropdown-item" href="../../observer/lookup" target="_blank">
                                             <i class="fa-solid fa-search fa-fw me-2"></i>GTID Lookup
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../observer/courses" target="_blank">
+                                        <a class="dropdown-item" href="../../observer/courses" target="_blank">
                                             <i class="fa-solid fa-caret-right fa-fw me-2"></i>Courses
                                         </a>
-                                        <a class="dropdown-item" href="../observer/departments" target="_blank">
+                                        <a class="dropdown-item" href="../../observer/departments" target="_blank">
                                             <i class="fa-solid fa-caret-right fa-fw me-2"></i>Departments
                                         </a>
-                                        <a class="dropdown-item" href="../observer/universities" target="_blank">
+                                        <a class="dropdown-item" href="../../observer/universities" target="_blank">
                                             <i class="fa-solid fa-caret-right fa-fw me-2"></i>Universities
                                         </a>
                                         <hr>
                                     </div>
                                 </li>
+                                {% endif %}
+                                {% if 'ROLE_ADMIN' in app.user.roles %}
                                 <li class="dropdown nav-item">
                                     <a class="nav-link dropdown-btn" id="dropdown-assignee" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-diagram-next fa-fw me-2"></i>Assignee</a>
                                     <div class="dropdown-menu" aria-labelledby="dropdown-assignee">
                                         <hr>
-                                        <a class="dropdown-item" href="../assignee" target="_blank">
+                                        <a class="dropdown-item" href="../../assignee" target="_blank">
                                             <i class="fa-solid fa-home fa-fw me-2"></i>Home
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../assignee/evaluations" target="_blank">
+                                        <a class="dropdown-item" href="../../assignee/evaluations" target="_blank">
                                             <i class="fa-solid fa-inbox fa-fw me-2"></i>Need My Attention
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../assignee/history" target="_blank">
+                                        <a class="dropdown-item" href="../../assignee/history" target="_blank">
                                             <i class="fa-solid fa-box-archive fa-fw me-2"></i>My Past Evaluations
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../assignee/lookup" target="_blank">
+                                        <a class="dropdown-item" href="../../assignee/lookup" target="_blank">
                                             <i class="fa-solid fa-search fa-fw me-2"></i>GTID Lookup
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../assignee/courses" target="_blank">
+                                        <a class="dropdown-item" href="../../assignee/courses" target="_blank">
                                             <i class="fa-solid fa-caret-right fa-fw me-2"></i>Courses
                                         </a>
-                                        <a class="dropdown-item" href="../assignee/departments" target="_blank">
+                                        <a class="dropdown-item" href="../../assignee/departments" target="_blank">
                                             <i class="fa-solid fa-caret-right fa-fw me-2"></i>Departments
                                         </a>
-                                        <a class="dropdown-item" href="../assignee/universities" target="_blank">
+                                        <a class="dropdown-item" href="../../assignee/universities" target="_blank">
                                             <i class="fa-solid fa-caret-right fa-fw me-2"></i>Universities
                                         </a>
                                         <hr>
                                     </div>
                                 </li>
+                                {% endif %}
+                                {% if 'ROLE_ADMIN' in app.user.roles %}
                                 <li class="dropdown nav-item">
                                     <a class="nav-link dropdown-btn" id="dropdown-requester" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-folder-closed fa-fw me-2"></i>Requester</a>
                                     <div class="dropdown-menu" aria-labelledby="dropdown-requester">
                                         <hr>
-                                        <a class="dropdown-item" href="../requester" target="_blank">
+                                        <a class="dropdown-item" href="../../requester" target="_blank">
                                             <i class="fa-solid fa-home fa-fw me-2"></i>Home
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../requester/evaluation/create" target="_blank">
+                                        <a class="dropdown-item" href="../../requester/evaluation/create" target="_blank">
                                             <i class="fa-solid fa-arrow-up-from-bracket fa-fw me-2"></i>Submit an Evaluation
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../requester/evaluations" target="_blank">
+                                        <a class="dropdown-item" href="../../requester/evaluation/table" target="_blank">
                                             <i class="fa-solid fa-table fa-fw me-2"></i>My Evaluations
                                         </a>
                                         <hr>
                                     </div>
                                 </li>
+                                {% endif %}
                                 <li class="dropdown nav-item">
                                     <a class="nav-link dropdown-btn" id="dropdown-roles" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-user-gear fa-fw me-2"></i>My Roles</a>
                                     <div class="dropdown-menu" aria-labelledby="dropdown-roles">
                                         <hr>
-                                        <a class="dropdown-item" href="../roles" target="_blank">
+                                        <a class="dropdown-item" href="../../" target="_blank">
                                             <i class="fa-solid fa-gear fa-fw me-2"></i>Choose Your Role
                                         </a>
                                         <hr>
@@ -265,92 +275,14 @@
 
                 <!-- Main -->
                 <div class="col-md-9 ms-sm-auto col-xl-10 px-0 d-flex flex-column h-100 mt-3 mt-sm-0">
-                    <main id="main" class="d-flex p-4">
 
-                        <div class="container-fluid px-0">
-                            <div class="row g-0">
-
-                                <div class="col-12">
-                                    <nav clsss="row" aria-label="breadcrumb">
-                                        <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                            <li class="breadcrumb-item"><a href="#">Library</a></li>
-                                            <li class="breadcrumb-item active" aria-current="page">Data</li>
-                                        </ol>
-                                    </nav>
-                                </div>
-
-                                <div class="col-12">
-                                    <section class="row region region-top-header">
-                                        <div class="block-page-title-block">
-                                            <div class="content">
-                                                <h1 class="title border-bottom pb-3 mb-4">Transfer Credit Evaluation</h1>
-                                            </div>
-                                        </div>
-                                    </section>
-                                </div>
-
-                                <div class="col-12">
-                                    <div class="main-content w-100" id="content" role="main">
-                                        <section class="section">
-                                            <a id="main-content" tabindex="-1"></a>
-                                            <div class="content">
-                                                
-                                                <div class="row">
-
-                                                    <!-- Alerts -->
-                                                    <div id="browser"></div>
-                                                    <div id="features"></div>
-                                                    <div id="messages"></div>
-
-                                                    <div class="col-12 order-0 order-lg-1">
-                                                        <div class="card mb-3">
-                                                            <h2 class="card-header h5">
-                                                                Announcements
-                                                            </h2>
-                                                            <div class="card-body">
-                                                                <span id="announcements">There are no announcements at this time.</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-12 order-1 order-lg-0">
-                                                        <div class="card mb-3">
-                                                            <div class="card-body">
-                                                                <h2>Welcome to Transfer Credit Evaluation</h2>
-                                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce imperdiet aliquam turpis, vitae molestie quam lobortis at. Suspendisse in mauris vitae metus sodales eleifend. Praesent facilisis euismod sem, eget tempor mauris accumsan vel. Fusce non commodo nibh, eu facilisis purus. Cras nec eleifend lectus. Cras metus ex, blandit nec lobortis vel, iaculis ac mauris. Nunc nisl est, posuere sit amet risus et, vulputate maximus enim. Donec luctus porttitor arcu, vitae dignissim purus. Suspendisse ultricies egestas eleifend. Morbi convallis non elit eu maximus.</p>
-
-                                                                <ul>
-                                                                    <li><a href="#">Basic page</a></li>
-                                                                    <li><a href="record">Record</a></li>
-                                                                    <li><a href="table">Table</a></li>
-                                                                    <li><a href="oscar">OSCAR</a></li>
-                                                                </ul>
-
-                                                                <p>Praesent cursus pretium facilisis. Donec molestie ultrices tincidunt. Sed et massa aliquet, accumsan sem nec, ornare odio. Ut efficitur at diam ut elementum. Maecenas sem quam, egestas sed dapibus consectetur, condimentum ac orci. Sed vulputate auctor nisl eu laoreet. Nullam pharetra egestas lacus non tempus. Aenean nec mi et ex fringilla aliquet ut elementum magna. Integer lobortis dui sed ligula accumsan mollis. Aenean aliquam nisi lectus, in aliquet erat congue quis. Proin ac malesuada mi. Phasellus dui ligula, tincidunt eu condimentum ut, ornare eget sapien. Maecenas gravida condimentum felis nec convallis.</p>
-                                                                <p>Nullam gravida felis non est gravida, ut tincidunt elit tincidunt. Morbi accumsan quam eu diam viverra euismod. Ut quis magna luctus, luctus tellus tristique, iaculis nibh. Ut non malesuada leo, eget maximus eros. Aliquam iaculis est in massa pretium semper. Morbi congue sollicitudin orci, sed varius mauris euismod nec. Vestibulum venenatis tellus nec pharetra vestibulum. Aliquam a tincidunt odio. Etiam malesuada, sapien quis iaculis feugiat, velit velit fringilla arcu, quis auctor mi neque et nisi.</p>
-                                                                <p>Donec ut dui nec magna aliquam volutpat. Fusce fermentum nulla vel molestie pharetra. Vivamus molestie vitae sapien sed molestie. Nulla placerat a dui sit amet tincidunt. Donec eget orci eget dui ullamcorper posuere rhoncus a neque. Suspendisse feugiat augue ut est aliquet, eget hendrerit purus fermentum. Suspendisse vestibulum tortor dignissim porta pretium. In consequat hendrerit metus in tristique. Sed dolor risus, rutrum eget auctor ac, hendrerit ac ante. Proin et ante porta, condimentum turpis vel, imperdiet diam. Maecenas justo nulla, lobortis at facilisis sed, finibus dignissim mauris. Praesent posuere est a semper pharetra. Maecenas nisi erat, porta at aliquam vitae, mollis ut lectus.</p>
-                                                                <p>Cras non libero sit amet justo egestas posuere. Cras convallis turpis eget fermentum mattis. Nulla porttitor ex nisi, vel volutpat mauris posuere in. Sed imperdiet ultrices odio quis semper. Duis velit turpis, pulvinar in viverra et, euismod non libero. Vivamus vitae lacinia sem. Mauris eget ligula pellentesque, fermentum quam quis, lobortis ligula. Aliquam tempor porttitor ipsum, a tristique lacus porta nec. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu elit a enim eleifend ornare id eget nibh. Proin finibus leo nunc, nec suscipit erat malesuada vel. Donec gravida ipsum quis nisl consequat, ac hendrerit ipsum auctor. Donec in nibh a ligula gravida sagittis at fringilla orci. Nunc gravida mi non ipsum bibendum, sed pulvinar urna porta. Proin at nunc sit amet turpis lacinia luctus.</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </section>
-                                    </div>
-                                </div>
-                                <!-- end of tce3 examples -->
-                            </div>
-                        </div>
-                    </main>
+                    {% block page %}
+                    {% endblock %}
 
                     <footer class="mt-auto">
                         <div id="app-footer" class="container-fluid">
                             <div class="row px-4">
                                 <div class="col-12 px-0 py-3 top-bordered">
-                                    <p class="text-muted"><small>Please bookmark this page only. Do not bookmark any pages beyond this point. URLs for subsequent pages are subject to change without notice.</small></p>
-                                    <p class="text-muted"><small>Notwithstanding any language to the contrary, nothing contained herein constitutes nor is intended to constitute an offer, inducement, promise, or contract of any kind. The data contained herein is for informational purposes only and is not represented to be error free. Any links to non-barberod information are provided as a courtesy. They are not intended to nor do they constitute an endorsement by barberod of the linked materials.</small></p>
                                     <p class="text-muted mb-0"><small>Web app last modified September 1, 2023</small></p>
                                 </div>
                             </div>
@@ -466,21 +398,21 @@
             </div>
         </div>
     </div>
-    <script type="module" src="../js/main.js"></script>
-    <script src="../js/scroll.js"></script>
-    <script src="../js/cookie-alert.js"></script>
-    <script src="../js/color-modes.js"></script>
-    <script src="../js/cdn-pics.js"></script>
+    <script type="module" src="../../js/main.js"></script>
+    <script src="../../js/scroll.js"></script>
+    <script src="../../js/cookie-alert.js"></script>
+    <script src="../../js/color-modes.js"></script>
+    <script src="../../js/cdn-pics.js"></script>
 
-    <script src="../vendor/moment/moment-with-locales.js"></script>
-    <script src="../vendor/moment/moment-timezone-with-data-1970-2030.js"></script>
+    <script src="../../vendor/moment/moment-with-locales.js"></script>
+    <script src="../../vendor/moment/moment-timezone-with-data-1970-2030.js"></script>
     <script nonce="rZuRQ4J8kK7i">window.page_version = 'live';</script>
-    <script src="../js/announcements.js"></script>
-    <script src="../js/outages.js"></script>
-    <script src="../js/browser.js"></script>
+    <script src="../../js/announcements.js"></script>
+    <script src="../../js/outages.js"></script>
+    <script src="../../js/browser.js"></script>
 
-    <script src="../vendor/modernizr/modernizr-custom.js"></script>
-    <script src="../js/features.js"></script>
+    <script src="../../vendor/modernizr/modernizr-custom.js"></script>
+    <script src="../../js/features.js"></script>
 </body>
 
 </html>

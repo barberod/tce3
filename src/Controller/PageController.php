@@ -18,9 +18,69 @@ class PageController extends AbstractController
     #[Route('/', name: 'homepage')]
     public function index(): Response
     {
-        return $this->render('page/index.html.twig', [
+        return $this->render('page/page.html.twig', [
             'page_title' => 'Transfer Credit Evaluation',
             'page_content' => 'The quick brown fox jumps over the lazy dog.',
+        ]);
+    }
+
+    #[Route('/requester', name: 'requester')]
+    public function requester(): Response
+    {
+        return $this->render('page/requester.html.twig', [
+            'context' => 'requester',
+            'page_title' => 'Transfer Credit Evaluation',
+            'prepend' => 'Requester'
+        ]);
+    }
+
+    #[Route('/requester/evaluation', name: 'requester_evaluation')]
+    public function requesterEvaluation(): Response
+    {
+        return $this->render('evaluation/record.html.twig', [
+            'context' => 'requester',
+            'page_title' => 'Evaluation #4321',
+            'prepend' => 'Evaluation #4321'
+        ]);
+    }
+
+    #[Route('/requester/evaluation/table', name: 'requester_evaluation_table')]
+    public function requesterEvaluationTable(): Response
+    {
+        return $this->render('evaluation/table.html.twig', [
+            'context' => 'requester',
+            'page_title' => 'My Evaluations',
+            'prepend' => 'My Evaluations'
+        ]);
+    }
+
+    #[Route('/coordinator', name: 'coordinator')]
+    public function coordinator(): Response
+    {
+        return $this->render('page/coordinator.html.twig', [
+            'context' => 'coordinator',
+            'page_title' => 'Transfer Credit Evaluation',
+            'prepend' => 'Coordinator'
+        ]);
+    }
+
+    #[Route('/coordinator/evaluation', name: 'coordinator_evaluation')]
+    public function coordinatorEvaluation(): Response
+    {
+        return $this->render('evaluation/record.html.twig', [
+            'context' => 'coordinator',
+            'page_title' => 'Evaluation #4321',
+            'prepend' => 'Evaluation #4321'
+        ]);
+    }
+
+    #[Route('/coordinator/evaluation/table', name: 'coordinator_evaluation_table')]
+    public function coordinatorEvaluationTable(): Response
+    {
+        return $this->render('evaluation/table.html.twig', [
+            'context' => 'coordinator',
+            'page_title' => 'Evaluations',
+            'prepend' => 'Evaluations'
         ]);
     }
 

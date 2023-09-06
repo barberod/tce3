@@ -14,9 +14,6 @@ when@prod:
             dev:
                 pattern: ^/(_(profiler|wdt)|css|images|js)/
                 security: false
-            homepage_pass_thru:
-                security: false
-                request_matcher: App\Security\HomepageMatcher
             secured:
                 pattern: ^/
                 provider: chained_providers
@@ -26,7 +23,7 @@ when@prod:
                     login_path: cas_bundle_login
                 entry_point: EcPhp\CasBundle\Security\CasAuthenticator
         access_control:
-            - { path: ^/my, roles: ROLE_CAS_AUTHENTICATED }
+            - { path: ^/, roles: ROLE_CAS_AUTHENTICATED }
             - { path: ^/admin, roles: ROLE_ADMIN }
         role_hierarchy:
             ROLE_ADMIN: [ROLE_FACULTY,ROLE_STAFF,ROLE_STUDENT,ROLE_GSAPP,ROLE_UGAPP,ROLE_USER]
@@ -59,15 +56,12 @@ when@dev:
             dev:
                 pattern: ^/(_(profiler|wdt)|css|images|js)/
                 security: false
-            homepage_pass_thru:
-                security: false
-                request_matcher: App\Security\HomepageMatcher
             never_for_production:
                 lazy: true
                 provider: database_users
                 custom_authenticator: App\Security\DevAuthenticator
         access_control:
-            - { path: ^/my, roles: ROLE_USER }
+            - { path: ^/, roles: ROLE_USER }
             - { path: ^/admin, roles: ROLE_ADMIN }
         role_hierarchy:
             ROLE_ADMIN: [ROLE_FACULTY,ROLE_STAFF,ROLE_STUDENT,ROLE_GSAPP,ROLE_UGAPP,ROLE_USER]

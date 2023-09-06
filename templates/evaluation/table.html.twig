@@ -1,0 +1,249 @@
+{% extends 'base.html.twig' %}
+
+{% block page %}
+<main id="main" class="d-flex p-4">
+    <div class="container-fluid px-0">
+        <div class="row g-0">
+
+            <div class="col-12">
+                <nav clsss="row" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="../">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Evaluations</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="col-12">
+                <div class="main-content w-100" id="content" role="main">
+                    <section class="section">
+                        <a id="main-content" tabindex="-1"></a>
+                        <div class="content">
+                            
+                            <div class="row">
+
+                                <!-- Alerts -->
+                                <div id="browser"></div>
+                                <div id="features"></div>
+                                <div id="messages">
+                                {% for label, messages in app.flashes(['danger', 'info', 'success', 'warning']) %}
+                                    {% for message in messages %}
+                                        <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                                            {{ message }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    {% endfor %}
+                                {% endfor %}
+                                </div>
+
+                                <div class="col-12">
+                                    <section class="row region region-top-header">
+                                        <div class="block-page-title-block">
+                                            <div class="content">
+                                                <h1 class="title border-bottom pb-3 mb-4">{{ page_title }}</h1>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                                <div class="col-12">
+                                    <ul class="row nav nav-pills" id="tabs-phases" role="tablist">
+                                        <li class="col-12 col-lg-auto nav-item d-grid mb-3" role="presentation">
+                                            <a href="../{context}/evaluation/table/student" class="nav-link" id="tab-student" role="tab">Student</a>
+                                        </li>
+                                        <li class="col-12 col-lg-auto nav-item d-grid mb-3" role="presentation">
+                                            <a href="../{context}/evaluation/table/r1" class="nav-link active" id="tab-r1" role="tab">Registrar-1</a>
+                                        </li>
+                                        <li class="col-12 col-lg-auto nav-item d-grid mb-3" role="presentation">
+                                            <a href="../{context}/evaluation/table/dept" class="nav-link" id="tab-dept" role="tab">Department</a>
+                                        </li>
+                                        <li class="col-12 col-lg-auto nav-item d-grid mb-3" role="presentation">
+                                            <a href="../{context}/evaluation/table/r2" class="nav-link" id="tab-r2" role="tab">Registrar-2</a>
+                                        </li>
+                                        <li class="col-12 col-lg-auto nav-item d-grid mb-3" role="presentation">
+                                            <a href="../{context}/evaluation/table/hold" class="nav-link" id="tab-hold" role="tab">Hold</a>
+                                        </li>
+                                        <li class="col-12 col-lg-auto nav-item d-grid mb-3" role="presentation">
+                                            <a href="../{context}/evaluation/table/complete" class="nav-link" id="tab-complete" role="tab">Complete</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-12">
+                                    <div class="main-content w-100" id="content" role="main">
+                                        <section class="section">
+                                            <a id="main-content" tabindex="-1"></a>
+                                            <div class="content">
+                                                
+                                                <!-- Evaluations Table -->
+                                                <div id="table-evaluations" class="row table-wrapper">
+                                                    <div class="col-12">   
+
+                                                        <div class="row row-cols-2 mb-3">
+                                                            <div class="col">
+                                                                <p class="text-muted mb-0">Evaluations older than 500 days are not shown.</p>
+                                                            </div>
+                                                            <div class="col text-end">
+                                                                <p class="mb-0">Showing 4 of 9876</p>
+                                                            </div>
+                                                        </div>
+
+                                                        <form class="row mb-3">
+                                                            <div class="col-8 col-md-6 col-lg-4 col-xl-3">
+                                                                <div class="input-group mb-3">
+                                                                    <label for="reqAdmSelector" class="form-label fw-bold me-3 pt-2">Req Adm:</label>
+                                                                    <select class="form-select" id="regAdmSelector" aria-label="Filter by required for admission">
+                                                                        <option selected>-Any-</option>
+                                                                        <option value="Yes">Yes</option>
+                                                                        <option value="No">No</option>
+                                                                    </select>
+                                                                    <button class="btn btn-outline-primary" type="button" id="filter-button">Filter</button>
+                                                                </div> 
+                                                            </div>
+                                                        </form>
+
+                                                        <div class="row row-cols-1 mb-3">
+                                                            <div class="col">
+                                                                <div class="table-responsive">
+                                                                    <table class="table table-striped">
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th scope="col">Req Adm</th>
+                                                                            <th scope="col">Course</th>
+                                                                            <th scope="col">Requestor</th>
+                                                                            <th scope="col">Assignee</th>
+                                                                            <th scope="col">
+                                                                                <a href="#" sort="asc">Created</a>
+                                                                            </th>
+                                                                            <th scope="col">
+                                                                                <a href="#" sort="asc">Updated</a>
+                                                                            </th>
+                                                                            <th scope="col">Phase</th>
+                                                                            <th scope="col">Links</th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <tbody class="table-group-divider">
+                                                                            <tr>
+                                                                                <td><span class="text-danger me-2"><i class="fa-solid fa-circle fa-fw"></i></span>Yes</td>
+                                                                                <td>TEST 3000 (3)<br><span class="text-muted">University of West Georgia</span></td>
+                                                                                <td>David Barbero<br><span class="text-muted">903203313</span></td>
+                                                                                <td>Makesia Scott<br><span class="text-muted">ms366</span></td>
+                                                                                <td>2023-09-01 12:30<br><span class="text-muted">5 days 12 hours</span></td>
+                                                                                <td>2023-09-03 18:45<br><span class="text-muted">3 days 6 hours</span></td>
+                                                                                <td>Registrar 1</td>
+                                                                                <td>
+                                                                                    <a class="me-2" href="#">View</a>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td><span class="text-muted me-2"><i class="fa-regular fa-circle fa-fw"></i></span>No</td>
+                                                                                <td>TEST 3000 (3)<br><span class="text-muted">University of West Georgia</span></td>
+                                                                                <td>David Barbero<br><span class="text-muted">903203313</span></td>
+                                                                                <td>Makesia Scott<br><span class="text-muted">ms366</span></td>
+                                                                                <td>2023-09-01 12:30<br><span class="text-muted">5 days 12 hours</span></td>
+                                                                                <td>2023-09-03 18:45<br><span class="text-muted">3 days 6 hours</span></td>
+                                                                                <td>Registrar 1</td>
+                                                                                <td>
+                                                                                    <a class="me-2" href="#">View</a>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td><span class="text-danger me-2"><i class="fa-solid fa-circle fa-fw"></i></span>Yes</td>
+                                                                                <td>TEST 3000 (3)<br><span class="text-muted">University of West Georgia</span></td>
+                                                                                <td>David Barbero<br><span class="text-muted">903203313</span></td>
+                                                                                <td>Makesia Scott<br><span class="text-muted">ms366</span></td>
+                                                                                <td>2023-09-01 12:30<br><span class="text-muted">5 days 12 hours</span></td>
+                                                                                <td>2023-09-03 18:45<br><span class="text-muted">3 days 6 hours</span></td>
+                                                                                <td>Registrar 1</td>
+                                                                                <td>
+                                                                                    <a class="me-2" href="#">View</a>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Page Navigation -->
+                                                        <div id="page-navigation" class="row justify-content-center mb-3">
+                                                            <div class="col-12 col-lg-8 col-xl-10">
+                                                                <nav aria-label="Page navigation">
+                                                                    <ul class="pagination">
+
+                                                                        <li class="page-item">
+                                                                            <a class="page-link" href="#" aria-label="First">
+                                                                                <span aria-hidden="true">
+                                                                                    <i class="fa-solid fa-backward-fast me-2"></i>First
+                                                                                </span>
+                                                                            </a>
+                                                                        </li>
+
+                                                                        <li class="page-item">
+                                                                            <a class="page-link" href="#" aria-label="Previous">
+                                                                                <span aria-hidden="true">
+                                                                                    <i class="fa-solid fa-caret-left me-2"></i>Previous
+                                                                                </span>
+                                                                            </a>
+                                                                        </li>
+
+                                                                        <li class="page-item" aria-current="page">
+                                                                            <a class="page-link" href="#">5</a>
+                                                                        </li>
+
+                                                                        <li class="page-item">
+                                                                            <a class="page-link" href="#" aria-label="Next">
+                                                                                <span aria-hidden="true">
+                                                                                    Next<i class="fa-solid fa-caret-right ms-2"></i>
+                                                                                </span>
+                                                                            </a>
+                                                                        </li>
+
+                                                                        <li class="page-item">
+                                                                            <a class="page-link" href="#" aria-label="Last">
+                                                                                <span aria-hidden="true">
+                                                                                    Last<i class="fa-solid fa-forward-fast ms-2"></i>
+                                                                                </span>
+                                                                            </a>
+                                                                        </li>
+
+                                                                    </ul>
+                                                                </nav>
+                                                            </div>
+                                                            <div class="col-12 col-lg-4 col-xl-2">
+                                                                <div class="input-group">
+                                                                    <select class="form-select" id="inputGoToPage" aria-label="Go to page">
+                                                                        <option selected>Page...</option>
+                                                                        <option value="1">1</option>
+                                                                        <option value="2">2</option>
+                                                                        <option value="3">3</option>
+                                                                        <option value="4">4</option>
+                                                                        <option value="5">5</option>
+                                                                        <option value="6">6</option>
+                                                                        <option value="7">7</option>
+                                                                    </select>
+                                                                    <button class="btn btn-outline-primary" type="button">Go</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /#page-navigation -->
+                                                    </div>
+                                                </div>
+                                                <!-- /#table-evaluations -->
+
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <!-- end of tce3 examples -->
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<!-- no scripts -->
+{% endblock %}
