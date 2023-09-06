@@ -25,6 +25,9 @@ when@prod:
                     check_path: cas_bundle_login
                     login_path: cas_bundle_login
                 entry_point: EcPhp\CasBundle\Security\CasAuthenticator
+                remember_me:
+                    secret: '%kernel.secret%'
+                    always_remember_me: true
         access_control:
             - { path: ^/secure, roles: ROLE_CAS_AUTHENTICATED }
             - { path: ^/secure/requestor, roles: ROLE_STAFF }
