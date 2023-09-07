@@ -1,0 +1,151 @@
+<nav role="navigation" class="mb-auto">
+    {% if app.user.attributes.profile.roles|default() %}
+    <ul class="nav navbar-nav flex-column">
+        {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
+        <li class="dropdown nav-item">
+            <a class="nav-link dropdown-btn" id="dropdown-manager" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-sitemap fa-fw me-2"></i>Manager</a>
+            <div class="dropdown-menu" aria-labelledby="dropdown-manager">
+                <hr>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/manager">
+                    <i class="fa-solid fa-home fa-fw me-2"></i>Home
+                </a>
+                <hr>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/manager/reports">
+                    <i class="fa-solid fa-chart-simple fa-fw me-2"></i>Manager Reports
+                </a>
+                <hr>
+            </div>
+        </li>
+        {% endif %}
+        {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
+        <li class="dropdown nav-item">
+            <a class="nav-link dropdown-btn" id="dropdown-coordinator" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-folder-tree fa-fw me-2"></i>Coordinator</a>
+            <div class="dropdown-menu" aria-labelledby="dropdown-coordinator">
+                <hr>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator">
+                    <i class="fa-solid fa-home fa-fw me-2"></i>Home
+                </a>
+                <hr>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator/evaluation/table">
+                    <i class="fa-solid fa-table fa-fw me-2"></i>Evaluations Tables
+                </a>
+                <hr>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator/lookup">
+                    <i class="fa-solid fa-search fa-fw me-2"></i>GTID Lookup
+                </a>
+                <hr>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator/activity">
+                    <i class="fa-solid fa-caret-right fa-fw me-2"></i>Activity
+                </a>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator/courses">
+                    <i class="fa-solid fa-caret-right fa-fw me-2"></i>Courses
+                </a>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator/departments">
+                    <i class="fa-solid fa-caret-right fa-fw me-2"></i>Departments
+                </a>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator/universities">
+                    <i class="fa-solid fa-caret-right fa-fw me-2"></i>Universities
+                </a>
+                <hr>
+            </div>
+        </li>
+        {% endif %}
+        {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
+        <li class="dropdown nav-item">
+            <a class="nav-link dropdown-btn" id="dropdown-observer" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-glasses fa-fw me-2"></i>Observer</a>
+            <div class="dropdown-menu" aria-labelledby="dropdown-observer">
+                <hr>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/observer">
+                    <i class="fa-solid fa-home fa-fw me-2"></i>Home
+                </a>
+                <hr>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/observer/evaluation/table">
+                    <i class="fa-solid fa-table fa-fw me-2"></i>Evaluations Tables
+                </a>
+                <hr>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/observer/lookup">
+                    <i class="fa-solid fa-search fa-fw me-2"></i>GTID Lookup
+                </a>
+                <hr>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/observer/courses">
+                    <i class="fa-solid fa-caret-right fa-fw me-2"></i>Courses
+                </a>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/observer/departments">
+                    <i class="fa-solid fa-caret-right fa-fw me-2"></i>Departments
+                </a>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/observer/universities">
+                    <i class="fa-solid fa-caret-right fa-fw me-2"></i>Universities
+                </a>
+                <hr>
+            </div>
+        </li>
+        {% endif %}
+        {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
+        <li class="dropdown nav-item">
+            <a class="nav-link dropdown-btn" id="dropdown-assignee" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-diagram-next fa-fw me-2"></i>Assignee</a>
+            <div class="dropdown-menu" aria-labelledby="dropdown-assignee">
+                <hr>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee">
+                    <i class="fa-solid fa-home fa-fw me-2"></i>Home
+                </a>
+                <hr>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee/evaluation/table">
+                    <i class="fa-solid fa-inbox fa-fw me-2"></i>Need My Attention
+                </a>
+                <hr>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee/history">
+                    <i class="fa-solid fa-box-archive fa-fw me-2"></i>My Past Evaluations
+                </a>
+                <hr>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee/lookup">
+                    <i class="fa-solid fa-search fa-fw me-2"></i>GTID Lookup
+                </a>
+                <hr>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee/courses">
+                    <i class="fa-solid fa-caret-right fa-fw me-2"></i>Courses
+                </a>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee/departments">
+                    <i class="fa-solid fa-caret-right fa-fw me-2"></i>Departments
+                </a>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee/universities">
+                    <i class="fa-solid fa-caret-right fa-fw me-2"></i>Universities
+                </a>
+                <hr>
+            </div>
+        </li>
+        {% endif %}
+        {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
+        <li class="dropdown nav-item">
+            <a class="nav-link dropdown-btn" id="dropdown-requester" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-folder-closed fa-fw me-2"></i>Requester</a>
+            <div class="dropdown-menu" aria-labelledby="dropdown-requester">
+                <hr>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/requester">
+                    <i class="fa-solid fa-home fa-fw me-2"></i>Home
+                </a>
+                <hr>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/requester/evaluation/create">
+                    <i class="fa-solid fa-arrow-up-from-bracket fa-fw me-2"></i>Submit an Evaluation
+                </a>
+                <hr>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/requester/evaluation/table">
+                    <i class="fa-solid fa-table fa-fw me-2"></i>My Evaluations
+                </a>
+                <hr>
+            </div>
+        </li>
+        {% endif %}
+        {% if 'ROLE_USER' in app.user.attributes.profile.roles %}
+        <li class="dropdown nav-item">
+            <a class="nav-link dropdown-btn" id="dropdown-roles" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-user-gear fa-fw me-2"></i>My Roles</a>
+            <div class="dropdown-menu" aria-labelledby="dropdown-roles">
+                <hr>
+                <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/">
+                    <i class="fa-solid fa-gear fa-fw me-2"></i>Choose Your Role
+                </a>
+                <hr>
+            </div>
+        </li>
+        {% endif %}
+    </ul>
+    {% endif %}
+</nav>

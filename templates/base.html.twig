@@ -83,29 +83,8 @@
 <body id="top">
     <a href="#main-content" class="visually-hidden focusable skip-link">Skip to main content</a>
     
-        <header id="navbar-main" class="navbar navbar-main border-bottom sticky-top flex-md-nowrap p-0">
-
-            <a id="navbar-logo-area" aria-label="Navigate to the Georgia Tech main website"
-                class="navbar-brand col-12 col-sm-4 col-md-3 col-xl-2 me-0 border-end border-bottom d-flex justify-content-start"
-                href="https://www.gatech.edu">
-                <div id="navbar-logo" class="w-100 mx-2"></div>
-            </a>
-
-            <div id="navbar-site-name" class="col-4 fs-4 my-0 ms-0 me-auto py-3 py-sm-2 my-md-3 px-4 text-nowrap">Registrar's Office</div>
-
-            <div class="navbar-nav d-none d-md-block">
-                <div class="nav-item text-nowrap">
-                    <a class="nav-link px-4" href="https://www.gatech.edu">Service Status<i class="fa-solid fa-external-link ms-2"></i></a>
-                </div>
-            </div>
-
-            <button class="navbar-toggler d-md-none me-4 collapsed" type="button" data-bs-toggle="collapse"
-                data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
-                aria-label="Toggle navigation" onclick="scrollToTop()">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-        </header>
+        <!-- Header -->
+        {% include "fragment/header.html.twig" %}
 
         <div class="container-fluid">
             <div class="row d-flex">
@@ -113,164 +92,8 @@
                 <!-- Sidebar -->
                 <nav id="sidebarMenu" class="col-md-3 col-xl-2 d-md-block border-end sidebar collapse">
                     <div class="position-sticky pt-4 sidebar-sticky px-0 d-flex align-items-start flex-column h-100">
-
-                        <nav role="navigation" class="mb-auto">
-                            {% if app.user.attributes.profile.roles|default() %}
-                            <ul class="nav navbar-nav flex-column">
-                                {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
-                                <li class="dropdown nav-item">
-                                    <a class="nav-link dropdown-btn" id="dropdown-manager" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-sitemap fa-fw me-2"></i>Manager</a>
-                                    <div class="dropdown-menu" aria-labelledby="dropdown-manager">
-                                        <hr>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/manager">
-                                            <i class="fa-solid fa-home fa-fw me-2"></i>Home
-                                        </a>
-                                        <hr>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/manager/reports">
-                                            <i class="fa-solid fa-chart-simple fa-fw me-2"></i>Manager Reports
-                                        </a>
-                                        <hr>
-                                    </div>
-                                </li>
-                                {% endif %}
-                                {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
-                                <li class="dropdown nav-item">
-                                    <a class="nav-link dropdown-btn" id="dropdown-coordinator" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-folder-tree fa-fw me-2"></i>Coordinator</a>
-                                    <div class="dropdown-menu" aria-labelledby="dropdown-coordinator">
-                                        <hr>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator">
-                                            <i class="fa-solid fa-home fa-fw me-2"></i>Home
-                                        </a>
-                                        <hr>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator/evaluation/table">
-                                            <i class="fa-solid fa-table fa-fw me-2"></i>Evaluations Tables
-                                        </a>
-                                        <hr>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator/lookup">
-                                            <i class="fa-solid fa-search fa-fw me-2"></i>GTID Lookup
-                                        </a>
-                                        <hr>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator/activity">
-                                            <i class="fa-solid fa-caret-right fa-fw me-2"></i>Activity
-                                        </a>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator/courses">
-                                            <i class="fa-solid fa-caret-right fa-fw me-2"></i>Courses
-                                        </a>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator/departments">
-                                            <i class="fa-solid fa-caret-right fa-fw me-2"></i>Departments
-                                        </a>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator/universities">
-                                            <i class="fa-solid fa-caret-right fa-fw me-2"></i>Universities
-                                        </a>
-                                        <hr>
-                                    </div>
-                                </li>
-                                {% endif %}
-                                {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
-                                <li class="dropdown nav-item">
-                                    <a class="nav-link dropdown-btn" id="dropdown-observer" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-glasses fa-fw me-2"></i>Observer</a>
-                                    <div class="dropdown-menu" aria-labelledby="dropdown-observer">
-                                        <hr>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/observer">
-                                            <i class="fa-solid fa-home fa-fw me-2"></i>Home
-                                        </a>
-                                        <hr>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/observer/evaluation/table">
-                                            <i class="fa-solid fa-table fa-fw me-2"></i>Evaluations Tables
-                                        </a>
-                                        <hr>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/observer/lookup">
-                                            <i class="fa-solid fa-search fa-fw me-2"></i>GTID Lookup
-                                        </a>
-                                        <hr>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/observer/courses">
-                                            <i class="fa-solid fa-caret-right fa-fw me-2"></i>Courses
-                                        </a>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/observer/departments">
-                                            <i class="fa-solid fa-caret-right fa-fw me-2"></i>Departments
-                                        </a>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/observer/universities">
-                                            <i class="fa-solid fa-caret-right fa-fw me-2"></i>Universities
-                                        </a>
-                                        <hr>
-                                    </div>
-                                </li>
-                                {% endif %}
-                                {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
-                                <li class="dropdown nav-item">
-                                    <a class="nav-link dropdown-btn" id="dropdown-assignee" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-diagram-next fa-fw me-2"></i>Assignee</a>
-                                    <div class="dropdown-menu" aria-labelledby="dropdown-assignee">
-                                        <hr>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee">
-                                            <i class="fa-solid fa-home fa-fw me-2"></i>Home
-                                        </a>
-                                        <hr>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee/evaluation/table">
-                                            <i class="fa-solid fa-inbox fa-fw me-2"></i>Need My Attention
-                                        </a>
-                                        <hr>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee/history">
-                                            <i class="fa-solid fa-box-archive fa-fw me-2"></i>My Past Evaluations
-                                        </a>
-                                        <hr>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee/lookup">
-                                            <i class="fa-solid fa-search fa-fw me-2"></i>GTID Lookup
-                                        </a>
-                                        <hr>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee/courses">
-                                            <i class="fa-solid fa-caret-right fa-fw me-2"></i>Courses
-                                        </a>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee/departments">
-                                            <i class="fa-solid fa-caret-right fa-fw me-2"></i>Departments
-                                        </a>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee/universities">
-                                            <i class="fa-solid fa-caret-right fa-fw me-2"></i>Universities
-                                        </a>
-                                        <hr>
-                                    </div>
-                                </li>
-                                {% endif %}
-                                {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
-                                <li class="dropdown nav-item">
-                                    <a class="nav-link dropdown-btn" id="dropdown-requester" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-folder-closed fa-fw me-2"></i>Requester</a>
-                                    <div class="dropdown-menu" aria-labelledby="dropdown-requester">
-                                        <hr>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/requester">
-                                            <i class="fa-solid fa-home fa-fw me-2"></i>Home
-                                        </a>
-                                        <hr>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/requester/evaluation/create">
-                                            <i class="fa-solid fa-arrow-up-from-bracket fa-fw me-2"></i>Submit an Evaluation
-                                        </a>
-                                        <hr>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/requester/evaluation/table">
-                                            <i class="fa-solid fa-table fa-fw me-2"></i>My Evaluations
-                                        </a>
-                                        <hr>
-                                    </div>
-                                </li>
-                                {% endif %}
-                                {% if 'ROLE_USER' in app.user.attributes.profile.roles %}
-                                <li class="dropdown nav-item">
-                                    <a class="nav-link dropdown-btn" id="dropdown-roles" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-user-gear fa-fw me-2"></i>My Roles</a>
-                                    <div class="dropdown-menu" aria-labelledby="dropdown-roles">
-                                        <hr>
-                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/">
-                                            <i class="fa-solid fa-gear fa-fw me-2"></i>Choose Your Role
-                                        </a>
-                                        <hr>
-                                    </div>
-                                </li>
-                                {% endif %}
-                            </ul>
-                            {% endif %}
-                        </nav>
-
-                        <div class="sidebar-bottom pt-3">
-                            <div class="sidebar-heading text-uppercase"><small>Did you know?</small></div>
-                            <p class="text-muted mb-4">The <a href="https://registrar.gatech.edu/info/transfer-credit-equivalency-tables" target="_blank" class="text-muted text-decoration-underline">transfer equivalency tables</a> list all coursework and institutions that have already been evaluated for transfer credit.</p>
-                        </div>
-
+                        {% include "fragment/sidebar.html.twig" %}
+                        {% include "fragment/sidebar-factoid.html.twig" %}
                     </div>
                 </nav>
                 <!-- end of sidebar -->
@@ -293,58 +116,13 @@
                         </div>
                     </div>
 
+                    <!-- Page -->
                     {% block page %}
                     {% endblock %}
+                    <!-- end of page -->
 
-                    <footer class="mt-auto">
-                        <div id="app-footer" class="container-fluid">
-                            <div class="row px-4">
-                                <div class="col-12 px-0 py-3 top-bordered">
-                                    <p class="text-muted mb-0"><small>Web app last modified {{ app.request.server.get('LAST_MODIFIED') }}</small></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="accent-footer" class="container-fluid" style="height: 1.5rem;"></div>
-
-                        <div id="org-footer" class="container-fluid px-5 py-3">
-                            <div class="row pt-1">
-
-                                <div class="col-sm-3">
-                                    <address class="left-bordered">
-                                        <strong>Georgia Institute of Technology</strong><br>
-                                        North Avenue, Atlanta, GA 30332<br>
-                                        404.894.2000
-                                    </address>
-                                </div>
-
-                                <div class="col-sm-3">
-                                    <div class="left-bordered">
-                                        <p><a href="https://www.directory.gatech.edu/" target="_blank">Directory</a></p>
-                                        <p><a href="http://www.gatech.edu/emergency/" target="_blank">Emergency Information</a></p>
-                                        <p><a href="http://www.gatech.edu/legal/" target="_blank">Legal &amp; Privacy Information</a></p>
-                                        <p><a href="https://gbi.georgia.gov/human-trafficking-notice"target="_blank">Human Trafficking Notice</a></p>
-                                        <p><a href="https://titleix.gatech.edu/" target="_blank">Title IX/Sexual Misconduct</a></p>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-3">
-                                    <div class="left-bordered">
-                                        <p><a href="http://www.gatech.edu/accessibility/" target="_blank">Accessibility</a></p>
-                                        <p><a href="http://www.gatech.edu/accountability/" target="_blank">Accountablility</a></p>
-                                        <p><a href="https://www.gatech.edu/accreditation/" target="_blank">Accreditation</a></p>
-                                        <p><a href="http://www.careers.gatech.edu/" target="_blank">Employment</a></p>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-3 align-self-center">
-                                    <div id="accent-logo"></div>
-                                    <p class="copyr">©&nbsp;Georgia Institute of Technology</p>
-                                </div>
-
-                            </div>
-                        </div>
-                    </footer>
+                    <!-- Footer -->
+                    {% include "fragment/footer.html.twig" %}
 
                     <!-- Back to Top -->
                     <button onclick="scrollToTop()" id="scroll-top" class="scroll-top" style="display: none;" title="Scroll to top">
