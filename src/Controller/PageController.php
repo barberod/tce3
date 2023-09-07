@@ -27,13 +27,13 @@ class PageController extends AbstractController
     #[Route('/secure', name: 'roles')]
     public function roles(): Response
     {
-        return $this->render('page/roles.html.twig', [
+        return $this->render('page/homepage.html.twig', [
             'page_title' => 'Transfer Credit Evaluation',
             'prepend' => 'Roles'
         ]);
     }
 
-    #[Route('/secure/requester', name: 'requester')]
+    #[Route('/secure/requester', name: 'requester_home')]
     public function requester(): Response
     {
         return $this->render('page/homepage.html.twig', [
@@ -63,10 +63,10 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/secure/coordinator', name: 'coordinator')]
+    #[Route('/secure/coordinator', name: 'coordinator_home')]
     public function coordinator(): Response
     {
-        return $this->render('page/coordinator.html.twig', [
+        return $this->render('page/homepage.html.twig', [
             'context' => 'coordinator',
             'page_title' => 'Transfer Credit Evaluation',
             'prepend' => 'Coordinator'
