@@ -1,0 +1,57 @@
+{% if app.user.attributes.profile|default() %}
+<div class="card mb-3">
+    <h2 class="card-header h5">
+        Current User
+    </h2>
+    <div class="card-body">
+        <div class="row">
+
+            {% if app.user.attributes.profile.un|default() %}
+            <div class="col-12 d-flex flex-column mb-4">
+                <label for="factUn" class="form-label mb-0">Username</label>
+                <div class="font-monospace" id="factUn">{{ app.user.attributes.profile.un }}</div>
+            </div>
+            {% endif %}
+
+            {% if app.user.attributes.profile.org_id|default() %}
+            <div class="col-12 d-flex flex-column mb-4">
+                <label for="factOrgId" class="form-label mb-0">GTID</label>
+                <div class="font-monospace" id="factOrgId">{{ app.user.attributes.profile.org_id }}</div>
+            </div>
+            {% endif %}
+
+            {% if app.user.attributes.profile.dn|default() %}
+            <div class="col-12 d-flex flex-column mb-4">
+                <label for="factDn" class="form-label mb-0">Name</label>
+                <div class="font-monospace" id="factDn">{{ app.user.attributes.profile.dn }}</div>
+            </div>
+            {% endif %}
+
+            {% if app.user.attributes.profile.email|default() %}
+            <div class="col-12 d-flex flex-column mb-4">
+                <label for="factEmail" class="form-label mb-0">Email Address</label>
+                <div class="font-monospace" id="factEmail">{{ app.user.attributes.profile.email }}</div>
+            </div>
+            {% endif %}
+
+            {% if app.user.attributes.profile.roles|default() %}
+            <div class="col-12 d-flex flex-column mb-4">
+                <label for="factRoles" class="form-label mb-0">Roles</label>
+                <div class="font-monospace" id="factRoles">
+                {% if 'ROLE_USER' in app.user.attributes.profile.roles %}
+                    Authorized User<br>
+                {% endif %}
+                {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
+                    Admin<br>
+                {% endif %}
+                {% if 'ROLE_STAFF' in app.user.attributes.profile.roles %}
+                    Staff<br>
+                {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endif %}

@@ -189,19 +189,16 @@ class User implements UserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-
         // guarantees that a user always has at least one role for security
         if (empty($roles)) {
             $roles[] = self::ROLE_USER;
         }
-
         return array_unique($roles);
     }
 
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
-
         return $this;
     }
 
@@ -212,6 +209,32 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /*
+     * Used for mimicing a CasUser with data stored inside
+     * an "attributes" attribute
+     */
+    public function attributes() {
+        $roles = $this->getRoles();
+        array_push($roles, 'ROLE_USER');
+
+        $profile = [
+            'id' => $this->getId(),
+            'un' => $this->getUsername(),
+            'org_id' => $this->getOrgID(),
+            'dn' => $this->getDisplayName(),
+            'email' => $this->getEmail(),
+            'category' => $this->getCategory(),
+            'status' => $this->getStatus(),
+            'frozen' => $this->getFrozen(),
+            'loaded_from' => $this->getLoadedFrom(),
+            'created' => $this->getCreated(),
+            'updated' => $this->getUpdated(),
+            'roles' => $roles,
+        ];
+
+        return array('profile' => $profile);
     }
 
 }

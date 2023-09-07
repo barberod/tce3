@@ -1,4 +1,0 @@
-security:
-    providers:
-        cas:
-            id: App\Security\UserProvider

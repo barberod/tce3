@@ -1,7 +1,7 @@
 when@prod:    
     security:
         providers:
-            custom_user_provider:
+            prod_user_provider:
                 entity:
                     class: App\Security\UserProvider
                     property: username
@@ -11,7 +11,7 @@ when@prod:
                 security: false
             secured:
                 pattern: ^/secure
-                provider: custom_user_provider
+                provider: prod_user_provider
                 custom_authenticator: EcPhp\CasBundle\Security\CasAuthenticator
                 form_login:
                     check_path: cas_bundle_login
@@ -21,17 +21,7 @@ when@prod:
                 security: false
                 request_matcher: App\Security\HomepageMatcher
         access_control:
-            - { path: ^/secure/admin, roles: ROLE_ADMIN }
-            - { path: ^/secure/requester, roles: ROLE_STAFF }
             - { path: ^/secure, roles: ROLE_CAS_AUTHENTICATED }
-        role_hierarchy:
-            ROLE_ADMIN: [ROLE_FACULTY,ROLE_STAFF,ROLE_STUDENT,ROLE_GSAPP,ROLE_UGAPP,ROLE_USER]
-            ROLE_FACULTY: ROLE_USER
-            ROLE_STAFF: ROLE_USER
-            ROLE_STUDENT: ROLE_USER
-            ROLE_GSAPP: ROLE_USER 
-            ROLE_UGAPP: ROLE_USER
-            ROLE_USER: ROLE_CAS_AUTHENTICATED
 
 when@test:
     security:
@@ -49,8 +39,17 @@ when@test:
 when@dev:
     security:
         providers:
+            dev_user_provider:
+                entity:
+                    class: App\Security\DevUserProvider
+                    property: username
             database_users:
-                entity: { class: App\Entity\User, property: username }
+                entity: 
+                    class: App\Entity\User 
+                    property: username
+            chained_providers:
+                chain:
+                    providers: ['dev_user_provider', 'database_users']
         firewalls:
             dev:
                 pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -59,16 +58,8 @@ when@dev:
                 security: false
                 request_matcher: App\Security\HomepageMatcher
             never_for_production:
-                lazy: true
-                provider: database_users
+                pattern: ^/secure
+                provider: chained_providers
                 custom_authenticator: App\Security\DevAuthenticator
         access_control:
-            - { path: ^/secure, roles: ROLE_USER }
-            - { path: ^/secure/admin, roles: ROLE_ADMIN }
-        role_hierarchy:
-            ROLE_ADMIN: [ROLE_FACULTY,ROLE_STAFF,ROLE_STUDENT,ROLE_GSAPP,ROLE_UGAPP,ROLE_USER]
-            ROLE_FACULTY: ROLE_USER
-            ROLE_STAFF: ROLE_USER
-            ROLE_STUDENT: ROLE_USER
-            ROLE_GSAPP: ROLE_USER 
-            ROLE_UGAPP: ROLE_USER
+            - { path: ^/secure, roles: IS_AUTHENTICATED_FULLY }

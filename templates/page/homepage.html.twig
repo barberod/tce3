@@ -1,53 +1,36 @@
-{% extends 'base.html.twig' %}
+{% extends 'page/page.html.twig' %}
 
-{% block page %}
-<main id="main" class="d-flex p-4">
-    <div class="container-fluid px-0">
-        <div class="row g-0">
-
-            <div class="col-12">
-                <div id="browser"></div>
-                <div id="features"></div>
-                <div id="messages">
-                {% for label, messages in app.flashes(['danger', 'info', 'success', 'warning']) %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    {% endfor %}
-                {% endfor %}
-                </div>
-            </div>
-
-            <div class="col-12">
-                <nav clsss="row" aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ path('homepage') }}">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Coordinator</li>
-                    </ol>
-                </nav>
-            </div>
-
-            <div class="col-12">
-                <section class="row region region-top-header">
-                    <h1 class="title border-bottom pb-3 mb-4">{{ page_title }}</h1>
-                </section>
-            </div>
-
-            <a id="main-content" tabindex="-1"></a>
-            <div class="col-12" role="main">
-                <section class="row content">
-                    <div class="col-12">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
+{% block breadcrumbs %}
+<div class="col-12">
+    <nav clsss="row" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">Home</li>
+        </ol>
+    </nav>
+</div>
 {% endblock %}
 
-{% block scripts %}
-<!-- no scripts -->
+{% block content %}
+<div class="col-12">
+    <p>This is the home page.</p>
+    {% if page_content|default() %}
+        <p>{{ page_content }}</p>
+    {% endif %}
+</div>
+
+<div class="col-12">
+    {% if context|default() %}
+
+        {% if context == "coordinator" %}
+            {% include "fragment/coordinator.html.twig" %}
+        {% endif %}
+
+        {% if context == "requester" %}
+            {% include "fragment/requester.html.twig" %}
+        {% endif %}
+
+    {% else %}
+        {% include "fragment/user.html.twig" %}
+    {% endif %}
+</div>
 {% endblock %}

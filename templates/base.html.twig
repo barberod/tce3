@@ -9,16 +9,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="title" content="Transfer Credit Evaluation | Registrar's Office | Georgia Tech" />
-    <meta name="description" content="A theme suitable for a business form" />
-    <meta name="keywords" content="business, form" />
+    <meta name="description" content="If a course taken at another institution is not listed on the transfer equivalency site, it must be submitted for transfer credit evaluation." />
+    <meta name="keywords" content="transfer, credit, evaluation, equivalency" />
     <meta name="robots" content="index, follow" />
     <meta name="author" content="barberod" />
 
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('/apple-touch-icon.png')}}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('/favicon-32x32.png')}}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('/favicon-16x16.png')}}">
+    <link rel="manifest" href="{{ asset('/site.webmanifest')}}">
+    <link rel="mask-icon" href="{{ asset('/safari-pinned-tab.svg')}}" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#ffc40d">
     <meta name="theme-color" content="#ffffff">
 
@@ -30,23 +30,23 @@
 
     <meta property="og:url" content="https://www.gatech.edu" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Some Page @ Transfer Credit Evaluation" />
+    <meta property="og:title" content="{% if prepend|default() %}{{ prepend }} @ {% endif %}Transfer Credit Evaluation" />
     <meta property="og:site_name" content="Transfer Credit Evaluation">
-    <meta property="og:description" content="A theme suitable for a business form" />
-    <meta property="og:image" content="../../../img/meta_500x326.jpg" />
+    <meta property="og:description" content="If a course taken at another institution is not listed on the transfer equivalency site, it must be submitted for transfer credit evaluation." />
+    <meta property="og:image" content="{{ asset('img/meta_500x326.jpg')}}" />
 
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Some Page @ Transfer Credit Evaluation" />
-    <meta name="twitter:description" content="A theme suitable for a business form" />
+    <meta name="twitter:title" content="{% if prepend|default() %}{{ prepend }} @ {% endif %}Transfer Credit Evaluation" />
+    <meta name="twitter:description" content="If a course taken at another institution is not listed on the transfer equivalency site, it must be submitted for transfer credit evaluation." />
     <meta name="twitter:url" content="https://www.gatech.edu" />
-    <meta name="twitter:image" content="../../../img/twitter_500x326.jpg" />
+    <meta name="twitter:image" content="{{ asset('img/twitter_500x326.jpg')}}" />
     <meta name="twitter:image:alt" content="Alt text for image">
 
     <title>{% if prepend|default() %}{{ prepend }} | {% endif %}Transfer Credit Evaluation | Registrar's Office | Georgia Tech</title>
-    <link href="../../../css/styles.css" rel="stylesheet" />
-    <link href="../../../css/cookie-alert.css" rel="stylesheet" />
-    <link href="../../../css/cdn-pics.css" rel="stylesheet" />
-    <link href="../../../css/browser.css" rel="stylesheet" />
+    <link href="{{ asset('css/styles.css')}}" rel="stylesheet" />
+    <link href="{{ asset('css/cookie-alert.css')}}" rel="stylesheet" />
+    <link href="{{ asset('css/cdn-pics.css')}}" rel="stylesheet" />
+    <link href="{{ asset('css/browser.css')}}" rel="stylesheet" />
 
     <!-- Google Fonts: Abel, Roboto, Roboto Condensed -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -58,10 +58,10 @@
     <script src="https://kit.fontawesome.com/d781e20338.js" crossorigin="anonymous"></script>
 
     <!-- Font Awesome Pro -->
-    <link rel="stylesheet" href="../../../vendor/fontawesome/css/fontawesome.min.css" media="screen">
-    <link rel="stylesheet" href="../../../vendor/fontawesome/css/duotone.min.css" media="screen">
-    <link rel="stylesheet" href="../../../vendor/fontawesome/css/regular.min.css" media="screen">
-    <link rel="stylesheet" href="../../../vendor/fontawesome/css/brands.min.css" media="screen">
+    <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/fontawesome.min.css')}}" media="screen">
+    <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/duotone.min.css')}}" media="screen">
+    <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/regular.min.css')}}" media="screen">
+    <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/brands.min.css')}}" media="screen">
 
     <!-- Google tag (gtag.js) + cookie-alert.js -->
     <!--
@@ -122,11 +122,11 @@
                                     <a class="nav-link dropdown-btn" id="dropdown-manager" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-sitemap fa-fw me-2"></i>Manager</a>
                                     <div class="dropdown-menu" aria-labelledby="dropdown-manager">
                                         <hr>
-                                        <a class="dropdown-item" href="../../../secure/manager">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/manager">
                                             <i class="fa-solid fa-home fa-fw me-2"></i>Home
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../../../secure/manager/reports">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/manager/reports">
                                             <i class="fa-solid fa-chart-simple fa-fw me-2"></i>Manager Reports
                                         </a>
                                         <hr>
@@ -138,28 +138,28 @@
                                     <a class="nav-link dropdown-btn" id="dropdown-coordinator" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-folder-tree fa-fw me-2"></i>Coordinator</a>
                                     <div class="dropdown-menu" aria-labelledby="dropdown-coordinator">
                                         <hr>
-                                        <a class="dropdown-item" href="../../../secure/coordinator">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator">
                                             <i class="fa-solid fa-home fa-fw me-2"></i>Home
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../../../secure/coordinator/evaluation/table">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator/evaluation/table">
                                             <i class="fa-solid fa-table fa-fw me-2"></i>Evaluations Tables
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../../../secure/coordinator/lookup">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator/lookup">
                                             <i class="fa-solid fa-search fa-fw me-2"></i>GTID Lookup
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../../../secure/coordinator/activity">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator/activity">
                                             <i class="fa-solid fa-caret-right fa-fw me-2"></i>Activity
                                         </a>
-                                        <a class="dropdown-item" href="../../../secure/coordinator/courses">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator/courses">
                                             <i class="fa-solid fa-caret-right fa-fw me-2"></i>Courses
                                         </a>
-                                        <a class="dropdown-item" href="../../../secure/coordinator/departments">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator/departments">
                                             <i class="fa-solid fa-caret-right fa-fw me-2"></i>Departments
                                         </a>
-                                        <a class="dropdown-item" href="../../../secure/coordinator/universities">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/coordinator/universities">
                                             <i class="fa-solid fa-caret-right fa-fw me-2"></i>Universities
                                         </a>
                                         <hr>
@@ -171,25 +171,25 @@
                                     <a class="nav-link dropdown-btn" id="dropdown-observer" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-glasses fa-fw me-2"></i>Observer</a>
                                     <div class="dropdown-menu" aria-labelledby="dropdown-observer">
                                         <hr>
-                                        <a class="dropdown-item" href="../../../secure/observer">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/observer">
                                             <i class="fa-solid fa-home fa-fw me-2"></i>Home
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../../../secure/observer/evaluation/table">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/observer/evaluation/table">
                                             <i class="fa-solid fa-table fa-fw me-2"></i>Evaluations Tables
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../../../secure/observer/lookup">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/observer/lookup">
                                             <i class="fa-solid fa-search fa-fw me-2"></i>GTID Lookup
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../../../secure/observer/courses">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/observer/courses">
                                             <i class="fa-solid fa-caret-right fa-fw me-2"></i>Courses
                                         </a>
-                                        <a class="dropdown-item" href="../../../secure/observer/departments">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/observer/departments">
                                             <i class="fa-solid fa-caret-right fa-fw me-2"></i>Departments
                                         </a>
-                                        <a class="dropdown-item" href="../../../secure/observer/universities">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/observer/universities">
                                             <i class="fa-solid fa-caret-right fa-fw me-2"></i>Universities
                                         </a>
                                         <hr>
@@ -201,29 +201,29 @@
                                     <a class="nav-link dropdown-btn" id="dropdown-assignee" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-diagram-next fa-fw me-2"></i>Assignee</a>
                                     <div class="dropdown-menu" aria-labelledby="dropdown-assignee">
                                         <hr>
-                                        <a class="dropdown-item" href="../../../secure/assignee">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee">
                                             <i class="fa-solid fa-home fa-fw me-2"></i>Home
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../../../secure/assignee/evaluation/table">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee/evaluation/table">
                                             <i class="fa-solid fa-inbox fa-fw me-2"></i>Need My Attention
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../../../secure/assignee/history">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee/history">
                                             <i class="fa-solid fa-box-archive fa-fw me-2"></i>My Past Evaluations
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../../../secure/assignee/lookup">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee/lookup">
                                             <i class="fa-solid fa-search fa-fw me-2"></i>GTID Lookup
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../../../secure/assignee/courses">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee/courses">
                                             <i class="fa-solid fa-caret-right fa-fw me-2"></i>Courses
                                         </a>
-                                        <a class="dropdown-item" href="../../../secure/assignee/departments">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee/departments">
                                             <i class="fa-solid fa-caret-right fa-fw me-2"></i>Departments
                                         </a>
-                                        <a class="dropdown-item" href="../../../secure/assignee/universities">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/assignee/universities">
                                             <i class="fa-solid fa-caret-right fa-fw me-2"></i>Universities
                                         </a>
                                         <hr>
@@ -235,15 +235,15 @@
                                     <a class="nav-link dropdown-btn" id="dropdown-requester" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-folder-closed fa-fw me-2"></i>Requester</a>
                                     <div class="dropdown-menu" aria-labelledby="dropdown-requester">
                                         <hr>
-                                        <a class="dropdown-item" href="../../../secure/requester">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/requester">
                                             <i class="fa-solid fa-home fa-fw me-2"></i>Home
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../../../secure/requester/evaluation/create">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/requester/evaluation/create">
                                             <i class="fa-solid fa-arrow-up-from-bracket fa-fw me-2"></i>Submit an Evaluation
                                         </a>
                                         <hr>
-                                        <a class="dropdown-item" href="../../../secure/requester/evaluation/table">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/requester/evaluation/table">
                                             <i class="fa-solid fa-table fa-fw me-2"></i>My Evaluations
                                         </a>
                                         <hr>
@@ -255,7 +255,7 @@
                                     <a class="nav-link dropdown-btn" id="dropdown-roles" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa-solid fa-user-gear fa-fw me-2"></i>My Roles</a>
                                     <div class="dropdown-menu" aria-labelledby="dropdown-roles">
                                         <hr>
-                                        <a class="dropdown-item" href="../../../secure/">
+                                        <a class="dropdown-item" href="{{ app.request.getSchemeAndHttpHost() }}secure/">
                                             <i class="fa-solid fa-gear fa-fw me-2"></i>Choose Your Role
                                         </a>
                                         <hr>
@@ -268,7 +268,7 @@
 
                         <div class="sidebar-bottom pt-3">
                             <div class="sidebar-heading text-uppercase"><small>Did you know?</small></div>
-                            <p class="text-muted mb-4">ChipTest, Hydra, Deep Blue, and HiTech are all computers or computer programs developed to play chess.</p>
+                            <p class="text-muted mb-4">The <a href="https://registrar.gatech.edu/info/transfer-credit-equivalency-tables" target="_blank" class="text-muted text-decoration-underline">transfer equivalency tables</a> list all coursework and institutions that have already been evaluated for transfer credit.</p>
                         </div>
 
                     </div>
@@ -277,6 +277,21 @@
 
                 <!-- Main -->
                 <div class="col-md-9 ms-sm-auto col-xl-10 px-0 d-flex flex-column h-100 mt-3 mt-sm-0">
+
+                    <div class="col-12">
+                        <div id="browser"></div>
+                        <div id="features"></div>
+                        <div id="messages">
+                        {% for label, messages in app.flashes(['danger', 'info', 'success', 'warning']) %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                        </div>
+                    </div>
 
                     {% block page %}
                     {% endblock %}
@@ -400,21 +415,16 @@
             </div>
         </div>
     </div>
-    <script type="module" src="../../../js/main.js"></script>
-    <script src="../../../js/scroll.js"></script>
-    <script src="../../../js/cookie-alert.js"></script>
-    <script src="../../../js/color-modes.js"></script>
-    <script src="../../../js/cdn-pics.js"></script>
-
-    <script src="../../../vendor/moment/moment-with-locales.js"></script>
-    <script src="../../../vendor/moment/moment-timezone-with-data-1970-2030.js"></script>
-    <script nonce="rZuRQ4J8kK7i">window.page_version = 'live';</script>
-    <script src="../../../js/announcements.js"></script>
-    <script src="../../../js/outages.js"></script>
-    <script src="../../../js/browser.js"></script>
-
-    <script src="../../../vendor/modernizr/modernizr-custom.js"></script>
-    <script src="../../../js/features.js"></script>
+    <script type="module" src="{{ asset('js/main.js') }}"></script>
+    <script src="{{ asset('js/scroll.js')}}"></script>
+    <script src="{{ asset('js/cookie-alert.js') }}"></script>
+    <script src="{{ asset('js/color-modes.js') }}"></script>
+    <script src="{{ asset('js/cdn-pics.js') }}"></script>
+    <script src="{{ asset('js/browser.js') }}"></script>
+    <script src="{{ asset('vendor/modernizr/modernizr-custom.js') }}"></script>
+    <script src="{{ asset('js/features.js') }}"></script>
+    {% block scripts %}
+    {% endblock %}
 </body>
 
 </html>

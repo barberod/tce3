@@ -77,7 +77,7 @@ final class UserProvider implements CasUserProviderInterface
         if (!$user instanceof CasUserInterface) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
         }
-        // $this->logger->debug('****REFRESH USER**** = '.$user->getUserIdentifier());
+        // $this->logger->debug('Refreshing user '.$user->getUserIdentifier());
 
         $processedUser = $this->lookup->processUser($user->getUserIdentifier());
         if ($processedUser->getStatus() !== 1) {

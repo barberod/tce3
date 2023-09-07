@@ -43,10 +43,12 @@ These are the steps to create.
 + [22. Add dev authorization](#22)
 + [23. Add flash alerts](#23)
 + [24. Add prod authorization](#24)
-+ [25. Add custom error page templates](#25)
-+ [26. Add unit testing with PHPUnit](#26)
-+ [27. Add end-to-end (e2e) testing with Codeception](#27)
-+ [28. Copy in front-end project](#28)
++ [25. Modify dev and prod authorization for GT](#25)
++ [26. Enable Symfony to provide assets](#26)
++ [27. Add custom error page templates](#27)
++ [28. Add unit testing with PHPUnit](#28)
++ [29. Add end-to-end (e2e) testing with Codeception](#29)
++ [30. Copy in front-end project](#30)
 <br>
 <br>
 
@@ -987,6 +989,8 @@ public function load(ObjectManager $manager): void
 
 ### 13. Add dev authentication
 
+_NB: If you're working step-by-step, be aware of the changes in Step 25 (dev auth, prod auth, templates)._
+
 Mini-glossary:<br>
 + _YAML = YAML Ain't Markup Language™. YAML is a human-friendly data serialization language for all programming languages._<br>
 <br>
@@ -1224,6 +1228,8 @@ You still shouldn't be able to access anything at `/my`.
 <a href="#top">Back to top</a>
 
 ### 16. Add prod authentication with CAS
+
+_NB: If you're working step-by-step, be aware of the changes in Step 25 (dev auth, prod auth, templates)._
 
 Mini-glossary:<br>
 + _CAS = Central Authentication Service_<br>
@@ -2484,6 +2490,8 @@ After loading or unloading data in this way, be sure to undue any changes to `co
 
 ### 22. Add dev authorization
 
+_NB: If you're working step-by-step, be aware of the changes in Step 25 (dev auth, prod auth, templates)._
+
 Since the `http_basic` means of dev authentication cannot mimic prod authentication sufficiently -- it does not create a `User` object for the current user -- you must now create a custom `DevAuthenticator`. With this dev authenticator in place, it will be possible to use the `User` table of the database of dev authorization.
 
 Create a new file at `src/Security/DevAuthenticator.php`
@@ -2832,6 +2840,8 @@ Clear the cache. Run the dev server. Load the `/my` page. See an alert containin
 <a href="#top">Back to top</a>
 
 ### 24. Add prod authorization
+
+_NB: If you're working step-by-step, be aware of the changes in Step 25 (dev auth, prod auth, templates)._
 
 Mini-glossary:<br>
 + _GTED = Georgia Tech Enterprise Directory_<br>
@@ -3278,26 +3288,427 @@ If you view the User table in the database after you log in, you'll see your acc
 <a id="25"></a>
 <a href="#top">Back to top</a>
 
-### 25. Add custom error page templates
-https://www.digitalocean.com/community/tutorials/how-to-troubleshoot-common-http-error-codes
+### 25. Modify dev and prod authorization for GT
 
-Lorem ipsum...
+Because you'll necessarily use Georgia Tech's CAS service for authentication in the production environment, some crucial modifications are needed. The `ecphp/cas-bundle` package handles CAS in this app, but it limits what kinds of data and roles can exist for the currently logged-in user as it is known by the security processes of the app. It really only allows a username gotten from the CAS service and the `ROLE_CAS_AUTHENTICATED`, it doesn't out-of-the-box allow for the rest of the data in our User object or the roles we want to define for ourselves.
+
+With the steps below, we continue to have our User object that holds the additional data and roles we want, and we continue to use the `ecphp/cas-bundle` package in a way that should (hopefully) persist beyond upgrades. The main downsides are three: first, we cannot use the simple access control configurations that rely on the security system knowing roles beyond `ROLE_CAS_AUTHENTICATED` and will instead need slightly less simple access control processes; second, we need custom UserProvider classes that return a _spoofed_ CasUser object to satisfy the `ecphp/cas-bundle` package during authentication or, in the case of the UserProvider for the dev env, mimic a spoofed CasUser object when returning a plain User object; and third, in our Twig templates we will have to get roles with an uncommon variable as the commonly used `app.user.roles` will only hold `ROLE_CAS_AUTHENTICATED` -- our unique roles will be accessed with `app.user.attributes.profile.roles` instead and, likewise, supplemental user data are accessed with the Twig variables itemized below.
+
+- `app.user.attributes.profile.id // uuid` 
+- `app.user.attributes.profile.un // username`
+- `app.user.attributes.profile.org_id // GTID`
+- `app.user.attributes.profile.dn // display name`
+- `app.user.attributes.profile.email`
+- `app.user.attributes.profile.category // e.g., staff, faculty, student, member`
+- `app.user.attributes.profile.status // 1 for not blocked`
+- `app.user.attributes.profile.frozen // 1 for frozen. i.e., not overwritten by LDAP (unlikely to need be shown by Twig)`
+- `app.user.attributes.profile.loaded_from // used by the data-load and data-unload commands (unlikely to need be shown by Twig)`
+- `app.user.attributes.profile.created `
+- `app.user.attributes.profile.updated`
+- `app.user.attributes.profile.roles // beyond ROLE_CAS_AUTHENTICATED. e.g., ROLE_USER, ROLE_REQUESTER, ROLE_COORDINATOR`
+- `app.user.attributes.profile.roles`
+
 <br>
+
+#### Edit the custom UserProvider for prod ####
+
+The file a `src/Security/UserProvider` to be this.
+
+```
+<?php
+
+/**
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ *
+ * @see https://github.com/ecphp
+ */
+
+declare(strict_types=1);
+
+namespace App\Security;
+
+use App\Entity\User;
+use App\Service\LookupService;
+use EcPhp\CasBundle\Security\Core\User\CasUser;
+use EcPhp\CasBundle\Security\Core\User\CasUserInterface;
+use EcPhp\CasBundle\Security\Core\User\CasUserProviderInterface;
+use EcPhp\CasLib\Introspection\Contract\IntrospectorInterface;
+use EcPhp\CasLib\Introspection\Contract\ServiceValidate;
+use InvalidArgumentException;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\User\UserInterface;
+
+use function get_class;
+
+final class UserProvider implements CasUserProviderInterface
+{
+    private IntrospectorInterface $introspector;
+    private LoggerInterface $logger;
+    private LookupService $lookup;
+    private RequestStack $requestStack;
+
+    public function __construct(
+        IntrospectorInterface $introspector,
+        LoggerInterface $logger,
+        LookupService $lookup,
+        RequestStack $requestStack
+    ) {
+        $this->introspector = $introspector;
+        $this->logger = $logger;
+        $this->lookup = $lookup;
+        $this->requestStack = $requestStack;
+    }
+
+    public function loadUserByIdentifier($identifier): UserInterface
+    {
+        throw new UnsupportedUserException('Unsupported operation.');
+    }
+
+    public function loadUserByResponse(ResponseInterface $response): CasUserInterface
+    {
+        try {
+            $introspect = $this->introspector->detect($response);
+        } catch (InvalidArgumentException $exception) {
+            throw new AuthenticationException($exception->getMessage());
+        }
+
+        if ($introspect instanceof ServiceValidate) {
+            return new CasUser($introspect->getCredentials());
+        }
+
+        throw new AuthenticationException('Unable to load user from response.');
+    }
+
+    public function loadUserByUsername(string $username): UserInterface
+    {
+        throw new UnsupportedUserException(sprintf('Username "%s" does not exist.', $username));
+    }
+
+    public function refreshUser(UserInterface $user): UserInterface
+    {
+        if (!$user instanceof CasUserInterface) {
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
+        }
+        // $this->logger->debug('Refreshing user '.$user->getUserIdentifier());
+
+        $processedUser = $this->lookup->processUser($user->getUserIdentifier());
+        if ($processedUser->getStatus() !== 1) {
+            throw new UnsupportedUserException(sprintf('User "%s" is blocked.', $user->getUserIdentifier()));
+        }
+
+        if (!($this->keepsExistingUsernameInSession($processedUser->getUsername()))) {
+            $this->setUsernameInSession($processedUser->getUsername());
+            $this->generateLoggedInFlashMessage($processedUser);
+        }
+
+        $spoofStorage = array();
+        $spoofStorage['user'] = $user->getUserIdentifier();
+        $spoofStorage['proxyGrantingTicket'] = $user->getPgt();
+        $spoofStorage['attributes'] = $user->getAttributes();
+        $spoofStorage['attributes']['profile']['id'] = $processedUser->getId();
+        $spoofStorage['attributes']['profile']['un'] = $processedUser->getUsername();
+        $spoofStorage['attributes']['profile']['org_id'] = $processedUser->getOrgID();
+        $spoofStorage['attributes']['profile']['dn'] = $processedUser->getDisplayName();
+        $spoofStorage['attributes']['profile']['email'] = $processedUser->getEMail();
+        $spoofStorage['attributes']['profile']['category'] = $processedUser->getCategory();
+        $spoofStorage['attributes']['profile']['status'] = $processedUser->getStatus();
+        $spoofStorage['attributes']['profile']['frozen'] = $processedUser->getFrozen();
+        $spoofStorage['attributes']['profile']['loaded_from'] = $processedUser->getLoadedFrom();
+        $spoofStorage['attributes']['profile']['created'] = $processedUser->getCreated();
+        $spoofStorage['attributes']['profile']['updated'] = $processedUser->getUpdated();
+        $spoofStorage['attributes']['profile']['roles'] = $processedUser->getRoles();
+        array_push($spoofStorage['attributes']['profile']['roles'], 'ROLE_USER');
+
+        return new CasUser($spoofStorage);
+    }
+
+    public function supportsClass(string $class): bool
+    {
+        return (CasUser::class === $class || User::class );
+    }
+
+    protected function generateLoggedInFlashMessage(User $user): void {
+        $alertText = sprintf("Successfully logged in as %s (%s).", $user->getDisplayName(), $user->getUsername());
+        $this->requestStack->getSession()->getFlashBag()->add('success', $alertText);
+    }
+
+    protected function keepsExistingUsernameInSession(string $givenUsername): bool {
+        if ($givenUsername === $this->getExistingUsernameInSession()) {
+            return true;
+        }
+        return false;
+    }
+
+    protected function getExistingUsernameInSession(): ?string {
+        if ($this->requestStack->getSession()->get('existingUsername')) {
+            return $this->requestStack->getSession()->get('existingUsername');
+        }
+        return null;
+    }
+
+    protected function setUsernameInSession(string $givenUsername): void {
+        $this->requestStack->getSession()->set('existingUsername', $givenUsername);
+    }
+
+}
+
+```
+
+#### Edit the User class ####
+
+Notice how it hijacks the `CasUser` class by storing the data from the `LookupService` as "attributes".
+
+So that your app has access to the same data in the same way, whether the user is understood by the app as a `User` object (as it is in dev env) or a `CasUser` object (as it is in prod env), you should mimic this storing of data in attributes. You can accomplish this by adding a public function named `attributes()` to the `User` class.
+
+Edit the file at `src/Entity/User.php` to contain the following.
+
+```
+/*
+* Used for mimicing a CasUser with data stored inside
+* an "attributes" attribute
+*/
+public function attributes() {
+    $roles = $this->getRoles();
+    array_push($roles, 'ROLE_USER');
+
+    $profile = [
+        'id' => $this->getId(),
+        'un' => $this->getUsername(),
+        'org_id' => $this->getOrgID(),
+        'dn' => $this->getDisplayName(),
+        'email' => $this->getEmail(),
+        'category' => $this->getCategory(),
+        'status' => $this->getStatus(),
+        'frozen' => $this->getFrozen(),
+        'loaded_from' => $this->getLoadedFrom(),
+        'created' => $this->getCreated(),
+        'updated' => $this->getUpdated(),
+        'roles' => $roles,
+    ];
+
+    return array('profile' => $profile);
+}
+```
+
+Now you can reference those variables like `app.user.attributes.profile.roles` and `app.user.attributes.profile.dn` in your Twig templates and count on them to work in both dev (dev auth / `User`) and prod (CAS auth / `CasUser`).
+
+
+#### Create a dev user provider ####
+
+There are a few particulars in the custom `UserProvider` being used in the prod env. Some of those are being done in the `User` class itself now, but some of the other particulars need to be there for the dev env. Hence, we need a custom user provide class just for the dev env. We'll call it `DevUserProvider`.
+
+Create a file at `src/Security/DevUserProvider`. Make it this.
+
+```
+<?php
+
+namespace App\Security;
+
+use App\Entity\User;
+use App\Service\LookupService;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+
+class DevUserProvider implements UserProviderInterface, PasswordUpgraderInterface
+{
+    private LoggerInterface $logger;
+    private LookupService $lookup;
+    private RequestStack $requestStack;
+
+    public function __construct(
+        LoggerInterface $logger,
+        LookupService $lookup,
+        RequestStack $requestStack
+    ) {
+        $this->logger = $logger;
+        $this->lookup = $lookup;
+        $this->requestStack = $requestStack;
+    }
+
+    /**
+     * loadUserByIdentifier is an unsupported operation for this app.
+     */
+    public function loadUserByIdentifier(string $identifier): UserInterface
+    {
+        throw new UnsupportedUserException('Unsupported operation.');
+    }
+
+    /**
+     * Refreshes the user after being reloaded from the session.
+     * When a user is logged in, at the beginning of each request, the
+     * User object is loaded from the session and then this method is
+     * called.
+     */
+    public function refreshUser(UserInterface $user): UserInterface
+    {
+        $processedUser = $this->lookup->processUser($user->getUserIdentifier());
+        if ($processedUser->getStatus() !== 1) {
+            throw new UnsupportedUserException(sprintf('User "%s" is blocked.', $user->getUserIdentifier()));
+        }
+
+        if (!($this->keepsExistingUsernameInSession($processedUser->getUsername()))) {
+            $this->setUsernameInSession($processedUser->getUsername());
+            $this->generateLoggedInFlashMessage($processedUser);
+        }
+
+        return $user;
+    }
+
+    /**
+     * Tells Symfony to use this provider for this User class.
+     */
+    public function supportsClass(string $class): bool
+    {
+        return true;
+        // return User::class === $class || is_subclass_of($class, User::class);
+    }
+
+    /**
+     * upgradePassword is an unsupported operation for this app.
+     */
+    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
+    {
+        throw new UnsupportedUserException('Unsupported operation.');
+    }
+
+    protected function generateLoggedInFlashMessage(User $user): void {
+        $alertText = sprintf("Successfully logged in as %s (%s).", $user->getDisplayName(), $user->getUsername());
+        $this->requestStack->getSession()->getFlashBag()->add('success', $alertText);
+    }
+
+    protected function keepsExistingUsernameInSession(string $givenUsername): bool {
+        if ($givenUsername === $this->getExistingUsernameInSession()) {
+            return true;
+        }
+        return false;
+    }
+
+    protected function getExistingUsernameInSession(): ?string {
+        if ($this->requestStack->getSession()->get('existingUsername')) {
+            return $this->requestStack->getSession()->get('existingUsername');
+        }
+        return null;
+    }
+
+    protected function setUsernameInSession(string $givenUsername): void {
+        $this->requestStack->getSession()->set('existingUsername', $givenUsername);
+    }
+}
+
+```
+
+#### Edit the security configuration ####
+
+Ok, there is a bunch of new custom stuff in our app now. These goals are satisfied.
+
+- In prod, use CAS to log in but get User data from the User entity/table and have a good way to use it in Twig templates.
+- In dev, use Symfony auth to log in but mimic how User data in prod is stored so Twig templates are same in dev and prod.
+
+Now, update the YAML file at `config/packages/security.yaml`.
+
+Under `when@prod` it's this.
+
+```
+when@prod:    
+    security:
+        providers:
+            prod_user_provider:
+                entity:
+                    class: App\Security\UserProvider
+                    property: username
+        firewalls:
+            dev:
+                pattern: ^/(_(profiler|wdt)|css|images|js)/
+                security: false
+            secured:
+                pattern: ^/secure
+                provider: prod_user_provider
+                custom_authenticator: EcPhp\CasBundle\Security\CasAuthenticator
+                form_login:
+                    check_path: cas_bundle_login
+                    login_path: cas_bundle_login
+                entry_point: EcPhp\CasBundle\Security\CasAuthenticator
+            homepage_pass_thru:
+                security: false
+                request_matcher: App\Security\HomepageMatcher
+        access_control:
+            - { path: ^/secure, roles: ROLE_CAS_AUTHENTICATED }
+```
+
+Under `when@dev` it's this.
+
+```
+when@dev:
+    security:
+        providers:
+            dev_user_provider:
+                entity:
+                    class: App\Security\DevUserProvider
+                    property: username
+            database_users:
+                entity: 
+                    class: App\Entity\User 
+                    property: username
+            chained_providers:
+                chain:
+                    providers: ['dev_user_provider', 'database_users']
+        firewalls:
+            dev:
+                pattern: ^/(_(profiler|wdt)|css|images|js)/
+                security: false
+            homepage_pass_thru:
+                security: false
+                request_matcher: App\Security\HomepageMatcher
+            never_for_production:
+                pattern: ^/secure
+                provider: chained_providers
+                custom_authenticator: App\Security\DevAuthenticator
+        access_control:
+            - { path: ^/secure, roles: IS_AUTHENTICATED_FULLY }
+```
 <br>
 
 <a id="26"></a>
 <a href="#top">Back to top</a>
 
-### 26. Add unit testing with PHPUnit
+### 26. Enable Symfony to provide assets
 
-Lorem ipsum...
-<br>
-<br>
+This step is relatively simple and might have been done earlier.
+
+Install the Symfony Assets package.
+```
+composer require symfony/assets
+```
+
+Then use `composer update` and `composer install`.
+
+This package keeps you from having to worry about your style assets loading, especially as your urls get longer.
+
+You can use this. _USE THIS._
+```
+<link href="{{ asset('css/styles.css')}}" rel="stylesheet" />
+```
+
+Instead of something like this. _DO NOT USE THIS._
+```
+<link href="../../../../css/styles.css" rel="stylesheet" />
+```
 
 <a id="27"></a>
 <a href="#top">Back to top</a>
 
-### 27. Add end-to-end (e2e) testing with Codeception
+### 27. Add custom error page templates
+https://www.digitalocean.com/community/tutorials/how-to-troubleshoot-common-http-error-codes
 
 Lorem ipsum...
 <br>
@@ -3306,7 +3717,25 @@ Lorem ipsum...
 <a id="28"></a>
 <a href="#top">Back to top</a>
 
-### 28. Copy in front-end project
+### 28. Add unit testing with PHPUnit
+
+Lorem ipsum...
+<br>
+<br>
+
+<a id="29"></a>
+<a href="#top">Back to top</a>
+
+### 29. Add end-to-end (e2e) testing with Codeception
+
+Lorem ipsum...
+<br>
+<br>
+
+<a id="30"></a>
+<a href="#top">Back to top</a>
+
+### 30. Copy in front-end project
 
 Lorem ipsum...
 <br>

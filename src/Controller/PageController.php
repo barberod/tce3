@@ -18,7 +18,7 @@ class PageController extends AbstractController
     #[Route('/', name: 'homepage')]
     public function index(): Response
     {
-        return $this->render('page/page.html.twig', [
+        return $this->render('page/homepage.html.twig', [
             'page_title' => 'Transfer Credit Evaluation',
             'page_content' => 'The quick brown fox jumps over the lazy dog.',
         ]);
@@ -36,7 +36,7 @@ class PageController extends AbstractController
     #[Route('/secure/requester', name: 'requester')]
     public function requester(): Response
     {
-        return $this->render('page/requester.html.twig', [
+        return $this->render('page/homepage.html.twig', [
             'context' => 'requester',
             'page_title' => 'Transfer Credit Evaluation',
             'prepend' => 'Requester'
