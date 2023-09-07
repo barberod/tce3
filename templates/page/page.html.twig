@@ -6,147 +6,35 @@
         <div class="row g-0">
 
             <div class="col-12">
-                <nav clsss="row" aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="../secure">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Requester</li>
-                    </ol>
-                </nav>
+                <div id="browser"></div>
+                <div id="features"></div>
+                <div id="messages">
+                {% for label, messages in app.flashes(['danger', 'info', 'success', 'warning']) %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                </div>
             </div>
+
+            <!-- There are no breadcrumbs on this template. -->
 
             <div class="col-12">
                 <section class="row region region-top-header">
-                    <div class="block-page-title-block">
-                        <div class="content">
-                            <h1 class="title border-bottom pb-3 mb-4">{{ page_title }}</h1>
-                        </div>
-                    </div>
+                    <h1 class="title border-bottom pb-3 mb-4">{{ page_title }}</h1>
                 </section>
             </div>
 
-            <div class="col-12">
-                <div class="main-content w-100" id="content" role="main">
-                    <section class="section">
-                        <a id="main-content" tabindex="-1"></a>
-                        <div class="content">
-                            
-                            <div class="row">
-
-                                <!-- Alerts -->
-                                <div id="browser"></div>
-                                <div id="features"></div>
-                                <div id="messages">
-                                {% for label, messages in app.flashes(['danger', 'info', 'success', 'warning']) %}
-                                    {% for message in messages %}
-                                        <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
-                                            {{ message }}
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        </div>
-                                    {% endfor %}
-                                {% endfor %}
-                                </div>
-
-                                {% block content %}
-                                <div class="col-12">
-                                    <div class="row">
-                                        <!-- Right side -->
-                                        <div class="col-12 col-lg-4 col-xl-3 d-flex flex-column">
-                                            <!-- Menu Card -->
-                                            <div class="card mb-3">
-                                                <h2 class="h6 card-header">Menu</h2>
-                                                <div class="card-body">
-                                                    <div class="d-grid gap-3">
-                                                        <a class="btn btn-link text-start text-decoration-none ps-4" href="/secure">Log in<i class="fa-solid fa-right-to-bracket fa-fw ms-3"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- end of Menu Card -->
-                                        </div>
-                                        <!-- end of right side-->
-                                        <!-- Left side -->
-                                        <div class="col-12 col-lg-8 col-xl-9 d-flex flex-column">
-                                            <!-- About Card -->
-                                            <div class="card mb-3">
-                                                <h2 class="h6 card-header">About the Transfer Credit Evaluation Web App</h2>
-                                                <div class="card-body mb-4">
-                                                    <h2 class="h6"><i class="fa-solid fa-check me-3 text-success"></i>Intended for Undergraduate Students and Undergraduate-Level Applicants</h2>
-                                                    <p class="card-text">This course evaluation request website is intended for current undergraduate Georgia Tech students and applicants that need courses evaluated for credit, initial transfer, or admissibility.</p>
-                                                </div>
-                                            </div>
-
-                                            <div class="card mb-3">
-                                                <div class="card-body mb-4">
-                                                    <h2 class="h6"><i class="fa-solid fa-xmark me-3 text-danger"></i>Not Intended for Graduate Students or Graduate-Level Applicants</h2>
-                                                    <p class="card-text">Information for graduate students interested in transfer credit can be found in the Georgia Tech Catalog.</p>
-                                                    <p class="card-text"><a href="https://catalog.gatech.edu/academics/graduate/policies-and-regulations/" target="_blank">Graduate Policies and Regulations<i class="fas fa-external-link-alt ps-3" aria-hidden="true"></i></a></p>
-                                                </div>
-                                            </div>
-
-                                            <div class="card mb-3">
-                                                <div class="card-body mb-4">
-                                                    <h2 class="h6"><i class="fa-solid fa-equals me-3 text-muted"></i>First, Review the Existing Tranfer Equivalencies</h2>
-                                                    <p class="card-text">Before submitting a request for an evaluation, the student is asked review the transfer equivalency catalog. If the course(s) are listed with a GT equivalent, there is no need to request an additional evaluation.</p>
-                                                    <p class="card-text"><a href="https://registrar.gatech.edu/info/transfer-credit-equivalency-tables" target="_blank">Transfer Credit Equivalency Tables<i class="fas fa-external-link-alt ps-3" aria-hidden="true"></i></a></p>
-                                                </div>
-                                            </div>
-
-                                            <div class="card mb-3">
-                                                <div class="card-body">
-                                                    <h2 class="h6"><i class="fa-solid fa-file me-3 text-muted"></i>Files Needed for Each Evaluation</h2>
-                                                    <p class="card-text">Before submitting a request for an evaluation, the student will need to have a course syllabus and/or description in electronic format for each course being evaluated. The course syllabus and description are the basis of the evaluation. Georgia Tech cannot process any request without them.</p>
-                                                </div>
-                                            </div>
-                                            <!-- end of About Card -->
-                                        </div>
-                                        <!-- end of left side-->
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12 offset-lg-4 col-lg-8 offset-xl-3 col-xl-9 d-flex flex-column">
-                                            <hr>
-                                            <!-- Legend Card -->
-                                            <div class="card mb-3 mt-3">
-                                                <h2 class="h6 card-header">Legend</h2>
-                                                <div class="card-body">
-                                                    <p><em>The phases of the Transfer Credit Evaluation process are described below.</em></p>
-                                                    <table class="table table-light table-buzz">
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="text-center px-3">Phase</th>
-                                                                <th class="px-3">Description</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td class="text-center px-3 py-4 fs-6">Registrar 1</td>
-                                                                <td class="px-3 py-4 fs-6">Pending initial review by the Registrar's Office.</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="text-center px-3 py-4 fs-6">Department</td>
-                                                                <td class="px-3 py-4 fs-6">Registrar's Office has sent course to department for review. Please allow 2-4 weeks.</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="text-center px-3 py-4 fs-6">Registrar 2</td>
-                                                                <td class="px-3 py-4 fs-6">Department has reviewed and Registrar's Office is processing. Please allow 2-4 weeks.</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="text-center px-3 py-4 fs-6">Student</td>
-                                                                <td class="px-3 py-4 fs-6">Student must review notes and submit again. Will return to "Registrar 1" phase.</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td class="text-center px-3 py-4 fs-6">Complete</td>
-                                                                <td class="px-3 py-4 fs-6">Evaluation completed.</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {% endblock %}
-
-                        </div>
-                    </section>
+            <a id="main-content" tabindex="-1"></a>
+            <div class="col-12" role="main">
+                <section class="row content">
+                    <div class="col-12">
+                    {% block content %}
+                    {% endblock %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -157,3 +45,4 @@
 {% block scripts %}
 <!-- no scripts -->
 {% endblock %}
+

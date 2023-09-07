@@ -93,7 +93,6 @@ final class UserProvider implements CasUserProviderInterface
         $spoofStorage['user'] = $user->getUserIdentifier();
         $spoofStorage['proxyGrantingTicket'] = $user->getPgt();
         $spoofStorage['attributes'] = $user->getAttributes();
-
         $spoofStorage['attributes']['profile']['id'] = $processedUser->getId();
         $spoofStorage['attributes']['profile']['un'] = $processedUser->getUsername();
         $spoofStorage['attributes']['profile']['org_id'] = $processedUser->getOrgID();
