@@ -9,19 +9,18 @@
                 {% if (context == "manager") or (context == "coordinator") or (context == "observer") or (context == "assignee") or (context == "requester") %}
                     {% set home_route = context ~ '_home' %}
                     <li class="breadcrumb-item"><a href="{{ url(home_route) }}">{{ context|capitalize }}</a></li>
+                    {% set evaluation_table = context ~ '_evaluation_table' %}
+                    <li class="breadcrumb-item"><a href="{{ url(evaluation_table) }}">Evaluations</a></li>
+                    {% if verb|default() %}
+                        {% set evaluation_page = context ~ '_evaluation_page' %}
+                        <li class="breadcrumb-item"><a href="{{ url(evaluation_page, {'uuid':uuid}) }}">Evaluation #{{ uuid }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ verb|replace({'-': ' '})|capitalize }}</li>
+                    {% else %}
+                        <li class="breadcrumb-item active" aria-current="page">Evaluation #{{ uuid }}</li>
+                    {% endif %}
                 {% endif %}
             {% endif %}
-            <li class="breadcrumb-item"><a href="#">Evaluations</a></li>
-
-            {% if verb|default() %}
-                {% if context|default() %}
-                    {% set evaluation_page = context ~ '_evaluation_page' %}
-                    <li class="breadcrumb-item"><a href="{{ url(evaluation_page, {'uuid':uuid}) }}">Evaluation #{{ uuid }}</a></li>
-                {% endif %}
-                <li class="breadcrumb-item active" aria-current="page">{{ verb|replace({'-': ' '})|capitalize }}</li>
-            {% else %}
-                <li class="breadcrumb-item active" aria-current="page">Evaluation #{{ uuid }}</li>
-            {% endif %}
+            
         </ol>
     </nav>
 </div>

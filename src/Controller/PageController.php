@@ -43,6 +43,8 @@ class PageController extends AbstractController
         ]);
     }
 
+
+
     #[Route('/secure/coordinator', name: 'coordinator_home')]
     public function coordinator(): Response
     {
@@ -56,7 +58,7 @@ class PageController extends AbstractController
     #[Route('/secure/coordinator/evaluation', name: 'coordinator_evaluation_table')]
     public function coordinatorEvaluationTable(): Response
     {
-        return $this->render('evaluation/page.html.twig', [
+        return $this->render('evaluation/table.html.twig', [
             'context' => 'coordinator',
             'page_title' => 'Evaluations',
             'prepend' => 'Evaluations'
@@ -86,6 +88,8 @@ class PageController extends AbstractController
         ]);
     }
 
+
+
     #[Route('/secure/observer', name: 'observer_home')]
     public function observer(): Response
     {
@@ -95,6 +99,41 @@ class PageController extends AbstractController
             'prepend' => 'Observer'
         ]);
     }
+
+    #[Route('/secure/observer/evaluation', name: 'observer_evaluation_table')]
+    public function observerEvaluationTable(): Response
+    {
+        return $this->render('evaluation/table.html.twig', [
+            'context' => 'observer',
+            'page_title' => 'Evaluations',
+            'prepend' => 'Evaluations'
+        ]);
+    }
+
+    #[Route('/secure/observer/evaluation/{uuid}', name: 'observer_evaluation_page')]
+    public function observerEvaluationPage(string $uuid): Response
+    {
+        return $this->render('evaluation/page.html.twig', [
+            'context' => 'observer',
+            'page_title' => 'Evaluation #'.$uuid,
+            'prepend' => 'Evaluation #'.$uuid,
+            'uuid' => $uuid
+        ]);
+    }
+
+    #[Route('/secure/observer/evaluation/{uuid}/{verb}', name: 'observer_evaluation_form')]
+    public function observerEvaluationForm(string $uuid, string $verb): Response
+    {
+        return $this->render('evaluation/page.html.twig', [
+            'context' => 'observer',
+            'page_title' => 'Evaluation #'.$uuid,
+            'prepend' => 'Evaluation #'.$uuid,
+            'uuid' => $uuid,
+            'verb' => $verb
+        ]);
+    }
+
+
 
     #[Route('/secure/assignee', name: 'assignee_home')]
     public function assignee(): Response
@@ -106,6 +145,41 @@ class PageController extends AbstractController
         ]);
     }
 
+    #[Route('/secure/assignee/evaluation', name: 'assignee_evaluation_table')]
+    public function assigneeEvaluationTable(): Response
+    {
+        return $this->render('evaluation/table.html.twig', [
+            'context' => 'assignee',
+            'page_title' => 'Evaluations',
+            'prepend' => 'Evaluations'
+        ]);
+    }
+
+    #[Route('/secure/assignee/evaluation/{uuid}', name: 'assignee_evaluation_page')]
+    public function assigneeEvaluationPage(string $uuid): Response
+    {
+        return $this->render('evaluation/page.html.twig', [
+            'context' => 'assignee',
+            'page_title' => 'Evaluation #'.$uuid,
+            'prepend' => 'Evaluation #'.$uuid,
+            'uuid' => $uuid
+        ]);
+    }
+
+    #[Route('/secure/assignee/evaluation/{uuid}/{verb}', name: 'assignee_evaluation_form')]
+    public function assigneeEvaluationForm(string $uuid, string $verb): Response
+    {
+        return $this->render('evaluation/page.html.twig', [
+            'context' => 'assignee',
+            'page_title' => 'Evaluation #'.$uuid,
+            'prepend' => 'Evaluation #'.$uuid,
+            'uuid' => $uuid,
+            'verb' => $verb
+        ]);
+    }
+
+
+
     #[Route('/secure/requester', name: 'requester_home')]
     public function requester(): Response
     {
@@ -115,6 +189,41 @@ class PageController extends AbstractController
             'prepend' => 'Requester'
         ]);
     }
+
+    #[Route('/secure/requester/evaluation', name: 'requester_evaluation_table')]
+    public function requesterEvaluationTable(): Response
+    {
+        return $this->render('evaluation/table.html.twig', [
+            'context' => 'requester',
+            'page_title' => 'Evaluations',
+            'prepend' => 'Evaluations'
+        ]);
+    }
+
+    #[Route('/secure/requester/evaluation/{uuid}', name: 'requester_evaluation_page')]
+    public function requesterEvaluationPage(string $uuid): Response
+    {
+        return $this->render('evaluation/page.html.twig', [
+            'context' => 'requester',
+            'page_title' => 'Evaluation #'.$uuid,
+            'prepend' => 'Evaluation #'.$uuid,
+            'uuid' => $uuid
+        ]);
+    }
+
+    #[Route('/secure/requester/evaluation/{uuid}/{verb}', name: 'requester_evaluation_form')]
+    public function requesterEvaluationForm(string $uuid, string $verb): Response
+    {
+        return $this->render('evaluation/page.html.twig', [
+            'context' => 'requester',
+            'page_title' => 'Evaluation #'.$uuid,
+            'prepend' => 'Evaluation #'.$uuid,
+            'uuid' => $uuid,
+            'verb' => $verb
+        ]);
+    }
+
+
 
     #[Route('/login', name: 'login')]
     public function login(): Response
