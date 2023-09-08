@@ -189,7 +189,7 @@ class LookupService
             return true;
         }
         if (
-            (in_array("celster3", $entry->getAttribute('gtprimarygtaccountusername')))
+            (in_array("celster3", $entry->getAttribute('gtPrimaryGtAccountUsername')))
         ) {
             return true;
         }
@@ -198,7 +198,7 @@ class LookupService
 
     private function isAdmin(Entry $entry): bool {
         if (
-            (in_array("dbarbero3", $entry->getAttribute('gtprimarygtaccountusername')))
+            (in_array("dbarbero3", $entry->getAttribute('gtPrimaryGtAccountUsername')))
         ) {
             return true;
         }
