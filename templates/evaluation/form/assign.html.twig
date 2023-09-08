@@ -1,0 +1,120 @@
+<!-- Form 08 (assign) -->
+<form id="form-05">
+    <div class="card border-primary mb-3">
+        <h2 class="card-header bg-primary border-primary h5">
+            Assign to Department
+        </h2>
+        <div class="card-body">
+            <div id="assignGrp" class="mb-5">
+                <div class="mb-4">
+                    <label for="dept" class="form-label">Department</label>
+                    <select class="form-select" id="dept" name="dept">
+                        <option selected>- Select -</option>
+                        <option value="15110">Admissions</option>
+                        <option value="15111">Aerospace Engineering</option>
+                        <option value="15112">Airforce</option>
+                        <option value="393853">Applied Physiology</option>
+                        <option value="294733">Arabic</option>
+                        <option value="15113">Architecture</option>
+                        <option value="15114">Athletics</option>
+                        <option value="15115">Biology</option>
+                        <option value="15116">Biomedical Engineering</option>
+                        <option value="15117">Building Contstruction</option>
+                        <option value="15118">Chemical and Biomolecular Engineering</option>
+                        <option value="15119">Chemistry</option>
+                        <option value="294734">Chinese</option>
+                        <option value="396738">City and Regional Planning</option>
+                        <option value="15120">Civil &amp; Environmental Engineering</option>
+                        <option value="15121">Computer Engineering</option>
+                        <option value="15122">Computer Science</option>
+                        <option value="15123">Earth and Atmospheric Sciences</option>
+                        <option value="15124">Economics</option>
+                        <option value="15125">Electrical Engineering</option>
+                        <option value="285504">Engineering, College of</option>
+                        <option value="382670">Former</option>
+                        <option value="294735">French</option>
+                        <option value="294736">German</option>
+                        <option value="15126">Health Performance Science</option>
+                        <option value="294737">Hindi</option>
+                        <option value="15127">History Technology and Society</option>
+                        <option value="15128">Industrial and Sytems Engineering</option>
+                        <option value="15129">Industrial Design</option>
+                        <option value="15130">International Affairs</option>
+                        <option value="294739">Japanese</option>
+                        <option value="294740">Korean</option>
+                        <option value="294738">Linguistics</option>
+                        <option value="15131">Literature Media and Communication</option>
+                        <option value="345424">Management - Accounting</option>
+                        <option value="345425">Management - Analytics</option>
+                        <option value="345426">Management - Business Law and Ethics</option>
+                        <option value="345427">Management - Entrepreneurship/Strategy</option>
+                        <option value="345428">Management - Finance</option>
+                        <option value="15132">Management - General Management</option>
+                        <option value="345429">Management - Information Technology Management</option>
+                        <option value="345430">Management - International Business</option>
+                        <option value="345431">Management - Leadership and Organizational Change</option>
+                        <option value="345432">Management - Marketing</option>
+                        <option value="345433">Management - Operations and Supply Chain</option>
+                        <option value="15133">Marines</option>
+                        <option value="15134">Materials Science and Engineering</option>
+                        <option value="15135">Mathematics</option>
+                        <option value="15136">Mechanical Engineering</option>
+                        <option value="15137">Modern Languages</option>
+                        <option value="285515">Music</option>
+                        <option value="15138">Navy</option>
+                        <option value="15139">Nuclear and Radiological Engineering</option>
+                        <option value="15140">Office of International Education</option>
+                        <option value="294741">Persian</option>
+                        <option value="15141">Philosophy Science and Technology</option>
+                        <option value="15142">Physics</option>
+                        <option value="15143">Polymer and Fiber Engineering</option>
+                        <option value="294742">Portuguese</option>
+                        <option value="15144">Psychology</option>
+                        <option value="15145">Public Policy</option>
+                        <option value="15146">Registrar</option>
+                        <option value="15147">ROTC</option>
+                        <option value="294743">Russian</option>
+                        <option value="294744">Spanish</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="assignee" class="form-label">Assign to</label>
+                    <select class="form-select" id="assignee">
+                        <option selected>- Select -</option>
+                        <option value="_">Crystal Elster &lt;celster3&gt;</option>
+                        <option value="_">David Barbero &lt;dbarbero3&gt;</option>
+                        <option value="_">Makesia Scott &lt;ms366&gt;</option>
+                        <option value="_">Val Mack &lt;vm61&gt;</option>
+                    </select>
+                </div>
+            </div>
+            <div id="noteGrp" class="mb-5">
+                <div class="mb-4">
+                    <label for="noteYesOrNo" class="form-label">Add a note?</label>
+                    <select class="form-select" id="noteYesOrNo" name="noteYesOrNo">
+                        <option value="Yes">Yes</option>
+                        <option value="No" selected>No</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="visibleToRequester" class="form-label">Shall this note be visible to the requester?</label>
+                    <select class="form-select" id="visibleToRequester">
+                        <option selected>- Select -</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="noteText" class="form-label">Note</label>
+                    <textarea class="form-control" id="noteText" name="noteText" rows="3"></textarea>
+                </div>
+            </div>
+            <p class="mb-4">Use the Submit button to move this evaluation the Department phase.</p>
+        </div>
+        <div class="card-footer border-top-none p-3">
+            <button class="btn btn-primary" type="submit">Submit</button>
+            <a class="btn btn-outline-secondary ms-2" href="../secure/{{context}}/{uuid}">Exit without submitting</a>
+        </div>
+    </div>
+</form>
+<!-- /#form-08 (assign) -->

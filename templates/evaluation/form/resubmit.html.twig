@@ -1,0 +1,29 @@
+<!-- Form 06 (resubmit) -->
+<form id="form-06">
+    <div class="card border-primary mb-3">
+        <h2 class="card-header bg-primary border-primary h5">
+            Submit
+        </h2>
+        <div class="card-body">
+            <div id="limitedNoteGrp" class="mb-5">
+                <div class="mb-4">
+                    <label for="noteYesOrNo" class="form-label">Add a note?</label>
+                    <select class="form-select" id="noteYesOrNo" name="noteYesOrNo">
+                        <option value="Yes">Yes</option>
+                        <option value="No" selected>No</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="noteText" class="form-label">Note</label>
+                    <textarea class="form-control" id="noteText" name="noteText" rows="3"></textarea>
+                </div>
+            </div>
+            <p class="mb-4">Use the Submit button to submit this evaluation to the Registrar's Office.</p>
+        </div>
+        <div class="card-footer border-top-none p-3">
+            <button class="btn btn-primary" type="submit">Submit</button>
+            <a class="btn btn-outline-secondary ms-2" href="../secure/{{context}}/{uuid}">Exit without submitting</a>
+        </div>
+    </div>
+</form>
+<!-- /#form-06 (resubmit) -->

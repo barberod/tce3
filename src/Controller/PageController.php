@@ -53,6 +53,16 @@ class PageController extends AbstractController
         ]);
     }
 
+    #[Route('/secure/coordinator/evaluation', name: 'coordinator_evaluation')]
+    public function coordinatorEvaluation(): Response
+    {
+        return $this->render('evaluation/page.html.twig', [
+            'context' => 'coordinator',
+            'page_title' => 'Evaluation #1234',
+            'prepend' => 'Evaluation #1234'
+        ]);
+    }
+
     #[Route('/secure/observer', name: 'observer_home')]
     public function observer(): Response
     {

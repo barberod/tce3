@@ -1,0 +1,27 @@
+<!-- Form 04 (hide) -->
+<form id="form-04">
+    <div class="card border-primary mb-3">
+        <h2 class="card-header bg-primary border-primary h5">
+            Hide this Evaluation
+        </h2>
+        <div class="card-body">
+
+            <p class="mb-4">If you hide this evaluation, you will not be able to un-hide it without the help of the application developer.</p>
+
+            <div class="mb-4">
+                <label for="hideYesOrNo" class="form-label">Are you sure you want to hide this evaluation?</label>
+                <select class="form-select" id="hideYesOrNo" name="hideYesOrNo">
+                    <option selected>- Select -</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="card-footer border-top-none p-3">
+            <button class="btn btn-primary" type="submit">Submit</button>
+            <a class="btn btn-outline-secondary ms-2" href="../secure/{{context}}/{uuid}">Exit without submitting</a>
+        </div>
+    </div>
+</form>
+<!-- /#form-04 (hide) -->

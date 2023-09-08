@@ -1,0 +1,91 @@
+<div id="evaluation-options" class="card border-primary mb-3">
+    <h2 class="card-header bg-primary border-primary h5">
+        Options
+    </h2>
+    <div class="list-group">
+        <!-- Any Phase -->
+        <a href="/secure/{{context}}/{uuid}/edit" id="option-01" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Edit Details
+        </a>
+        <a href="/secure/{{context}}/{uuid}/annotate" id="option-02" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Write a Note
+        </a>
+        <a href="/secure/{{context}}/{uuid}/annotate-as-requester" id="option-02b" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Write a Note
+        </a>
+        <a href="/secure/{{context}}/{uuid}/append" id="option-03" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Upload a File
+        </a>
+        <a href="/secure/{{context}}/{uuid}/hide" id="option-04" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Hide this Evaluation
+        </a>
+
+        <!-- Student Phase -->
+        <a href="/secure/{{context}}/{uuid}/from-student-to-r1" id="option-05" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Advance to Registrar
+        </a>
+
+        <!-- Student Phase as Student -->
+        <a href="/secure/{{context}}/{uuid}/resubmit" id="option-06" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Submit
+        </a>
+
+        <!-- R1 Phase -->
+        <a href="/secure/{{context}}/{uuid}/articulate" id="option-07" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Spot Articulate
+        </a>
+        <a href="/secure/{{context}}/{uuid}/assign" id="option-08" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Assign to Department
+        </a>
+        <a href="/secure/{{context}}/{uuid}/from-r1-to-student" id="option-09" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Send Back to Student
+        </a>
+
+        <!-- Dept Phase -->
+        <a href="/secure/{{context}}/{uuid}/evaluate" id="option-10" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Enter Equivalencies
+        </a>
+        <a href="/secure/{{context}}/{uuid}/from-dept-to-r1" id="option-11" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Send Back to Registrar 1
+        </a>
+        <a href="/secure/{{context}}/{uuid}/reassign" id="option-12" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Change Assignee
+        </a>
+        <a href="/secure/{{context}}/{uuid}/from-dept-to-student" id="option-13" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Send Back to Student
+        </a>
+
+        <!-- Dept Phase as Assignee -->
+        <a href="/secure/{{context}}/{uuid}/pass" id="option-14" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Send Back to Registrar without Evaluating
+        </a>
+        <a href="/secure/{{context}}/{uuid}/forward" id="option-15" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Forward to a Colleague
+        </a>
+
+        <!-- R2 Phase -->
+        <a href="/secure/{{context}}/{uuid}/finalize" id="option-16" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Evaluate and Finalize Articulation
+        </a>
+        <a href="/secure/{{context}}/{uuid}/hold" id="option-17" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Put on Hold
+        </a>
+        <a href="/secure/{{context}}/{uuid}/from-r2-to-student" id="option-18" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Send Back to Student
+        </a>
+        <a href="/secure/{{context}}/{uuid}/from-r2-to-dept" id="option-19" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Re-assign to Department
+        </a>
+
+        <!-- Complete -->
+        <a href="/secure/{{context}}/{uuid}/from-complete-to-hold" id="option-20" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Move from "Complete" to "Hold"
+        </a>
+
+        <!-- Manager -->
+        <a href="/secure/{{context}}/{uuid}/delete" id="option-22" class="list-group-item list-group-item-action">
+            <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Delete thie Evaluation
+        </a>
+    </div>
+</div>
+<!-- #/evaluation-options -->

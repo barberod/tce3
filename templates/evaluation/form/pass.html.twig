@@ -1,0 +1,40 @@
+<!-- Form 14 (pass) -->
+<form id="form-14">
+    <div class="card border-primary mb-3">
+        <h2 class="card-header bg-primary border-primary h5">
+            Send Back to Registrar without Evaluating
+        </h2>
+        <div class="card-body">
+
+            <div id="noteGrp" class="mb-5">
+                <div class="mb-4">
+                    <label for="noteYesOrNo" class="form-label">Add a note?</label>
+                    <select class="form-select" id="noteYesOrNo" name="noteYesOrNo">
+                        <option value="Yes">Yes</option>
+                        <option value="No" selected>No</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="visibleToRequester" class="form-label">Shall this note be visible to the requester?</label>
+                    <select class="form-select" id="visibleToRequester">
+                        <option selected>- Select -</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="noteText" class="form-label">Note</label>
+                    <textarea class="form-control" id="noteText" name="noteText" rows="3"></textarea>
+                </div>
+            </div>
+
+            <p class="mb-4">Use the Submit button to pass this evaluation back to the Registrar.</p>
+
+        </div>
+        <div class="card-footer border-top-none p-3">
+            <button class="btn btn-primary" type="submit">Submit</button>
+            <a class="btn btn-outline-secondary ms-2" href="../secure/{{context}}/{uuid}">Exit without submitting</a>
+        </div>
+    </div>
+</form>
+<!-- /#form-14 (pass) -->
