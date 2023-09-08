@@ -116,57 +116,80 @@ class LookupService
 
     private function determineRoles(Entry $entry): array {
         $roles = array();
-        if ($this->isUndergraduateApplicant($entry)) { $roles[] = User::ROLE_UGAPP; };
-        if ($this->isGraduateApplicant($entry)) { $roles[] = User::ROLE_UGAPP; };
-        if ($this->isStudent($entry)) { $roles[] = User::ROLE_STUDENT; };
-        if ($this->isStaff($entry)) { $roles[] = User::ROLE_STAFF; };
-        if ($this->isFaculty($entry)) { $roles[] = User::ROLE_FACULTY; };
+        if ($this->isRequester($entry)) { $roles[] = User::ROLE_REQUESTER; };
+        if ($this->isAssignee($entry)) { $roles[] = User::ROLE_ASSIGNEE; };
+        if ($this->isObserver($entry)) { $roles[] = User::ROLE_OBSERVER; };
+        if ($this->isCoordinator($entry)) { $roles[] = User::ROLE_COORDINATOR; };
+        if ($this->isManager($entry)) { $roles[] = User::ROLE_MANAGER; };
         if ($this->isAdmin($entry)) { $roles[] = User::ROLE_ADMIN; };
         return $roles;
     }
 
-    private function isUndergraduateApplicant(Entry $entry): bool {
-        if (in_array("undergrad-applicant@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) {
+    private function isRequester(Entry $entry): bool {
+        if (
+            $this->isAdmin($entry) || 
+            $this->isManager($entry) || 
+            $this->isCoordinator($entry) ||
+            $this->isObserver($entry) ||
+            $this->isAssignee($entry)
+        ) {
             return true;
         }
-        return false;
-    }
 
-    private function isGraduateApplicant(Entry $entry): bool {
-        if (in_array("grad-applicant@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) {
-            return true;
-        }
-        return false;
-    }
-
-    private function isStudent(Entry $entry): bool {
         if (
             (in_array("student@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
-            (in_array("former-credit-student@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
+            (in_array("undergrad-applicant@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
             (in_array("credit-applicant-confirmed@gt", $entry->getAttribute('eduPersonScopedAffiliation')))
         ) {
             return true;
         }
+        
         return false;
     }
 
-    private function isStaff(Entry $entry): bool {
+    private function isAssignee(Entry $entry): bool {
+        if ($this->isAdmin($entry) || $this->isManager($entry) || $this->isCoordinator($entry)) {
+            return true;
+        }
         if (
-            (in_array("staff@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
-            (in_array("faculty@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
-            (in_array("affiliate@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
-            (in_array("retiree@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
-            (in_array("full-time-employee@gt", $entry->getAttribute('eduPersonScopedAffiliation')))
+            (in_array("vm61", $entry->getAttribute('account'))) || 
+            (in_array("ms366", $entry->getAttribute('account')))
         ) {
             return true;
         }
         return false;
     }
 
-    private function isFaculty(Entry $entry): bool {
+    private function isObserver(Entry $entry): bool {
+        if ($this->isAdmin($entry) || $this->isManager($entry)) {
+            return true;
+        }
         if (
-            (in_array("faculty@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
-            (in_array("affiliate@gt", $entry->getAttribute('eduPersonScopedAffiliation')))
+            (in_array("staff@psdept 682:office und:office undergraduate admission", $entry->getAttribute('eduPersonScopedAffiliation')))
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    private function isCoordinator(Entry $entry): bool {
+        if ($this->isAdmin($entry) || $this->isManager($entry)) {
+            return true;
+        }
+        if (
+            (in_array("staff@psdept 680:registrar:registrar's office", $entry->getAttribute('eduPersonScopedAffiliation')))
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    private function isManager(Entry $entry): bool {
+        if ($this->isAdmin($entry)) {
+            return true;
+        }
+        if (
+            (in_array("celster3", $entry->getAttribute('account')))
         ) {
             return true;
         }
@@ -175,8 +198,7 @@ class LookupService
 
     private function isAdmin(Entry $entry): bool {
         if (
-            (in_array("staff@enrollment", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
-            (in_array("staff@psdept 653:oit-eis:oit-enterprise information sys", $entry->getAttribute('eduPersonScopedAffiliation')))
+            (in_array("dbarbero3", $entry->getAttribute('account')))
         ) {
             return true;
         }

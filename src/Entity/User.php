@@ -13,13 +13,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface
 {
-    final public const ROLE_USER = 'ROLE_USER';
-    final public const ROLE_UGAPP = 'ROLE_UGAPP';
-    final public const ROLE_GSAPP = 'ROLE_GSAPP';
-    final public const ROLE_STUDENT = 'ROLE_STUDENT';
-    final public const ROLE_STAFF = 'ROLE_STAFF';
-    final public const ROLE_FACULTY = 'ROLE_FACULTY';
     final public const ROLE_ADMIN = 'ROLE_ADMIN';
+    final public const ROLE_MANAGER = 'ROLE_MANAGER';
+    final public const ROLE_COORDINATOR = 'ROLE_COORDINATOR';
+    final public const ROLE_OBSERVER = 'ROLE_OBSERVER';
+    final public const ROLE_ASSIGNEE = 'ROLE_ASSIGNEE';
+    final public const ROLE_REQUESTER = 'ROLE_REQUESTER';
 
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
