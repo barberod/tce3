@@ -1,0 +1,81 @@
+{% extends 'page/page.html.twig' %}
+
+{% block breadcrumbs %}
+<div class="col-12">
+    <nav clsss="row" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">Home</li>
+        </ol>
+    </nav>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="col-12">
+    <div class="row content">
+        <div class="col-12 d-flex flex-column">
+            <div class="card mb-3">
+                <h2 class="card-header h5">
+                    My Roles
+                </h2>
+                <table class="table table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="width: 25%;">Role</th>
+                            <th style="width: 75%;">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if app.user.attributes.profile.roles|default() %}
+
+                            {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
+                            <tr>
+                                <td class="text-center"><a href="{{ url('manager_home') }}">Manager</a></td>
+                                <td>A manager is a leader in the Registrar's Office who has special permissions.</td>
+                            <tr>
+                            {% endif %}
+
+                            {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
+                            <tr>
+                                <td class="text-center"><a href="{{ url('coordinator_home') }}">Coordinator</a></td>
+                                <td>A coordinator is staff member in the Registrar's Office. Coordinators have high-level permissions.</td>
+                            <tr>
+                            {% endif %}
+
+                            {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
+                            <tr>
+                                <td class="text-center"><a href="{{ url('observer_home') }}">Observer</a></td>
+                                <td>An observer is a facutly or staff member in a partnering unit. Observers can view evaluations but cannot edit them.</td>
+                            <tr>
+                            {% endif %}
+
+                            {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
+                            <tr>
+                                <td class="text-center"><a href="{{ url('assignee_home') }}">Assignee</a></td>
+                                <td>An assignee is a faculty or staff member responsible for articulating equivalencies for the transfer courses sent to them.</td>
+                            <tr>
+                            {% endif %}
+
+                            {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
+                            <tr>
+                                <td class="text-center"><a href="{{ url('requester_home') }}">Requester</a></td>
+                                <td>A requester is a student or applicant seeking credit at Georgia Tech for coursework completed at another institution.</td>
+                            <tr>
+                            {% endif %}
+
+                        {% else %}
+
+                        <tr>
+                            <td class="text-center">User</td>
+                            <td>Any person who successfully logs in via GT SSO has this role by default.</td>
+                        <tr>
+
+                        {% endif %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

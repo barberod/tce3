@@ -4,33 +4,34 @@
 <div class="col-12">
     <nav clsss="row" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item active" aria-current="page">Home</li>
+            {% if context|default() %}
+                <li class="breadcrumb-item"><a href="{{ url('homepage') }}">Home</a></li>
+                {% if (context == "manager") or (context == "coordinator") or (context == "observer") or (context == "assignee") or (context == "requester") %}
+                    <li class="breadcrumb-item active" aria-current="page">{{ context|capitalize }}</li>
+                {% endif %}
+            {% else %}
+                <li class="breadcrumb-item active" aria-current="page">Home</li>
+            {% endif %}
         </ol>
     </nav>
 </div>
 {% endblock %}
 
 {% block content %}
-<div class="col-12">
-    <p>This is the home page.</p>
+
     {% if page_content|default() %}
+    <div class="col-12">
         <p>{{ page_content }}</p>
+    </div>
     {% endif %}
-</div>
 
-<div class="col-12">
-    {% if context|default() %}
-
-        {% if context == "coordinator" %}
-            {% include "fragment/coordinator.html.twig" %}
+    <div class="col-12">
+        {% if context|default() %}
+            {% if (context == "manager") or (context == "coordinator") or (context == "observer") or (context == "assignee") or (context == "requester") %}
+                {% include 'fragment/' ~ context ~ '.html.twig' %}
+            {% endif %}
+        {% else %}
+            {% include "fragment/public.html.twig" %}
         {% endif %}
-
-        {% if context == "requester" %}
-            {% include "fragment/requester.html.twig" %}
-        {% endif %}
-
-    {% else %}
-        {% include "fragment/user.html.twig" %}
-    {% endif %}
-</div>
+    </div>
 {% endblock %}

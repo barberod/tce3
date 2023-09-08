@@ -15,7 +15,6 @@
                 More Options
             </h2>
             <div class="card-body">
-                <p class="mb-0"><a href="#"><i class="fa-solid fa-caret-right fa-fw me-2"></i>Activity</a></p>
                 <p class="mb-0"><a href="#"><i class="fa-solid fa-caret-right fa-fw me-2"></i>Courses</a></p>
                 <p class="mb-0"><a href="#"><i class="fa-solid fa-caret-right fa-fw me-2"></i>Departments</a></p>
                 <p class="mb-0"><a href="#"><i class="fa-solid fa-caret-right fa-fw me-2"></i>Universities</a></p>
@@ -28,7 +27,7 @@
     <div id="right-side" class="col-12 col-lg-9 d-flex flex-column">
         <div class="card mb-3">
             <div class="card-body">
-                {% set role_description = "A coordinator is staff member in the Registrar's Office. Coordinators have high-level permissions." %}
+                {% set role_description = "An observer is a facutly or staff member in a partnering unit. Observers can view evaluations but cannot edit them." %}
                 <p><span class="fw-bold me-2">Role:</span>{{ context|capitalize }}</p>
                 <p>{{ role_description }}</p>
 

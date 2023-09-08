@@ -27,39 +27,19 @@ class PageController extends AbstractController
     #[Route('/secure', name: 'roles')]
     public function roles(): Response
     {
-        return $this->render('page/homepage.html.twig', [
+        return $this->render('page/roles.html.twig', [
             'page_title' => 'Transfer Credit Evaluation',
             'prepend' => 'Roles'
         ]);
     }
 
-    #[Route('/secure/requester', name: 'requester_home')]
-    public function requester(): Response
+    #[Route('/secure/manager', name: 'manager_home')]
+    public function manager(): Response
     {
         return $this->render('page/homepage.html.twig', [
-            'context' => 'requester',
+            'context' => 'manager',
             'page_title' => 'Transfer Credit Evaluation',
-            'prepend' => 'Requester'
-        ]);
-    }
-
-    #[Route('/secure/requester/evaluation', name: 'requester_evaluation')]
-    public function requesterEvaluation(): Response
-    {
-        return $this->render('evaluation/record.html.twig', [
-            'context' => 'requester',
-            'page_title' => 'Evaluation #4321',
-            'prepend' => 'Evaluation #4321'
-        ]);
-    }
-
-    #[Route('/secure/requester/evaluation/table', name: 'requester_evaluation_table')]
-    public function requesterEvaluationTable(): Response
-    {
-        return $this->render('evaluation/table.html.twig', [
-            'context' => 'requester',
-            'page_title' => 'My Evaluations',
-            'prepend' => 'My Evaluations'
+            'prepend' => 'Manager'
         ]);
     }
 
@@ -73,41 +53,33 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/secure/coordinator/evaluation', name: 'coordinator_evaluation')]
-    public function coordinatorEvaluation(): Response
+    #[Route('/secure/observer', name: 'observer_home')]
+    public function observer(): Response
     {
-        return $this->render('evaluation/record.html.twig', [
-            'context' => 'coordinator',
-            'page_title' => 'Evaluation #4321',
-            'prepend' => 'Evaluation #4321'
+        return $this->render('page/homepage.html.twig', [
+            'context' => 'observer',
+            'page_title' => 'Transfer Credit Evaluation',
+            'prepend' => 'Observer'
         ]);
     }
 
-    #[Route('/secure/coordinator/evaluation/table', name: 'coordinator_evaluation_table')]
-    public function coordinatorEvaluationTable(): Response
+    #[Route('/secure/assignee', name: 'assignee_home')]
+    public function assignee(): Response
     {
-        return $this->render('evaluation/table.html.twig', [
-            'context' => 'coordinator',
-            'page_title' => 'Evaluations',
-            'prepend' => 'Evaluations'
+        return $this->render('page/homepage.html.twig', [
+            'context' => 'assignee',
+            'page_title' => 'Transfer Credit Evaluation',
+            'prepend' => 'Assignee'
         ]);
     }
 
-    #[Route('/secure/my', name: 'secure_page')]
-    public function secure(LoggerInterface $logger): Response
+    #[Route('/secure/requester', name: 'requester_home')]
+    public function requester(): Response
     {
-        return $this->render('page/index.html.twig', [
-            'page_title' => 'Secure Page',
-            'page_content' => 'This is a secure page.',
-        ]);
-    }
-
-    #[Route('/secure/admin', name: 'admin_page')]
-    public function admin(): Response
-    {
-        return $this->render('page/index.html.twig', [
-            'page_title' => 'Admin Page',
-            'page_content' => 'This is the admin page.',
+        return $this->render('page/homepage.html.twig', [
+            'context' => 'requester',
+            'page_title' => 'Transfer Credit Evaluation',
+            'prepend' => 'Requester'
         ]);
     }
 

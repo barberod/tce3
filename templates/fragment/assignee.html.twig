@@ -6,7 +6,8 @@
                 Main Menu
             </h2>
             <div class="card-body">
-                <p><a href="#"><i class="fa-solid fa-table fa-fw me-2"></i>Evaluations</a></p>
+                <p><a href="#"><i class="fa-solid fa-inbox fa-fw me-2"></i>Need My Attention</a></p>
+                <p><a href="#"><i class="fa-solid fa-box-archive fa-fw me-2"></i>My Past Evaluations</a></p>
                 <p class="mb-0"><a href="#"><i class="fa-solid fa-search fa-fw me-2"></i>GTID Lookup</a></p>
             </div>
         </div>
@@ -15,7 +16,6 @@
                 More Options
             </h2>
             <div class="card-body">
-                <p class="mb-0"><a href="#"><i class="fa-solid fa-caret-right fa-fw me-2"></i>Activity</a></p>
                 <p class="mb-0"><a href="#"><i class="fa-solid fa-caret-right fa-fw me-2"></i>Courses</a></p>
                 <p class="mb-0"><a href="#"><i class="fa-solid fa-caret-right fa-fw me-2"></i>Departments</a></p>
                 <p class="mb-0"><a href="#"><i class="fa-solid fa-caret-right fa-fw me-2"></i>Universities</a></p>
@@ -28,7 +28,7 @@
     <div id="right-side" class="col-12 col-lg-9 d-flex flex-column">
         <div class="card mb-3">
             <div class="card-body">
-                {% set role_description = "A coordinator is staff member in the Registrar's Office. Coordinators have high-level permissions." %}
+                {% set role_description = "An assignee is a faculty or staff member responsible for articulating equivalencies for the transfer courses sent to them." %}
                 <p><span class="fw-bold me-2">Role:</span>{{ context|capitalize }}</p>
                 <p>{{ role_description }}</p>
 

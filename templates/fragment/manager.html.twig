@@ -6,8 +6,7 @@
                 Main Menu
             </h2>
             <div class="card-body">
-                <p><a href="#"><i class="fa-solid fa-arrow-up-from-bracket fa-fw me-2"></i>Submit an Evaluation</a></p>
-                <p class="mb-0"><a href="#"><i class="fa-solid fa-table fa-fw me-2"></i>My Evaluations</a></p>
+                <p class="mb-0"><a href="#"><i class="fa-solid fa-cog fa-fw me-2"></i>Manager Controls</a></p>
             </div>
         </div>
     </div>
@@ -17,7 +16,7 @@
     <div id="right-side" class="col-12 col-lg-9 d-flex flex-column">
         <div class="card mb-3">
             <div class="card-body">
-                {% set role_description = "A requester is a student or applicant seeking credit at Georgia Tech for coursework completed at another institution." %}
+                {% set role_description = "A manager is a leader in the Registrar's Office who has special permissions." %}
                 <p><span class="fw-bold me-2">Role:</span>{{ context|capitalize }}</p>
                 <p>{{ role_description }}</p>
 
