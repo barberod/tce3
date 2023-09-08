@@ -38,14 +38,26 @@
             <div class="col-12 d-flex flex-column mb-4">
                 <label for="factRoles" class="form-label mb-0">Roles</label>
                 <div class="font-monospace" id="factRoles">
-                {% if 'ROLE_USER' in app.user.attributes.profile.roles %}
-                    Authorized User<br>
-                {% endif %}
                 {% if 'ROLE_ADMIN' in app.user.attributes.profile.roles %}
                     Admin<br>
                 {% endif %}
-                {% if 'ROLE_STAFF' in app.user.attributes.profile.roles %}
-                    Staff<br>
+                {% if 'ROLE_MANAGER' in app.user.attributes.profile.roles %}
+                    Manager<br>
+                {% endif %}
+                {% if 'ROLE_COORDINATOR' in app.user.attributes.profile.roles %}
+                    Coordinator<br>
+                {% endif %}
+                {% if 'ROLE_ASSIGNEE' in app.user.attributes.profile.roles %}
+                    Assignee<br>
+                {% endif %}
+                {% if 'ROLE_OBSERVER' in app.user.attributes.profile.roles %}
+                    Observer<br>
+                {% endif %}
+                {% if 'ROLE_REQUESTER' in app.user.attributes.profile.roles %}
+                    Requester<br>
+                {% endif %}
+                {% if 'ROLE_USER' in app.user.attributes.profile.roles %}
+                    User<br>
                 {% endif %}
                 </div>
             </div>

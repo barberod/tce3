@@ -19,8 +19,7 @@ class PageController extends AbstractController
     public function index(): Response
     {
         return $this->render('page/homepage.html.twig', [
-            'page_title' => 'Transfer Credit Evaluation',
-            'page_content' => 'The quick brown fox jumps over the lazy dog.',
+            'page_title' => 'Transfer Credit Evaluation'
         ]);
     }
 

@@ -1,0 +1,18 @@
+<div class="row content">
+    <!-- Left side -->
+    <div id="left-side" class="col-12 col-lg-3 d-flex flex-column">
+    {% if app.user.attributes.profile|default() %}
+        {% include "fragment/user.html.twig" %}
+    {% else %}
+        {% include "fragment/login.html.twig" %}
+    {% endif %}
+    </div>
+    <!-- /#left-side -->
+
+    <!-- Right side -->
+    <div id="right-side" class="col-12 col-lg-9 d-flex flex-column">
+        {% include "fragment/info.html.twig" %}
+        {% include "fragment/legend.html.twig" %}
+    </div>
+    <!-- /#right-side -->
+</div>
