@@ -53,13 +53,36 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/secure/coordinator/evaluation', name: 'coordinator_evaluation')]
-    public function coordinatorEvaluation(): Response
+    #[Route('/secure/coordinator/evaluation', name: 'coordinator_evaluation_table')]
+    public function coordinatorEvaluationTable(): Response
     {
         return $this->render('evaluation/page.html.twig', [
             'context' => 'coordinator',
-            'page_title' => 'Evaluation #1234',
-            'prepend' => 'Evaluation #1234'
+            'page_title' => 'Evaluations',
+            'prepend' => 'Evaluations'
+        ]);
+    }
+
+    #[Route('/secure/coordinator/evaluation/{uuid}', name: 'coordinator_evaluation_page')]
+    public function coordinatorEvaluationPage(string $uuid): Response
+    {
+        return $this->render('evaluation/page.html.twig', [
+            'context' => 'coordinator',
+            'page_title' => 'Evaluation #'.$uuid,
+            'prepend' => 'Evaluation #'.$uuid,
+            'uuid' => $uuid
+        ]);
+    }
+
+    #[Route('/secure/coordinator/evaluation/{uuid}/{verb}', name: 'coordinator_evaluation_form')]
+    public function coordinatorEvaluationForm(string $uuid, string $verb): Response
+    {
+        return $this->render('evaluation/page.html.twig', [
+            'context' => 'coordinator',
+            'page_title' => 'Evaluation #'.$uuid,
+            'prepend' => 'Evaluation #'.$uuid,
+            'uuid' => $uuid,
+            'verb' => $verb
         ]);
     }
 

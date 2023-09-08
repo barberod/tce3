@@ -12,8 +12,16 @@
                 {% endif %}
             {% endif %}
             <li class="breadcrumb-item"><a href="#">Evaluations</a></li>
-            <li class="breadcrumb-item"><a href="#">Evaluation #1234</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ context|capitalize }}</li>
+
+            {% if verb|default() %}
+                {% if context|default() %}
+                    {% set evaluation_page = context ~ '_evaluation_page' %}
+                    <li class="breadcrumb-item"><a href="{{ url(evaluation_page, {'uuid':uuid}) }}">Evaluation #{{ uuid }}</a></li>
+                {% endif %}
+                <li class="breadcrumb-item active" aria-current="page">{{ verb|replace({'-': ' '})|capitalize }}</li>
+            {% else %}
+                <li class="breadcrumb-item active" aria-current="page">Evaluation #{{ uuid }}</li>
+            {% endif %}
         </ol>
     </nav>
 </div>
@@ -31,9 +39,13 @@
 
         <!-- Right side -->
         <div id="right-side" class="col-12 col-lg-6 d-flex flex-column">
-            {% include "evaluation/fragment/resubmit-notice.html.twig" %}
-            {% include "evaluation/fragment/options.html.twig" %}
-            
+            {% if verb|default() %}
+                {% include 'evaluation/form/' ~ verb ~ '.html.twig' %}
+            {% else %}
+                {% include "evaluation/fragment/options.html.twig" %}
+            {% endif %}
+
+            <div style="display: none;">
             {% include "evaluation/form/example.html.twig" %}
             {% include "evaluation/form/annotate.html.twig" %}
             {% include "evaluation/form/annotate-as-requester.html.twig" %}
@@ -54,6 +66,7 @@
             {% include "evaluation/form/from-r2-to-student.html.twig" %}
             {% include "evaluation/form/from-r2-to-dept.html.twig" %}
             {% include "evaluation/form/from-complete-to-hold.html.twig" %}
+            </div>
 
             {% include "evaluation/fragment/notes.html.twig" %}
             {% include "evaluation/fragment/trails.html.twig" %}
