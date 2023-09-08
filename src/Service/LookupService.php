@@ -152,8 +152,8 @@ class LookupService
             return true;
         }
         if (
-            (in_array("vm61", $entry->getAttribute('account'))) || 
-            (in_array("ms366", $entry->getAttribute('account')))
+            (in_array("vm61", $entry->getAttribute('gtprimarygtaccountusername'))) || 
+            (in_array("ms366", $entry->getAttribute('gtprimarygtaccountusername')))
         ) {
             return true;
         }
@@ -189,7 +189,7 @@ class LookupService
             return true;
         }
         if (
-            (in_array("celster3", $entry->getAttribute('account')))
+            (in_array("celster3", $entry->getAttribute('gtprimarygtaccountusername')))
         ) {
             return true;
         }
@@ -198,7 +198,7 @@ class LookupService
 
     private function isAdmin(Entry $entry): bool {
         if (
-            (in_array("dbarbero3", $entry->getAttribute('account')))
+            (in_array("dbarbero3", $entry->getAttribute('gtprimarygtaccountusername')))
         ) {
             return true;
         }

@@ -19,6 +19,7 @@ class User implements UserInterface
     final public const ROLE_OBSERVER = 'ROLE_OBSERVER';
     final public const ROLE_ASSIGNEE = 'ROLE_ASSIGNEE';
     final public const ROLE_REQUESTER = 'ROLE_REQUESTER';
+    final public const ROLE_USER= 'ROLE_USER';
 
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
