@@ -5,6 +5,21 @@
     <div class="container-fluid px-0">
         <section class="row g-0">
 
+            <div class="col-12">
+                <div id="browser"></div>
+                <div id="features"></div>
+                <div id="messages">
+                {% for label, messages in app.flashes(['danger', 'info', 'success', 'warning']) %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                </div>
+            </div>
+
             {% block breadcrumbs %}
             <!-- There are no breadcrumbs on this template. -->
             {% endblock %}
