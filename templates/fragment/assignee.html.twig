@@ -31,10 +31,10 @@
                 {% set role_description = "An assignee is a faculty or staff member responsible for articulating equivalencies for the transfer courses sent to them." %}
                 <p><span class="fw-bold me-2">Role:</span>{{ context|capitalize }}</p>
                 <p>{{ role_description }}</p>
-
-                <p>Lorem ipsum</p>
             </div>
         </div>
+        {% include "fragment/info.html.twig" %}
+        {% include "fragment/legend.html.twig" %}
     </div>
     <!-- /#right-side -->
 </div>

@@ -30,10 +30,10 @@
                 {% set role_description = "An observer is a facutly or staff member in a partnering unit. Observers can view evaluations but cannot edit them." %}
                 <p><span class="fw-bold me-2">Role:</span>{{ context|capitalize }}</p>
                 <p>{{ role_description }}</p>
-
-                <p>Lorem ipsum</p>
             </div>
         </div>
+        {% include "fragment/info.html.twig" %}
+        {% include "fragment/legend.html.twig" %}
     </div>
     <!-- /#right-side -->
 </div>

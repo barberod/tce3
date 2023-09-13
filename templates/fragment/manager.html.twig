@@ -19,10 +19,10 @@
                 {% set role_description = "A manager is a leader in the Registrar's Office who has special permissions." %}
                 <p><span class="fw-bold me-2">Role:</span>{{ context|capitalize }}</p>
                 <p>{{ role_description }}</p>
-
-                <p>Lorem ipsum</p>
             </div>
         </div>
+        {% include "fragment/info.html.twig" %}
+        {% include "fragment/legend.html.twig" %}
     </div>
     <!-- /#right-side -->
 </div>

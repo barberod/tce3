@@ -20,10 +20,10 @@
                 {% set role_description = "A requester is a student or applicant seeking credit at Georgia Tech for coursework completed at another institution." %}
                 <p><span class="fw-bold me-2">Role:</span>{{ context|capitalize }}</p>
                 <p>{{ role_description }}</p>
-
-                <p>Lorem ipsum</p>
             </div>
         </div>
+        {% include "fragment/info.html.twig" %}
+        {% include "fragment/legend.html.twig" %}
     </div>
     <!-- /#right-side -->
 </div>
