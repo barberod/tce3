@@ -197,7 +197,9 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
+        // $roles = $this->roles;
+        $roles = $this->enforceRoleHierarchy($this->roles);
+
         // guarantees that a user always has at least one role for security
         if (empty($roles)) {
             $roles[] = self::ROLE_USER;
@@ -232,7 +234,7 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    /*
+    /**
      * Used for mimicing a CasUser with data stored inside
      * an "attributes" attribute
      */
@@ -258,4 +260,31 @@ class User implements UserInterface
         return array('profile' => $profile);
     }
 
+    /**
+     * Returns an array of roles. Used to ensure user has not only their necessary
+     * highest role but all the roles beneath that role, too.
+     * 
+     * @param array An array of roles already determined
+     * @return array An array of the full set of roles for the user
+     */
+    public function enforceRoleHierarchy(array $initialRoles): array {
+        $roleHierarchy = [  'ROLE_ADMIN',
+                            'ROLE_MANAGER',
+                            'ROLE_COORDINATOR',
+                            'ROLE_ASSIGNEE',
+                            'ROLE_OBSERVER',
+                            'ROLE_REQUESTER'    ];
+
+        for ($i = 0; $i < count($roleHierarchy); $i++) {
+            if (in_array($roleHierarchy[$i], $initialRoles)) {
+                break;
+            }
+        }
+
+        $finalRoles = array();
+        for ($j = $i; $j < count($roleHierarchy); $j++) {
+            $finalRoles[] = $roleHierarchy[$j];
+        }
+        return $finalRoles;
+    }
 }
