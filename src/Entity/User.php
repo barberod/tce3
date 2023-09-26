@@ -21,6 +21,12 @@ class User implements UserInterface
     final public const ROLE_REQUESTER = 'ROLE_REQUESTER';
     final public const ROLE_USER= 'ROLE_USER';
 
+    final public const ROLE_FACULTY = 'ROLE_FACULTY';
+    final public const ROLE_STAFF = 'ROLE_STAFF';
+    final public const ROLE_GSAPP = 'ROLE_GSAPP';
+    final public const ROLE_UGAPP = 'ROLE_UGAPP';
+    final public const ROLE_STUDENT = 'ROLE_STUDENT';
+
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -61,6 +67,9 @@ class User implements UserInterface
 
     #[ORM\Column(nullable: true)]
     private array $roles = [];
+
+    #[ORM\Column(nullable: true)]
+    private ?int $d7Uid = 0;
 
     public function getId(): ?Uuid
     {
@@ -199,6 +208,18 @@ class User implements UserInterface
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
+        return $this;
+    }
+
+    public function getD7Uid(): ?int
+    {
+        return $this->d7Uid;
+    }
+
+    public function setD7Uid(int $d7Uid): static
+    {
+        $this->d7Uid = $d7Uid;
+
         return $this;
     }
 

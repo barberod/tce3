@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\Course;
+use App\Entity\Department;
 use App\Entity\Institution;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,7 +24,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class DataLoadCommand extends Command
 {
-    private $loadableEntities = ['Course','User','Institution'];
+    private $loadableEntities = ['User','Course','Institution','Department'];
 
     public function __construct(
         private readonly LoggerInterface $logger,
@@ -59,6 +60,11 @@ class DataLoadCommand extends Command
         if ($targetEntity === 'Course') {
             $io->title("Loading courses");
             return $this->loadCourses($io, $targetEntity, $fileToLoad);
+        }
+
+        if ($targetEntity === 'Department') {
+            $io->title("Loading departments");
+            return $this->loadDepartments($io, $targetEntity, $fileToLoad);
         }
 
         $io->warning('Invalid.');
@@ -155,9 +161,8 @@ class DataLoadCommand extends Command
     /*
      * User
      */
-
      protected function loadUsers(SymfonyStyle $io, string $targetEntity, string $fileToLoad) {
-        if ($this->runChecks($io, $targetEntity, $fileToLoad, 8, 2) === 0) {
+        if ($this->runChecks($io, $targetEntity, $fileToLoad, 9, 2) === 0) {
             $this->parseUserFileAndLoadUsers($io, $fileToLoad);
         } else {
             $io->warning('Users from '.$fileToLoad.' have NOT been loaded.');
@@ -194,6 +199,7 @@ class DataLoadCommand extends Command
         $user->setStatus((int) $row[5]);
         $user->setFrozen((int) $row[6]);
         $user->setLoadedFrom($fileToLoad);
+        $user->setD7Uid((int) $row[8]);
 
         $rolesToLoad = [User::ROLE_USER];
         if (!empty($row[7])) {
@@ -239,6 +245,28 @@ class DataLoadCommand extends Command
                 case 'ROLE_UGAPP':
                     $rolesToLoad[] = User::ROLE_UGAPP;
                     break;
+
+                case 'manager':
+                    $rolesToLoad[] = User::ROLE_STAFF;
+                    $rolesToLoad[] = User::ROLE_MANAGER;
+                    break;
+                case 'ro':
+                    $rolesToLoad[] = User::ROLE_STAFF;
+                    $rolesToLoad[] = User::ROLE_COORDINATOR;
+                    break;
+                case 'facstaff':
+                    $rolesToLoad[] = User::ROLE_FACULTY;
+                    $rolesToLoad[] = User::ROLE_ASSIGNEE;
+                    break;
+                case 'admissions':
+                    $rolesToLoad[] = User::ROLE_STAFF;
+                    $rolesToLoad[] = User::ROLE_OBSERVER;
+                    break;
+                case 'student':
+                    $rolesToLoad[] = User::ROLE_STUDENT;
+                    $rolesToLoad[] = User::ROLE_REQUESTER;
+                    break;
+
                 default:
                     $rolesToLoad[] = User::ROLE_USER;
                     break;
@@ -248,10 +276,70 @@ class DataLoadCommand extends Command
     }
 
     /*
+     * Course
+     */
+     protected function loadCourses(SymfonyStyle $io, string $targetEntity, string $fileToLoad) {
+        if ($this->runChecks($io, $targetEntity, $fileToLoad, 2, 2) === 0) {
+            $this->parseCourseFileAndLoadCourses($io, $fileToLoad);
+        } else {
+            $io->warning('Courses from '.$fileToLoad.' have NOT been loaded.');
+            return Command::FAILURE;
+        }
+        $io->success('Course from '.$fileToLoad.' have been loaded.');
+        return Command::SUCCESS;
+    }
+
+    protected function parseCourseFileAndLoadCourses(SymfonyStyle $io, string $fileToLoad) {
+        $io->section("Parsing csv file and inserting Courses into database");
+        $denominator = $this->getExpectedNumberOfNewRecords('Course', $fileToLoad);
+        $row = 0;
+        if (($handle = fopen("data/csv/uploads/Course/{$fileToLoad}", "r")) !== FALSE) {
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                if ($row > 0) {
+                    $this->persistCourseToCourseTable($io, $data, $fileToLoad, (string)$denominator, (string)$row);
+                }
+                $row++;
+            }
+            fclose($handle);
+        }
+        $io->newLine();
+    }
+
+    protected function persistCourseToCourseTable(SymfonyStyle $io, array $row, string $fileToLoad, string $total, string $current) {
+        $parts = preg_split('/\s+/', $row[1]);
+
+        if (!isset($parts[1])) {
+            return;
+        }
+        if (strlen($row[1]) > 12) {
+            return;
+        }
+
+        $course = new Course();
+        $course->setSlug(str_replace(" ","",$row[1]));
+        $course->setSubjectCode($parts[0]);
+        $course->setCourseNumber($parts[1]);
+        $course->setStatus(1);
+        $course->setD7Nid($row[0]);
+        $course->setLoadedFrom($fileToLoad);
+
+        $this->entityManager->persist($course);
+        $this->entityManager->flush();
+
+        $io->text(
+            sprintf("%04d/%04d\t%5s\t%16s\t%16s", 
+            $current, 
+            $total, 
+            $course->getId(), 
+            $course->getSubjectCode(), 
+            $course->getCourseNumber()
+        ));
+    }
+
+    /*
      * Institution
      */
-
-     protected function loadInstitutions(SymfonyStyle $io, string $targetEntity, string $fileToLoad) {
+    protected function loadInstitutions(SymfonyStyle $io, string $targetEntity, string $fileToLoad) {
         if ($this->runChecks($io, $targetEntity, $fileToLoad, 8, 2) === 0) {
             $this->parseInstitutionFileAndLoadInstitutions($io, $fileToLoad);
         } else {
@@ -292,6 +380,7 @@ class DataLoadCommand extends Command
             $institution->setStatus(0);
         }
         $institution->setD7Nid($row[7]);
+        $institution->setLoadedFrom($fileToLoad);
 
         $this->entityManager->persist($institution);
         $this->entityManager->flush();
@@ -308,28 +397,27 @@ class DataLoadCommand extends Command
     }
 
     /*
-     * Course
+     * Department
      */
-
-     protected function loadCourses(SymfonyStyle $io, string $targetEntity, string $fileToLoad) {
+    protected function loadDepartments(SymfonyStyle $io, string $targetEntity, string $fileToLoad) {
         if ($this->runChecks($io, $targetEntity, $fileToLoad, 2, 2) === 0) {
-            $this->parseCourseFileAndLoadCourses($io, $fileToLoad);
+            $this->parseDepartmentFileAndLoadDepartments($io, $fileToLoad);
         } else {
-            $io->warning('Courses from '.$fileToLoad.' have NOT been loaded.');
+            $io->warning('Departments from '.$fileToLoad.' have NOT been loaded.');
             return Command::FAILURE;
         }
-        $io->success('Course from '.$fileToLoad.' have been loaded.');
+        $io->success('Department from '.$fileToLoad.' have been loaded.');
         return Command::SUCCESS;
     }
 
-    protected function parseCourseFileAndLoadCourses(SymfonyStyle $io, string $fileToLoad) {
-        $io->section("Parsing csv file and inserting Courses into database");
-        $denominator = $this->getExpectedNumberOfNewRecords('Course', $fileToLoad);
+    protected function parseDepartmentFileAndLoadDepartments(SymfonyStyle $io, string $fileToLoad) {
+        $io->section("Parsing csv file and inserting departments into database");
+        $denominator = $this->getExpectedNumberOfNewRecords('Department', $fileToLoad);
         $row = 0;
-        if (($handle = fopen("data/csv/uploads/Course/{$fileToLoad}", "r")) !== FALSE) {
+        if (($handle = fopen("data/csv/uploads/Department/{$fileToLoad}", "r")) !== FALSE) {
             while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
                 if ($row > 0) {
-                    $this->persistCourseToCourseTable($io, $data, $fileToLoad, (string)$denominator, (string)$row);
+                    $this->persistDepartmentToDepartmentTable($io, $data, $fileToLoad, (string)$denominator, (string)$row);
                 }
                 $row++;
             }
@@ -338,26 +426,23 @@ class DataLoadCommand extends Command
         $io->newLine();
     }
 
-    protected function persistCourseToCourseTable(SymfonyStyle $io, array $row, string $fileToLoad, string $total, string $current) {
-        $parts = preg_split('/\s+/', $row[1]);
-        $course = new Course();
+    protected function persistDepartmentToDepartmentTable(SymfonyStyle $io, array $row, string $fileToLoad, string $total, string $current) {
+        $department = new Department();
 
-        $course->setSlug($row[1]);
-        $course->setSubjectCode($parts[0]);
-        $course->setCourseNumber($parts[1]);
-        $course->setStatus(1);
-        $course->setD7Nid($row[0]);
+        $department->setName($row[0]);
+        $department->setStatus(1);
+        $department->setD7Nid($row[1]);
+        $department->setLoadedFrom($fileToLoad);
 
-        $this->entityManager->persist($course);
+        $this->entityManager->persist($department);
         $this->entityManager->flush();
 
         $io->text(
-            sprintf("%04d/%04d\t%5s\t%16s\t%16s", 
+            sprintf("%04d/%04d\t%5s\t%64s", 
             $current, 
             $total, 
-            $course->getId(), 
-            $course->getSubjectCode(), 
-            $course->getCourseNumber()
+            $department->getId(), 
+            $department->getName()
         ));
     }
 }

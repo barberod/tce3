@@ -2,25 +2,19 @@
 
 namespace App\Entity;
 
-use App\Repository\CourseRepository;
+use App\Repository\DepartmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CourseRepository::class)]
-class Course
+#[ORM\Entity(repositoryClass: DepartmentRepository::class)]
+class Department
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 12, nullable: true)]
-    private ?string $slug = null;
-
-    #[ORM\Column(length: 9, nullable: true)]
-    private ?string $subjectCode = null;
-
-    #[ORM\Column(length: 9, nullable: true)]
-    private ?string $courseNumber = null;
+    #[ORM\Column(length: 64, nullable: true)]
+    private ?string $name = null;
 
     #[ORM\Column]
     private ?int $status = null;
@@ -36,38 +30,14 @@ class Course
         return $this->id;
     }
 
-    public function getSlug(): ?string
+    public function getName(): ?string
     {
-        return $this->slug;
+        return $this->name;
     }
 
-    public function setSlug(?string $slug): static
+    public function setName(?string $name): static
     {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
-    public function getSubjectCode(): ?string
-    {
-        return $this->subjectCode;
-    }
-
-    public function setSubjectCode(?string $subjectCode): static
-    {
-        $this->subjectCode = $subjectCode;
-
-        return $this;
-    }
-
-    public function getCourseNumber(): ?string
-    {
-        return $this->courseNumber;
-    }
-
-    public function setCourseNumber(?string $courseNumber): static
-    {
-        $this->courseNumber = $courseNumber;
+        $this->name = $name;
 
         return $this;
     }

@@ -34,6 +34,9 @@ class Institution
     #[ORM\Column(nullable: true)]
     private ?int $d7Nid = null;
 
+    #[ORM\Column(length: 48, nullable: true)]
+    private ?string $loadedFrom = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -119,6 +122,18 @@ class Institution
     public function setD7Nid(?int $d7Nid): static
     {
         $this->d7Nid = $d7Nid;
+
+        return $this;
+    }
+
+    public function getLoadedFrom(): ?string
+    {
+        return $this->loadedFrom;
+    }
+
+    public function setLoadedFrom(string $loadedFrom): static
+    {
+        $this->loadedFrom = $loadedFrom;
 
         return $this;
     }
