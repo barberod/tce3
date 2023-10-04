@@ -87,6 +87,36 @@ class PageController extends AbstractController
         ]);
     }
 
+    #[Route('/secure/coordinator/course', name: 'coordinator_course_table')]
+    public function coordinatorCourseTable(): Response
+    {
+        return $this->render('course/table.html.twig', [
+            'context' => 'coordinator',
+            'page_title' => 'Courses',
+            'prepend' => 'Courses'
+        ]);
+    }
+
+    #[Route('/secure/coordinator/department', name: 'coordinator_department_table')]
+    public function coordinatorDepartmentTable(): Response
+    {
+        return $this->render('department/table.html.twig', [
+            'context' => 'coordinator',
+            'page_title' => 'Departments',
+            'prepend' => 'Departments'
+        ]);
+    }
+
+    #[Route('/secure/coordinator/institution', name: 'coordinator_institution_table')]
+    public function coordinatorInstitutionTable(): Response
+    {
+        return $this->render('institution/table.html.twig', [
+            'context' => 'coordinator',
+            'page_title' => 'Institutions',
+            'prepend' => 'Institutions'
+        ]);
+    }
+
 
 
     #[Route('/secure/observer', name: 'observer_home')]
@@ -132,6 +162,36 @@ class PageController extends AbstractController
         ]);
     }
 
+    #[Route('/secure/observer/course', name: 'observer_course_table')]
+    public function observerCourseTable(): Response
+    {
+        return $this->render('course/table.html.twig', [
+            'context' => 'observer',
+            'page_title' => 'Courses',
+            'prepend' => 'Courses'
+        ]);
+    }
+
+    #[Route('/secure/observer/department', name: 'observer_department_table')]
+    public function observerDepartmentTable(): Response
+    {
+        return $this->render('department/table.html.twig', [
+            'context' => 'observer',
+            'page_title' => 'Departments',
+            'prepend' => 'Departments'
+        ]);
+    }
+
+    #[Route('/secure/observer/institution', name: 'observer_institution_table')]
+    public function observerInstitutionTable(): Response
+    {
+        return $this->render('institution/table.html.twig', [
+            'context' => 'observer',
+            'page_title' => 'Institutions',
+            'prepend' => 'Institutions'
+        ]);
+    }
+
 
 
     #[Route('/secure/assignee', name: 'assignee_home')]
@@ -174,6 +234,36 @@ class PageController extends AbstractController
             'prepend' => 'Evaluation #'.$uuid,
             'uuid' => $uuid,
             'verb' => $verb
+        ]);
+    }
+
+    #[Route('/secure/assignee/course', name: 'assignee_course_table')]
+    public function assigneeCourseTable(): Response
+    {
+        return $this->render('course/table.html.twig', [
+            'context' => 'assignee',
+            'page_title' => 'Courses',
+            'prepend' => 'Courses'
+        ]);
+    }
+
+    #[Route('/secure/assignee/department', name: 'assignee_department_table')]
+    public function assigneeDepartmentTable(): Response
+    {
+        return $this->render('department/table.html.twig', [
+            'context' => 'assignee',
+            'page_title' => 'Departments',
+            'prepend' => 'Departments'
+        ]);
+    }
+
+    #[Route('/secure/assignee/institution', name: 'assignee_institution_table')]
+    public function assigneeInstitutionTable(): Response
+    {
+        return $this->render('institution/table.html.twig', [
+            'context' => 'assignee',
+            'page_title' => 'Institutions',
+            'prepend' => 'Institutions'
         ]);
     }
 

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\DepartmentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DepartmentRepository::class)]
@@ -16,7 +18,7 @@ class Department
     #[ORM\Column(length: 64, nullable: true)]
     private ?string $name = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true, options: ["default" => 1])]
     private ?int $status = null;
 
     #[ORM\Column(nullable: true)]
@@ -24,6 +26,14 @@ class Department
 
     #[ORM\Column(length: 48, nullable: true)]
     private ?string $loadedFrom = null;
+
+    #[ORM\OneToMany(mappedBy: 'department', targetEntity: Affiliation::class)]
+    private Collection $affiliations;
+
+    public function __construct()
+    {
+        $this->affiliations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -74,6 +84,36 @@ class Department
     public function setLoadedFrom(string $loadedFrom): static
     {
         $this->loadedFrom = $loadedFrom;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Affiliation>
+     */
+    public function getAffiliations(): Collection
+    {
+        return $this->affiliations;
+    }
+
+    public function addAffiliation(Affiliation $affiliation): static
+    {
+        if (!$this->affiliations->contains($affiliation)) {
+            $this->affiliations->add($affiliation);
+            $affiliation->setDepartment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAffiliation(Affiliation $affiliation): static
+    {
+        if ($this->affiliations->removeElement($affiliation)) {
+            // set the owning side to null (unless already changed)
+            if ($affiliation->getDepartment() === $this) {
+                $affiliation->setDepartment(null);
+            }
+        }
 
         return $this;
     }

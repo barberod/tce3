@@ -1,0 +1,163 @@
+{% extends 'page/page.html.twig' %}
+
+{% block breadcrumbs %}
+<div class="col-12">
+    <nav clsss="row" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url('homepage') }}">Home</a></li>
+            {% if context|default() %}
+                {% if (context == "manager") or (context == "coordinator") or (context == "observer") or (context == "assignee") %}
+                    {% set home_route = context ~ '_home' %}
+                    <li class="breadcrumb-item"><a href="{{ url(home_route) }}">{{ context|capitalize }}</a></li>
+                {% endif %}
+            {% endif %}
+            <li class="breadcrumb-item active" aria-current="page">Courses</li>
+        </ol>
+    </nav>
+</div>
+{% endblock %}
+
+{% block content %}
+    {% if context|default() %}
+        {% if (context == "manager") or (context == "coordinator") or (context == "observer") or (context == "assignee") %}
+            {#  set course_page = context ~ '_course_page' #}
+
+            <div class="col-12">
+                <div class="row content">
+
+                    <div id="table-courses" class="row table-wrapper">
+                        <div class="col-12">   
+
+                            <div class="row row-cols-1 mb-3">
+                                <div class="col text-end">
+                                    <p class="mb-0">Showing 3 of 5432</p>
+                                </div>
+                            </div>
+
+                            <form class="row mb-3">
+                                <div class="col-8 col-md-6 col-lg-4 col-xl-3">
+                                    <div class="input-group mb-3">
+                                        <label for="subjCodeSelector" class="form-label fw-bold me-3 pt-2">Subj Code:</label>
+                                        <select class="form-select" id="subjCodeSelector" aria-label="Filter by subject code">
+                                            <option selected>-Any-</option>
+                                            <option value="ACCT">ACCT</option>
+                                        </select>
+                                        <button class="btn btn-outline-primary" type="button" id="filter-button">Filter</button>
+                                    </div> 
+                                </div>
+                            </form>
+
+                            <div class="row row-cols-1 mb-3">
+                                <div class="col">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">Subj Code</th>
+                                                <th scope="col">Crse Num</th>
+                                                <th scope="col">Links</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="table-group-divider">
+                                                <tr>
+                                                    <td>ACCT</td>
+                                                    <td>1000</td>
+                                                    <td>
+                                                        <a class="me-2" href="{# url(course_page, {'id':'1234'}) #}">View</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>ACCT</td>
+                                                    <td>2000</td>
+                                                    <td>
+                                                        <a class="me-2" href="{# url(course_page, {'id':'1234'}) #}">View</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>ACCT</td>
+                                                    <td>3000</td>
+                                                    <td>
+                                                        <a class="me-2" href="{# url(course_page, {'id':'1234'}) #}">View</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Page Navigation -->
+                            <div id="page-navigation" class="row justify-content-center mb-3">
+                                <div class="col-12 col-lg-8 col-xl-10">
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination">
+
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="First">
+                                                    <span aria-hidden="true">
+                                                        <i class="fa-solid fa-backward-fast me-2"></i>First
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Previous">
+                                                    <span aria-hidden="true">
+                                                        <i class="fa-solid fa-caret-left me-2"></i>Previous
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                            <li class="page-item" aria-current="page">
+                                                <a class="page-link" href="#">5</a>
+                                            </li>
+
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Next">
+                                                    <span aria-hidden="true">
+                                                        Next<i class="fa-solid fa-caret-right ms-2"></i>
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Last">
+                                                    <span aria-hidden="true">
+                                                        Last<i class="fa-solid fa-forward-fast ms-2"></i>
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                    </nav>
+                                </div>
+                                <div class="col-12 col-lg-4 col-xl-2">
+                                    <div class="input-group">
+                                        <select class="form-select" id="inputGoToPage" aria-label="Go to page">
+                                            <option selected>Page...</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                        </select>
+                                        <button class="btn btn-outline-primary" type="button">Go</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /#page-navigation -->
+                        </div>
+                    </div>
+                    <!-- /#table-courses -->
+                </div>
+            </div>
+            
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+<!-- no scripts -->
+{% endblock %}

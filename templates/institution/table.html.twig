@@ -1,0 +1,167 @@
+{% extends 'page/page.html.twig' %}
+
+{% block breadcrumbs %}
+<div class="col-12">
+    <nav clsss="row" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url('homepage') }}">Home</a></li>
+            {% if context|default() %}
+                {% if (context == "manager") or (context == "coordinator") or (context == "observer") or (context == "assignee") %}
+                    {% set home_route = context ~ '_home' %}
+                    <li class="breadcrumb-item"><a href="{{ url(home_route) }}">{{ context|capitalize }}</a></li>
+                {% endif %}
+            {% endif %}
+            <li class="breadcrumb-item active" aria-current="page">Institutions</li>
+        </ol>
+    </nav>
+</div>
+{% endblock %}
+
+{% block content %}
+    {% if context|default() %}
+        {% if (context == "manager") or (context == "coordinator") or (context == "observer") or (context == "assignee") %}
+            {#  set institution_page = context ~ '_institution_page' #}
+
+            <div class="col-12">
+                <div class="row content">
+
+                    <div id="table-institutions" class="row table-wrapper">
+                        <div class="col-12">   
+
+                            <div class="row row-cols-1 mb-3">
+                                <div class="col text-end">
+                                    <p class="mb-0">Showing 6 of 2468</p>
+                                </div>
+                            </div>
+
+                            <form class="row mb-3">
+                                <div class="col-8 col-md-6 col-lg-4 col-xl-3">
+                                    <div class="input-group mb-3">
+                                        <label for="usStateSelector" class="form-label fw-bold me-3 pt-2">US State:</label>
+                                        <select class="form-select" id="usStateSelector" aria-label="Filter by US State">
+                                            <option selected>-Any-</option>
+                                            <option value="GA">GA</option>
+                                        </select>
+                                        <button class="btn btn-outline-primary" type="button" id="filter-button">Filter</button>
+                                    </div> 
+                                </div>
+                            </form>
+
+                            <div class="row row-cols-1 mb-3">
+                                <div class="col">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">State</th>
+                                                <th scope="col">Address</th>
+                                                <th scope="col">Links</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="table-group-divider">
+                                                <tr>
+                                                    <td>Georgia State University</td>
+                                                    <td>GA</td>
+                                                    <td>9876 Placeholder Street, Anytown, GA 99999-9999</td>
+                                                    <td>
+                                                        <a class="me-2" href="{# url(instituion_page, {'id':'1234'}) #}">View</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Kennesaw State University</td>
+                                                    <td>GA</td>
+                                                    <td>9876 Placeholder Street, Anytown, GA 99999-9999</td>
+                                                    <td>
+                                                        <a class="me-2" href="{# url(instituion_page, {'id':'1234'}) #}">View</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>University of West Georgia</td>
+                                                    <td>GA</td>
+                                                    <td>9876 Placeholder Street, Anytown, GA 99999-9999</td>
+                                                    <td>
+                                                        <a class="me-2" href="{# url(instituion_page, {'id':'1234'}) #}">View</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Page Navigation -->
+                            <div id="page-navigation" class="row justify-content-center mb-3">
+                                <div class="col-12 col-lg-8 col-xl-10">
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination">
+
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="First">
+                                                    <span aria-hidden="true">
+                                                        <i class="fa-solid fa-backward-fast me-2"></i>First
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Previous">
+                                                    <span aria-hidden="true">
+                                                        <i class="fa-solid fa-caret-left me-2"></i>Previous
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                            <li class="page-item" aria-current="page">
+                                                <a class="page-link" href="#">5</a>
+                                            </li>
+
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Next">
+                                                    <span aria-hidden="true">
+                                                        Next<i class="fa-solid fa-caret-right ms-2"></i>
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Last">
+                                                    <span aria-hidden="true">
+                                                        Last<i class="fa-solid fa-forward-fast ms-2"></i>
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                    </nav>
+                                </div>
+                                <div class="col-12 col-lg-4 col-xl-2">
+                                    <div class="input-group">
+                                        <select class="form-select" id="inputGoToPage" aria-label="Go to page">
+                                            <option selected>Page...</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                        </select>
+                                        <button class="btn btn-outline-primary" type="button">Go</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /#page-navigation -->
+                        </div>
+                    </div>
+                    <!-- /#table-institutions -->
+                </div>
+            </div>
+            
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+<!-- no scripts -->
+{% endblock %}

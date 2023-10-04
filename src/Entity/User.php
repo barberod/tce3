@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -45,13 +47,13 @@ class User implements UserInterface
     #[ORM\Column(length: 180, nullable: true)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 24, nullable: true)]
+    #[ORM\Column(length: 24, nullable: true, options: ["default" => "member"])]
     private ?string $category = 'member';
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(nullable: true, options: ["default" => 1])]
     private ?int $status = 1;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(nullable: true, options: ["default" => 0])]
     private ?int $frozen = 0;
 
     #[ORM\Column(length: 48, nullable: true)]
@@ -70,6 +72,26 @@ class User implements UserInterface
 
     #[ORM\Column(nullable: true)]
     private ?int $d7Uid = 0;
+
+    #[ORM\OneToMany(mappedBy: 'requester', targetEntity: Evaluation::class)]
+    private Collection $evaluations;
+
+    #[ORM\OneToMany(mappedBy: 'assignee', targetEntity: Evaluation::class)]
+    private Collection $assignedEvaluations;
+
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Note::class)]
+    private Collection $notes;
+
+    #[ORM\OneToMany(mappedBy: 'facstaff', targetEntity: Affiliation::class)]
+    private Collection $affiliations;
+
+    public function __construct()
+    {
+        $this->evaluations = new ArrayCollection();
+        $this->assignedEvaluations = new ArrayCollection();
+        $this->notes = new ArrayCollection();
+        $this->affiliations = new ArrayCollection();
+    }
 
     public function getId(): ?Uuid
     {
@@ -286,5 +308,125 @@ class User implements UserInterface
             $finalRoles[] = $roleHierarchy[$j];
         }
         return $finalRoles;
+    }
+
+    /**
+     * @return Collection<int, Evaluation>
+     */
+    public function getEvaluations(): Collection
+    {
+        return $this->evaluations;
+    }
+
+    public function addEvaluation(Evaluation $evaluation): static
+    {
+        if (!$this->evaluations->contains($evaluation)) {
+            $this->evaluations->add($evaluation);
+            $evaluation->setRequester($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvaluation(Evaluation $evaluation): static
+    {
+        if ($this->evaluations->removeElement($evaluation)) {
+            // set the owning side to null (unless already changed)
+            if ($evaluation->getRequester() === $this) {
+                $evaluation->setRequester(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Evaluation>
+     */
+    public function getAssignedEvaluations(): Collection
+    {
+        return $this->assignedEvaluations;
+    }
+
+    public function addAssignedEvaluation(Evaluation $assignedEvaluation): static
+    {
+        if (!$this->assignedEvaluations->contains($assignedEvaluation)) {
+            $this->assignedEvaluations->add($assignedEvaluation);
+            $assignedEvaluation->setAssignee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAssignedEvaluation(Evaluation $assignedEvaluation): static
+    {
+        if ($this->assignedEvaluations->removeElement($assignedEvaluation)) {
+            // set the owning side to null (unless already changed)
+            if ($assignedEvaluation->getAssignee() === $this) {
+                $assignedEvaluation->setAssignee(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Note>
+     */
+    public function getNotes(): Collection
+    {
+        return $this->notes;
+    }
+
+    public function addNote(Note $note): static
+    {
+        if (!$this->notes->contains($note)) {
+            $this->notes->add($note);
+            $note->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNote(Note $note): static
+    {
+        if ($this->notes->removeElement($note)) {
+            // set the owning side to null (unless already changed)
+            if ($note->getAuthor() === $this) {
+                $note->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Affiliation>
+     */
+    public function getAffiliations(): Collection
+    {
+        return $this->affiliations;
+    }
+
+    public function addAffiliation(Affiliation $affiliation): static
+    {
+        if (!$this->affiliations->contains($affiliation)) {
+            $this->affiliations->add($affiliation);
+            $affiliation->setFacstaff($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAffiliation(Affiliation $affiliation): static
+    {
+        if ($this->affiliations->removeElement($affiliation)) {
+            // set the owning side to null (unless already changed)
+            if ($affiliation->getFacstaff() === $this) {
+                $affiliation->setFacstaff(null);
+            }
+        }
+
+        return $this;
     }
 }
