@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\EvaluationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -54,24 +55,26 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/secure/coordinator/evaluation', name: 'coordinator_evaluation_table')]
-    public function coordinatorEvaluationTable(): Response
+    #[Route('/secure/coordinator/evaluation', name: 'coordinator_evaluation_table', methods: ['GET'])]
+    public function coordinatorEvaluationTable(EvaluationRepository $evaluationRepository): Response
     {
         return $this->render('evaluation/table.html.twig', [
             'context' => 'coordinator',
             'page_title' => 'Evaluations',
-            'prepend' => 'Evaluations'
+            'prepend' => 'Evaluations',
+            'evaluations' => $evaluationRepository->findAll(),
         ]);
     }
 
-    #[Route('/secure/coordinator/evaluation/{uuid}', name: 'coordinator_evaluation_page')]
-    public function coordinatorEvaluationPage(string $uuid): Response
+    #[Route('/secure/coordinator/evaluation/{id}', name: 'coordinator_evaluation_page')]
+    public function coordinatorEvaluationPage(int $id, EvaluationRepository $evaluationRepository): Response
     {
+        $evaluation = $evaluationRepository->find($id);
         return $this->render('evaluation/page.html.twig', [
             'context' => 'coordinator',
-            'page_title' => 'Evaluation #'.$uuid,
-            'prepend' => 'Evaluation #'.$uuid,
-            'uuid' => $uuid
+            'page_title' => 'Evaluation #'.$evaluation->getID(),
+            'prepend' => 'Evaluation #'.$evaluation->getID(),
+            'uuid' => $evaluation->getID()
         ]);
     }
 

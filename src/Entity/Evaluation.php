@@ -208,6 +208,12 @@ class Evaluation
     #[ORM\Column(nullable: true)]
     private ?int $d7Nid = null;
 
+    #[ORM\Column(length: 48, nullable: true)]
+    private ?string $d7Uuid = null;
+
+    #[ORM\Column(length: 48, nullable: true)]
+    private ?string $loadedFrom = null;
+
     #[ORM\OneToMany(mappedBy: 'evaluation', targetEntity: Trail::class)]
     private Collection $trails;
 
@@ -218,6 +224,13 @@ class Evaluation
     {
         $this->trails = new ArrayCollection();
         $this->notes = new ArrayCollection();
+    }
+
+    public function setID(int $givenID): static
+    {
+        $this->id = $givenID;
+
+        return $this;
     }
 
     public function getId(): ?int
@@ -398,6 +411,7 @@ class Evaluation
         return $this->labCreditHrs;
     }
 
+    // 15
     public function setLabCreditHrs(?string $labCreditHrs): static
     {
         $this->labCreditHrs = $labCreditHrs;
@@ -470,6 +484,7 @@ class Evaluation
         return $this->assignee;
     }
 
+    // 20
     public function setAssignee(?User $assignee): static
     {
         $this->assignee = $assignee;
@@ -530,6 +545,7 @@ class Evaluation
         return $this->draftEquiv2CreditHrs;
     }
 
+    // 25
     public function setDraftEquiv2CreditHrs(?string $draftEquiv2CreditHrs): static
     {
         $this->draftEquiv2CreditHrs = $draftEquiv2CreditHrs;
@@ -590,6 +606,7 @@ class Evaluation
         return $this->draftEquiv4Course;
     }
 
+    // 30
     public function setDraftEquiv4Course(?string $draftEquiv4Course): static
     {
         $this->draftEquiv4Course = $draftEquiv4Course;
@@ -650,6 +667,7 @@ class Evaluation
         return $this->finalEquiv1Operator;
     }
 
+    // 35
     public function setFinalEquiv1Operator(?string $finalEquiv1Operator): static
     {
         $this->finalEquiv1Operator = $finalEquiv1Operator;
@@ -710,6 +728,7 @@ class Evaluation
         return $this->finalEquiv3CreditHrs;
     }
 
+    // 40
     public function setFinalEquiv3CreditHrs(?string $finalEquiv3CreditHrs): static
     {
         $this->finalEquiv3CreditHrs = $finalEquiv3CreditHrs;
@@ -765,6 +784,7 @@ class Evaluation
         return $this;
     }
 
+    // 45
     public function getRequesterType(): ?string
     {
         return $this->requesterType;
@@ -830,6 +850,7 @@ class Evaluation
         return $this->holdForTranscript;
     }
 
+    // 50
     public function setHoldForTranscript(?int $holdForTranscript): static
     {
         $this->holdForTranscript = $holdForTranscript;
@@ -890,6 +911,7 @@ class Evaluation
         return $this->tagR2ToStudent;
     }
 
+    // 55
     public function setTagR2ToStudent(?int $tagR2ToStudent): static
     {
         $this->tagR2ToStudent = $tagR2ToStudent;
@@ -929,6 +951,30 @@ class Evaluation
     public function setD7Nid(?int $d7Nid): static
     {
         $this->d7Nid = $d7Nid;
+
+        return $this;
+    }
+
+    public function getD7Uuid(): ?string
+    {
+        return $this->d7Uuid;
+    }
+
+    public function setD7Uuid(?string $d7Uuid): static
+    {
+        $this->d7Uuid = $d7Uuid;
+
+        return $this;
+    }
+
+    public function getLoadedFrom(): ?string
+    {
+        return $this->loadedFrom;
+    }
+
+    public function setLoadedFrom(string $loadedFrom): static
+    {
+        $this->loadedFrom = $loadedFrom;
 
         return $this;
     }

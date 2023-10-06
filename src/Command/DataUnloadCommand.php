@@ -267,4 +267,48 @@ class DataUnloadCommand extends Command
         }
         $io->newLine();
     }
+
+    /*
+     * Evaluation
+     */
+    protected function unloadEvaluations(SymfonyStyle $io, string $targetEntity, string $fileToUnload): int {
+        if ($this->runChecks($io, $targetEntity, $fileToUnload, 2, 2) === 0) {
+            $this->deleteEvaluationsFromEvaluationTable($io, $fileToUnload);
+        } else {
+            $io->warning('Evaluations from '.$fileToUnload.' have NOT been unloaded.');
+            return Command::FAILURE;
+        }
+        $io->success('Evaluations from '.$fileToUnload.' have been unloaded.');
+        return Command::SUCCESS;
+    }
+
+    protected function deleteEvaluationsFromEvaluationTable(SymfonyStyle $io, string $fileToUnload) {
+        $io->section("Deleting evaluations from database");
+        $evaluations = $this->entityManager->getRepository(Evaluation::class)->findBy(['loadedFrom'=>$fileToUnload]);
+        $total = count($evaluations);
+        $i = 1;
+        foreach ($evaluations as $evaluation) {
+            $io->text(
+                sprintf("%04d/%04d\t%5s\t%8s\t%8s\t%8s\t%12s\t%12s\t%16s\t%12s\t%12s", 
+                $i, 
+                $total, 
+                $evaluation->getId(),
+                $evaluation->getSerialNum(),
+                $evaluation->getD7Nid(),
+                $evaluation->getRequester(),
+                $evaluation->getCourseSubjCode(),
+                $evaluation->getCourseCrseNum(),
+                $evaluation->getCourseSubjCode(),
+                date_format($evaluation->getCreated(),"Y-m-d"),
+                $evaluation->getInstitution(),
+                $evaluation->getPhase(),
+            ));
+
+            $this->entityManager->remove($evaluation);
+            $this->entityManager->flush();
+
+            $i++;
+        }
+        $io->newLine();
+    }
 }

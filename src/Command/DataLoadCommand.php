@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\Course;
 use App\Entity\Department;
+use App\Entity\Evaluation;
 use App\Entity\Institution;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,7 +25,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class DataLoadCommand extends Command
 {
-    private $loadableEntities = ['User','Course','Institution','Department'];
+    private $loadableEntities = ['User','Course','Institution','Department','Evaluation'];
 
     public function __construct(
         private readonly LoggerInterface $logger,
@@ -65,6 +66,11 @@ class DataLoadCommand extends Command
         if ($targetEntity === 'Department') {
             $io->title("Loading departments");
             return $this->loadDepartments($io, $targetEntity, $fileToLoad);
+        }
+
+        if ($targetEntity === 'Evaluation') {
+            $io->title("Loading evaluations");
+            return $this->loadEvaluations($io, $targetEntity, $fileToLoad);
         }
 
         $io->warning('Invalid.');
@@ -316,6 +322,7 @@ class DataLoadCommand extends Command
         }
 
         $course = new Course();
+        $course->setD7Nid($row[0]);
         $course->setSlug(str_replace(" ","",$row[1]));
         $course->setSubjectCode($parts[0]);
         $course->setCourseNumber($parts[1]);
@@ -443,6 +450,135 @@ class DataLoadCommand extends Command
             $total, 
             $department->getId(), 
             $department->getName()
+        ));
+    }
+
+    /*
+     * Evaluation
+     */
+    protected function loadEvaluations(SymfonyStyle $io, string $targetEntity, string $fileToLoad) {
+        if ($this->runChecks($io, $targetEntity, $fileToLoad, 2, 2) === 0) {
+            $this->parseEvaluationFileAndLoadEvaluations($io, $fileToLoad);
+        } else {
+            $io->warning('Evaluations from '.$fileToLoad.' have NOT been loaded.');
+            return Command::FAILURE;
+        }
+        $io->success('Evaluation from '.$fileToLoad.' have been loaded.');
+        return Command::SUCCESS;
+    }
+
+    protected function parseEvaluationFileAndLoadEvaluations(SymfonyStyle $io, string $fileToLoad) {
+        $io->section("Parsing csv file and inserting evaluations into database");
+        $denominator = $this->getExpectedNumberOfNewRecords('Evaluation', $fileToLoad);
+        $row = 0;
+        if (($handle = fopen("data/csv/uploads/Evaluation/{$fileToLoad}", "r")) !== FALSE) {
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                if ($row > 0) {
+                    $this->persistEvaluationToEvaluationTable($io, $data, $fileToLoad, (string)$denominator, (string)$row);
+                }
+                $row++;
+            }
+            fclose($handle);
+        }
+        $io->newLine();
+    }
+
+    protected function persistEvaluationToEvaluationTable(SymfonyStyle $io, array $row, string $fileToLoad, string $total, string $current) {
+        $evaluation = new Evaluation();
+
+        $evaluation->setID($row[0]);
+
+        $evaluation->setSerialNum($row[1]);
+        $evaluation->setRequester($row[2]);
+        $evaluation->setReqAdmin($row[3]);
+        $evaluation->setInstitution($row[4]);
+        $evaluation->setInstitutionOther($row[5]);
+        
+        $evaluation->setInstitutionCountry($row[6]);
+        $evaluation->setCourseSubjCode($row[7]);
+        $evaluation->setCourseCrseNum($row[8]);
+        $evaluation->setCourseTerm($row[9]);
+        $evaluation->setCourseCreditHrs($row[10]);
+
+        $evaluation->setCourseCreditBasis($row[11]);
+        $evaluation->setLabSubjCode($row[12]);
+        $evaluation->setLabCrseNum($row[13]);
+        $evaluation->setLabTerm($row[14]);
+        $evaluation->setLabCreditHrs($row[15]);
+
+        $evaluation->setLabCreditBasis($row[16]);
+        $evaluation->setPhase($row[17]);
+        $evaluation->setStatus($row[18]);
+        $evaluation->setCreated($row[19]);
+        // updated is set by the database
+        $evaluation->setAssignee($row[20]);
+
+        $evaluation->setDraftEquiv1Course($row[21]);
+        $evaluation->setDraftEquiv1CreditHrs($row[22]);
+        $evaluation->setDraftEquiv1Operator($row[23]);
+        $evaluation->setDraftEquiv2Course($row[24]);
+        $evaluation->setDraftEquiv2CreditHrs($row[25]);
+
+        $evaluation->setDraftEquiv2Operator($row[26]);
+        $evaluation->setDraftEquiv3Course($row[27]);
+        $evaluation->setDraftEquiv3CreditHrs($row[28]);
+        $evaluation->setDraftEquiv3Operator($row[29]);
+        $evaluation->setDraftEquiv4Course($row[30]);
+
+        $evaluation->setDraftEquiv4CreditHours($row[31]);
+        $evaluation->setDraftPolicy($row[32]);
+        $evaluation->setFinalEquiv1Course($row[33]);
+        $evaluation->setFinalEquiv1CreditHrs($row[34]);
+        $evaluation->setFinalEquiv1Operator($row[35]);
+
+        $evaluation->setFinalEquiv2Course($row[36]);
+        $evaluation->setFinalEquiv2CreditHrs($row[37]);
+        $evaluation->setFinalEquiv2Operator($row[38]);
+        $evaluation->setFinalEquiv3Course($row[39]);
+        $evaluation->setFinalEquiv3CreditHrs($row[40]);
+
+        $evaluation->setFinalEquiv3Operator($row[41]);
+        $evaluation->setFinalEquiv4Course($row[42]);
+        $evaluation->setFinalEquiv4CreditHrs($row[43]);
+        $evaluation->setFinalPolicy($row[44]);
+        $evaluation->setRequesterType($row[45]);
+
+        $evaluation->setCourseInSis($row[46]);
+        $evaluation->setTranscriptOnHand($row[47]);
+        $evaluation->setHoldForRequesterAdmit($row[48]);
+        $evaluation->setHoldForCourseInput($row[49]);
+        $evaluation->setHoldForTranscript($row[50]);
+
+        $evaluation->setTagSpotArticulated($row[51]);
+        $evaluation->setTagR1ToStudent($row[52]);
+        $evaluation->setTagDeptToStudent($row[53]);
+        $evaluation->setTagDeptToR1($row[54]);
+        $evaluation->setTagR2ToStudent($row[55]);
+
+        $evaluation->setTagR2ToDept($row[56]);
+        $evaluation->setTagReassigned($row[57]);
+        $evaluation->setD7Nid($row[58]);
+
+        $evaluation->setD7Nid($row[0]);
+        $evaluation->setLoadedFrom($fileToLoad);
+
+        $this->entityManager->persist($evaluation);
+        $this->entityManager->flush();
+
+        $io->text(
+            sprintf("%04d/%04d\t%5s\t%8s\t%8s\t%8s\t%12s\t%12s\t%16s\t%12s\t%12s", 
+            $current, 
+            $total, 
+            $evaluation->getId(),
+            $evaluation->getSerialNum(),
+            $evaluation->getD7Nid(),
+            $evaluation->getRequester(),
+            $evaluation->getCourseSubjCode(),
+            $evaluation->getCourseCrseNum(),
+            $evaluation->getCourseSubjCode(),
+            date_format($evaluation->getCreated(),"Y-m-d"),
+            $evaluation->getInstitution(),
+            $evaluation->getPhase(),
         ));
     }
 }
