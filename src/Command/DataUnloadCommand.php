@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\Course;
 use App\Entity\Department;
+use App\Entity\Evaluation;
 use App\Entity\Institution;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,7 +25,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class DataUnloadCommand extends Command
 {
-    private $unloadableEntities = ['User','Course','Institution','Department'];
+    private $unloadableEntities = ['User','Course','Institution','Department','Evaluation'];
 
     public function __construct(
         private readonly LoggerInterface $logger,
@@ -65,6 +66,11 @@ class DataUnloadCommand extends Command
         if ($targetEntity === 'Department') {
             $io->title("Unloading departments");
             return $this->unloadDepartments($io, $targetEntity, $fileToUnload);
+        }
+
+        if ($targetEntity === 'Evaluation') {
+            $io->title("Unloading evaluations");
+            return $this->unloadEvaluations($io, $targetEntity, $fileToUnload);
         }
 
         $io->warning('Invalid.');
@@ -112,6 +118,11 @@ class DataUnloadCommand extends Command
         }
         if ($targetEntity === 'Department') {
             if ($this->entityManager->getRepository(Department::class)->findBy(['loadedFrom'=>$fileToUnload], null, 1)) {
+                return true;
+            }
+        }
+        if ($targetEntity === 'Evaluation') {
+            if ($this->entityManager->getRepository(Evaluation::class)->findBy(['loadedFrom'=>$fileToUnload], null, 1)) {
                 return true;
             }
         }
@@ -289,18 +300,16 @@ class DataUnloadCommand extends Command
         $i = 1;
         foreach ($evaluations as $evaluation) {
             $io->text(
-                sprintf("%04d/%04d\t%5s\t%8s\t%8s\t%8s\t%12s\t%12s\t%16s\t%12s\t%12s", 
+                sprintf("%04d/%04d\t%5s\t%8s\t%8s\t%16s\t%8s\t%8s\t%16s\t%12s", 
                 $i, 
                 $total, 
                 $evaluation->getId(),
                 $evaluation->getSerialNum(),
                 $evaluation->getD7Nid(),
-                $evaluation->getRequester(),
+                $evaluation->getRequester()->getUsername(),
                 $evaluation->getCourseSubjCode(),
                 $evaluation->getCourseCrseNum(),
-                $evaluation->getCourseSubjCode(),
                 date_format($evaluation->getCreated(),"Y-m-d"),
-                $evaluation->getInstitution(),
                 $evaluation->getPhase(),
             ));
 

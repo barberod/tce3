@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: EvaluationRepository::class)]
 class Evaluation
@@ -72,22 +71,9 @@ class Evaluation
     #[ORM\Column(options: ["default" => 1])]
     private ?int $status = 1;
 
-    #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $created = null;
 
-    #[Gedmo\Timestampable(on: 'change', field: [
-        'requster','reqAdmin','institution','institutionOther','institutionCountry','courseSubjCode',
-        'courseCrseNum','courseTerm','courseCreditHrs','courseCreditBasis','labSubjCode','labCrseNum',
-        'labTerm','labCreditHrs','labCreditBasis','phase','status','assignee',
-        'draftEquiv1Course','draftEquiv1CreditHrs','draftEquiv1Operator','draftEquiv2Course','draftEquiv2CreditHrs','draftEquiv2Operator',
-        'draftEquiv3Course','draftEquiv3CreditHrs','draftEquiv3Operator','draftEquiv4Course','draftEquiv4CreditHrs','draftPolicy',
-        'finalEquiv1Course','finalEquiv1CreditHrs','finalEquiv1Operator','finalEquiv2Course','finalEquiv2CreditHrs','finalEquiv2Operator',
-        'finalEquiv3Course','finalEquiv3CreditHrs','finalEquiv3Operator','finalEquiv4Course','finalEquiv4CreditHrs','finalPolicy',
-        'requesterType','courseInSis','transcriptOnHand','holdForRequesterAdmit','holdForCourseInput','holdForTranscript',
-        'tagSpotArticulated','tagR1ToStudent','tagDeptToStudent','tagDeptToR1','tagR2ToStudent','tagR2ToDept',
-        'tagReassigned','d7Nid'
-    ])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updated = null;
 
@@ -224,13 +210,6 @@ class Evaluation
     {
         $this->trails = new ArrayCollection();
         $this->notes = new ArrayCollection();
-    }
-
-    public function setID(int $givenID): static
-    {
-        $this->id = $givenID;
-
-        return $this;
     }
 
     public function getId(): ?int

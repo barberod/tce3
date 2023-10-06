@@ -25,7 +25,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class DataLoadCommand extends Command
 {
-    private $loadableEntities = ['User','Course','Institution','Department','Evaluation'];
+    private array $loadableEntities = ['User','Course','Institution','Department','Evaluation'];
 
     public function __construct(
         private readonly LoggerInterface $logger,
@@ -322,7 +322,6 @@ class DataLoadCommand extends Command
         }
 
         $course = new Course();
-        $course->setD7Nid($row[0]);
         $course->setSlug(str_replace(" ","",$row[1]));
         $course->setSubjectCode($parts[0]);
         $course->setCourseNumber($parts[1]);
@@ -457,7 +456,7 @@ class DataLoadCommand extends Command
      * Evaluation
      */
     protected function loadEvaluations(SymfonyStyle $io, string $targetEntity, string $fileToLoad) {
-        if ($this->runChecks($io, $targetEntity, $fileToLoad, 2, 2) === 0) {
+        if ($this->runChecks($io, $targetEntity, $fileToLoad, 60, 2) === 0) {
             $this->parseEvaluationFileAndLoadEvaluations($io, $fileToLoad);
         } else {
             $io->warning('Evaluations from '.$fileToLoad.' have NOT been loaded.');
@@ -486,12 +485,21 @@ class DataLoadCommand extends Command
     protected function persistEvaluationToEvaluationTable(SymfonyStyle $io, array $row, string $fileToLoad, string $total, string $current) {
         $evaluation = new Evaluation();
 
-        $evaluation->setID($row[0]);
-
         $evaluation->setSerialNum($row[1]);
-        $evaluation->setRequester($row[2]);
+
+        $requester = $this->entityManager->getRepository(User::class)->findOneBy(['d7Uid'=>$row[2]]);
+        if ($requester) {
+            $evaluation->setRequester($requester);
+        }
+        
         $evaluation->setReqAdmin($row[3]);
-        $evaluation->setInstitution($row[4]);
+
+        // $evaluation->setInstitution($row[4]);
+        $institution = $this->entityManager->getRepository(Institution::class)->findOneBy(['d7Nid'=>$row[41]]);
+        if ($institution) {
+            $evaluation->setInstitution($institution);
+        }
+
         $evaluation->setInstitutionOther($row[5]);
         
         $evaluation->setInstitutionCountry($row[6]);
@@ -508,76 +516,181 @@ class DataLoadCommand extends Command
 
         $evaluation->setLabCreditBasis($row[16]);
         $evaluation->setPhase($row[17]);
-        $evaluation->setStatus($row[18]);
-        $evaluation->setCreated($row[19]);
-        // updated is set by the database
-        $evaluation->setAssignee($row[20]);
 
-        $evaluation->setDraftEquiv1Course($row[21]);
+        // $evaluation->setStatus($row[18]);
+        if (trim($row[18]) == "Yes") {
+            $evaluation->setStatus(1);
+        } else {
+            $evaluation->setStatus(0);
+        }
+
+        // $evaluation->setCreated($row[19]);
+        $dt = date_create_from_format("Y-m-d H:i:s", trim($row[19]));
+        if ($dt) {
+            $evaluation->setCreated($dt);
+        }
+
+        // updated is set by the database
+
+        // $evaluation->setAssignee($row[20]);
+        $assignee = $this->entityManager->getRepository(User::class)->findOneBy(['d7Uid'=>$row[20]]);
+        if ($assignee) {
+            $evaluation->setAssignee($assignee);
+        }
+
+        $evaluation->setDraftEquiv1Course(trim($row[21]));
         $evaluation->setDraftEquiv1CreditHrs($row[22]);
         $evaluation->setDraftEquiv1Operator($row[23]);
-        $evaluation->setDraftEquiv2Course($row[24]);
-        $evaluation->setDraftEquiv2CreditHrs($row[25]);
 
+        $evaluation->setDraftEquiv2Course(trim($row[24]));
+        $evaluation->setDraftEquiv2CreditHrs($row[25]);
         $evaluation->setDraftEquiv2Operator($row[26]);
-        $evaluation->setDraftEquiv3Course($row[27]);
+
+        $evaluation->setDraftEquiv3Course(trim($row[27]));
         $evaluation->setDraftEquiv3CreditHrs($row[28]);
         $evaluation->setDraftEquiv3Operator($row[29]);
-        $evaluation->setDraftEquiv4Course($row[30]);
 
+        $evaluation->setDraftEquiv4Course(trim($row[30]));
         $evaluation->setDraftEquiv4CreditHours($row[31]);
+
         $evaluation->setDraftPolicy($row[32]);
-        $evaluation->setFinalEquiv1Course($row[33]);
+
+        // $evaluation->setFinalEquiv1Course($row[33]);
+        $equiv1 = $this->entityManager->getRepository(Course::class)->findOneBy(['d7Nid'=>$row[33]]);
+        if ($equiv1) {
+            $evaluation->setFinalEquiv1Course($equiv1);
+        }
+
         $evaluation->setFinalEquiv1CreditHrs($row[34]);
         $evaluation->setFinalEquiv1Operator($row[35]);
 
-        $evaluation->setFinalEquiv2Course($row[36]);
+        // $evaluation->setFinalEquiv2Course($row[36]);
+        $equiv2 = $this->entityManager->getRepository(Course::class)->findOneBy(['d7Nid'=>$row[36]]);
+        if ($equiv2) {
+            $evaluation->setFinalEquiv2Course($equiv2);
+        }
+
         $evaluation->setFinalEquiv2CreditHrs($row[37]);
         $evaluation->setFinalEquiv2Operator($row[38]);
-        $evaluation->setFinalEquiv3Course($row[39]);
-        $evaluation->setFinalEquiv3CreditHrs($row[40]);
 
+        // $evaluation->setFinalEquiv3Course($row[39]);
+        $equiv3 = $this->entityManager->getRepository(Course::class)->findOneBy(['d7Nid'=>$row[39]]);
+        if ($equiv3) {
+            $evaluation->setFinalEquiv3Course($equiv3);
+        }
+
+        $evaluation->setFinalEquiv3CreditHrs($row[40]);
         $evaluation->setFinalEquiv3Operator($row[41]);
-        $evaluation->setFinalEquiv4Course($row[42]);
+
+        // $evaluation->setFinalEquiv4Course($row[42]);
+        $equiv4 = $this->entityManager->getRepository(Course::class)->findOneBy(['d7Nid'=>$row[42]]);
+        if ($equiv4) {
+            $evaluation->setFinalEquiv4Course($equiv4);
+        }
+
         $evaluation->setFinalEquiv4CreditHrs($row[43]);
+
         $evaluation->setFinalPolicy($row[44]);
         $evaluation->setRequesterType($row[45]);
 
-        $evaluation->setCourseInSis($row[46]);
-        $evaluation->setTranscriptOnHand($row[47]);
-        $evaluation->setHoldForRequesterAdmit($row[48]);
-        $evaluation->setHoldForCourseInput($row[49]);
-        $evaluation->setHoldForTranscript($row[50]);
+        // $evaluation->setCourseInSis($row[46]);       superfluous
+        // $evaluation->setTranscriptOnHand($row[47]);  superfluous
 
-        $evaluation->setTagSpotArticulated($row[51]);
-        $evaluation->setTagR1ToStudent($row[52]);
-        $evaluation->setTagDeptToStudent($row[53]);
-        $evaluation->setTagDeptToR1($row[54]);
-        $evaluation->setTagR2ToStudent($row[55]);
+        // $evaluation->setHoldForRequesterAdmit($row[48]);
+        if (trim($row[48]) == "Yes") {
+            $evaluation->setHoldForRequesterAdmit(1);
+        } else {
+            $evaluation->setHoldForRequesterAdmit(0);
+        }
 
-        $evaluation->setTagR2ToDept($row[56]);
-        $evaluation->setTagReassigned($row[57]);
-        $evaluation->setD7Nid($row[58]);
+        // $evaluation->setHoldForCourseInput($row[49]);
+        if (trim($row[49]) == "Yes") {
+            $evaluation->setHoldForCourseInput(1);
+        } else {
+            $evaluation->setHoldForCourseInput(0);
+        }
+
+        // $evaluation->setHoldForTranscript($row[50]);
+        if (trim($row[50]) == "Yes") {
+            $evaluation->setHoldForTranscript(1);
+        } else {
+            $evaluation->setHoldForTranscript(0);
+        }
+
+        // $evaluation->setTagSpotArticulated($row[51]);
+        if (trim($row[51]) == "Yes") {
+            $evaluation->setTagSpotArticulated(1);
+        } else {
+            $evaluation->setTagSpotArticulated(0);
+        }
+
+        // $evaluation->setTagR1ToStudent($row[52]);
+        if (trim($row[52]) == "Yes") {
+            $evaluation->setTagR1ToStudent(1);
+        } else {
+            $evaluation->setTagR1ToStudent(0);
+        }
+
+        // $evaluation->setTagDeptToStudent($row[53]);
+        if (trim($row[53]) == "Yes") {
+            $evaluation->setTagDeptToStudent(1);
+        } else {
+            $evaluation->setTagDeptToStudent(0);
+        }
+
+        // $evaluation->setTagDeptToR1($row[54]);
+        if (trim($row[54]) == "Yes") {
+            $evaluation->setTagDeptToR1(1);
+        } else {
+            $evaluation->setTagDeptToR1(0);
+        }
+
+        // $evaluation->setTagR2ToStudent($row[55]);
+        if (trim($row[55]) == "Yes") {
+            $evaluation->setTagR2ToStudent(1);
+        } else {
+            $evaluation->setTagR2ToStudent(0);
+        }
+
+        // $evaluation->setTagR2ToDept($row[56]);
+        if (trim($row[56]) == "Yes") {
+            $evaluation->setTagR2ToDept(1);
+        } else {
+            $evaluation->setTagR2ToDept(0);
+        }
+
+        // $evaluation->setTagReassigned($row[57]);
+        if (trim($row[57]) == "Yes") {
+            $evaluation->setTagReassigned(1);
+        } else {
+            $evaluation->setTagReassigned(0);
+        }
 
         $evaluation->setD7Nid($row[0]);
+        $evaluation->setD7Uuid($row[58]);
+
         $evaluation->setLoadedFrom($fileToLoad);
+
+        // $evaluation->setUpdated($row[59]);
+        $dt2 = date_create_from_format("Y-m-d H:i:s", trim($row[59]));
+        if ($dt2) {
+            $evaluation->setUpdated($dt2);
+        }
 
         $this->entityManager->persist($evaluation);
         $this->entityManager->flush();
 
         $io->text(
-            sprintf("%04d/%04d\t%5s\t%8s\t%8s\t%8s\t%12s\t%12s\t%16s\t%12s\t%12s", 
+            sprintf("%04d/%04d\t%5s\t%8s\t%8s\t%16s\t%8s\t%8s\t%16s\t%12s", 
             $current, 
             $total, 
             $evaluation->getId(),
             $evaluation->getSerialNum(),
             $evaluation->getD7Nid(),
-            $evaluation->getRequester(),
+            $evaluation->getRequester()->getUsername(),
             $evaluation->getCourseSubjCode(),
             $evaluation->getCourseCrseNum(),
-            $evaluation->getCourseSubjCode(),
             date_format($evaluation->getCreated(),"Y-m-d"),
-            $evaluation->getInstitution(),
             $evaluation->getPhase(),
         ));
     }
