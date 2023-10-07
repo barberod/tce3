@@ -6,6 +6,7 @@ use App\Entity\Course;
 use App\Entity\Department;
 use App\Entity\Evaluation;
 use App\Entity\Institution;
+use App\Entity\Trail;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -25,7 +26,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class DataUnloadCommand extends Command
 {
-    private $unloadableEntities = ['User','Course','Institution','Department','Evaluation'];
+    private $unloadableEntities = ['User','Course','Institution','Department','Evaluation','Trail'];
 
     public function __construct(
         private readonly LoggerInterface $logger,
@@ -71,6 +72,11 @@ class DataUnloadCommand extends Command
         if ($targetEntity === 'Evaluation') {
             $io->title("Unloading evaluations");
             return $this->unloadEvaluations($io, $targetEntity, $fileToUnload);
+        }
+
+        if ($targetEntity === 'Trail') {
+            $io->title("Unloading trails");
+            return $this->unloadTrails($io, $targetEntity, $fileToUnload);
         }
 
         $io->warning('Invalid.');
@@ -123,6 +129,11 @@ class DataUnloadCommand extends Command
         }
         if ($targetEntity === 'Evaluation') {
             if ($this->entityManager->getRepository(Evaluation::class)->findBy(['loadedFrom'=>$fileToUnload], null, 1)) {
+                return true;
+            }
+        }
+        if ($targetEntity === 'Trail') {
+            if ($this->entityManager->getRepository(Trail::class)->findBy(['loadedFrom'=>$fileToUnload], null, 1)) {
                 return true;
             }
         }
@@ -314,6 +325,42 @@ class DataUnloadCommand extends Command
             ));
 
             $this->entityManager->remove($evaluation);
+            $this->entityManager->flush();
+
+            $i++;
+        }
+        $io->newLine();
+    }
+
+    /*
+     * Trail
+     */
+    protected function unloadTrails(SymfonyStyle $io, string $targetEntity, string $fileToUnload): int {
+        if ($this->runChecks($io, $targetEntity, $fileToUnload, 2, 2) === 0) {
+            $this->deleteTrailsFromTrailTable($io, $fileToUnload);
+        } else {
+            $io->warning('Trails from '.$fileToUnload.' have NOT been unloaded.');
+            return Command::FAILURE;
+        }
+        $io->success('Trails from '.$fileToUnload.' have been unloaded.');
+        return Command::SUCCESS;
+    }
+
+    protected function deleteTrailsFromTrailTable(SymfonyStyle $io, string $fileToUnload) {
+        $io->section("Deleting trails from database");
+        $trails = $this->entityManager->getRepository(Trail::class)->findBy(['loadedFrom'=>$fileToUnload]);
+        $total = count($trails);
+        $i = 1;
+        foreach ($trails as $trail) {
+            $io->text(
+                sprintf("%04d/%04d\t%8s\t%8s", 
+                $i, 
+                $total, 
+                $trail->getD7Nid(), 
+                $trail->getEvaluation()->getD7Nid()
+            ));
+
+            $this->entityManager->remove($trail);
             $this->entityManager->flush();
 
             $i++;

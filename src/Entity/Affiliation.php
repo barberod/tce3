@@ -19,6 +19,9 @@ class Affiliation
     #[ORM\ManyToOne(inversedBy: 'affiliations')]
     private ?Department $department = null;
 
+    #[ORM\Column(length: 48, nullable: true)]
+    private ?string $loadedFrom = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,18 @@ class Affiliation
     public function setDepartment(?Department $department): static
     {
         $this->department = $department;
+
+        return $this;
+    }
+
+    public function getLoadedFrom(): ?string
+    {
+        return $this->loadedFrom;
+    }
+
+    public function setLoadedFrom(string $loadedFrom): static
+    {
+        $this->loadedFrom = $loadedFrom;
 
         return $this;
     }

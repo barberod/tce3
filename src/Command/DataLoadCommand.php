@@ -6,6 +6,7 @@ use App\Entity\Course;
 use App\Entity\Department;
 use App\Entity\Evaluation;
 use App\Entity\Institution;
+use App\Entity\Trail;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -25,7 +26,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class DataLoadCommand extends Command
 {
-    private array $loadableEntities = ['User','Course','Institution','Department','Evaluation'];
+    private array $loadableEntities = ['User','Course','Institution','Department','Evaluation','Trail'];
 
     public function __construct(
         private readonly LoggerInterface $logger,
@@ -71,6 +72,11 @@ class DataLoadCommand extends Command
         if ($targetEntity === 'Evaluation') {
             $io->title("Loading evaluations");
             return $this->loadEvaluations($io, $targetEntity, $fileToLoad);
+        }
+
+        if ($targetEntity === 'Trail') {
+            $io->title("Loading trails");
+            return $this->loadTrails($io, $targetEntity, $fileToLoad);
         }
 
         $io->warning('Invalid.');
@@ -693,5 +699,75 @@ class DataLoadCommand extends Command
             date_format($evaluation->getCreated(),"Y-m-d"),
             $evaluation->getPhase(),
         ));
+    }
+
+    /*
+     * Trail
+     */
+    protected function loadTrails(SymfonyStyle $io, string $targetEntity, string $fileToLoad) {
+        if ($this->runChecks($io, $targetEntity, $fileToLoad, 5, 2) === 0) {
+            $this->parseTrailFileAndLoadTrails($io, $fileToLoad);
+        } else {
+            $io->warning('Trails from '.$fileToLoad.' have NOT been loaded.');
+            return Command::FAILURE;
+        }
+        $io->success('Trail from '.$fileToLoad.' have been loaded.');
+        return Command::SUCCESS;
+    }
+
+    protected function parseTrailFileAndLoadTrails(SymfonyStyle $io, string $fileToLoad) {
+        $io->section("Parsing csv file and inserting trails into database");
+        $denominator = $this->getExpectedNumberOfNewRecords('Trail', $fileToLoad);
+        $row = 0;
+        if (($handle = fopen("data/csv/uploads/Trail/{$fileToLoad}", "r")) !== FALSE) {
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                if ($row > 0) {
+                    $this->persistTrailToTrailTable($io, $data, $fileToLoad, (string)$denominator, (string)$row);
+                }
+                $row++;
+            }
+            fclose($handle);
+        }
+        $io->newLine();
+    }
+
+    protected function persistTrailToTrailTable(SymfonyStyle $io, array $row, string $fileToLoad, string $total, string $current) {
+        $trail = new Trail();
+
+        if ((int)trim($row[1]) > 362867) {
+            $eval = $this->entityManager->getRepository(Evaluation::class)->findOneBy(['d7Nid'=>$row[1]]);
+            if ($eval) {
+                $trail->setEvaluation($eval);
+
+                $trail->setBody($row[2]);
+                $trail->setBodyAnon($row[3]);
+
+                $dt3 = date_create_from_format("Y-m-d H:i:s", trim($row[4]));
+                if ($dt3) {
+                    $trail->setCreated($dt3);
+                }
+
+                $trail->setD7Nid($row[0]);
+                $trail->setLoadedFrom($fileToLoad);
+
+                $this->entityManager->persist($trail);
+                $this->entityManager->flush();
+
+                $io->text(
+                    sprintf("%04d/%04d\t%8s\t%8s", 
+                    $current, 
+                    $total, 
+                    $trail->getD7Nid(), 
+                    $trail->getEvaluation()->getD7Nid()
+                ));
+            } else {
+                $io->text(
+                    sprintf("%04d/%04d\t%40s", 
+                    $current, 
+                    $total, 
+                    "Not loaded. No evaluation."
+                ));
+            }
+        }
     }
 }

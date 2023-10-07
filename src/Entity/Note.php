@@ -21,9 +21,6 @@ class Note
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $body = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $bodyAnon = null;
-
     #[ORM\Column(nullable: true, options: ["default" => 0])]
     private ?int $visibleToRequester = null;
 
@@ -36,6 +33,9 @@ class Note
 
     #[ORM\Column(nullable: true)]
     private ?int $d7Nid = null;
+
+    #[ORM\Column(length: 48, nullable: true)]
+    private ?string $loadedFrom = null;
 
     public function getId(): ?int
     {
@@ -62,18 +62,6 @@ class Note
     public function setBody(?string $body): static
     {
         $this->body = $body;
-
-        return $this;
-    }
-
-    public function getBodyAnon(): ?string
-    {
-        return $this->bodyAnon;
-    }
-
-    public function setBodyAnon(?string $bodyAnon): static
-    {
-        $this->bodyAnon = $bodyAnon;
 
         return $this;
     }
@@ -122,6 +110,18 @@ class Note
     public function setD7Nid(?int $d7Nid): static
     {
         $this->d7Nid = $d7Nid;
+
+        return $this;
+    }
+
+    public function getLoadedFrom(): ?string
+    {
+        return $this->loadedFrom;
+    }
+
+    public function setLoadedFrom(string $loadedFrom): static
+    {
+        $this->loadedFrom = $loadedFrom;
 
         return $this;
     }
