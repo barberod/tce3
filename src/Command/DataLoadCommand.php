@@ -6,6 +6,7 @@ use App\Entity\Course;
 use App\Entity\Department;
 use App\Entity\Evaluation;
 use App\Entity\Institution;
+use App\Entity\Note;
 use App\Entity\Trail;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,7 +27,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class DataLoadCommand extends Command
 {
-    private array $loadableEntities = ['User','Course','Institution','Department','Evaluation','Trail'];
+    private array $loadableEntities = ['User','Course','Institution','Department','Evaluation','Trail','Note'];
 
     public function __construct(
         private readonly LoggerInterface $logger,
@@ -77,6 +78,11 @@ class DataLoadCommand extends Command
         if ($targetEntity === 'Trail') {
             $io->title("Loading trails");
             return $this->loadTrails($io, $targetEntity, $fileToLoad);
+        }
+
+        if ($targetEntity === 'Note') {
+            $io->title("Loading notes");
+            return $this->loadNotes($io, $targetEntity, $fileToLoad);
         }
 
         $io->warning('Invalid.');
@@ -767,6 +773,89 @@ class DataLoadCommand extends Command
                     $total, 
                     "Not loaded. No evaluation."
                 ));
+            }
+        }
+    }
+
+    /*
+     * Note
+     */
+    protected function loadNotes(SymfonyStyle $io, string $targetEntity, string $fileToLoad) {
+        if ($this->runChecks($io, $targetEntity, $fileToLoad, 7, 2) === 0) {
+            $this->parseNoteFileAndLoadNotes($io, $fileToLoad);
+        } else {
+            $io->warning('Notes from '.$fileToLoad.' have NOT been loaded.');
+            return Command::FAILURE;
+        }
+        $io->success('Note from '.$fileToLoad.' have been loaded.');
+        return Command::SUCCESS;
+    }
+
+    protected function parseNoteFileAndLoadNotes(SymfonyStyle $io, string $fileToLoad) {
+        $io->section("Parsing csv file and inserting notes into database");
+        $denominator = $this->getExpectedNumberOfNewRecords('Note', $fileToLoad);
+        $row = 0;
+        if (($handle = fopen("data/csv/uploads/Note/{$fileToLoad}", "r")) !== FALSE) {
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                if ($row > 0) {
+                    $this->persistNoteToNoteTable($io, $data, $fileToLoad, (string)$denominator, (string)$row);
+                }
+                $row++;
+            }
+            fclose($handle);
+        }
+        $io->newLine();
+    }
+
+    protected function persistNoteToNoteTable(SymfonyStyle $io, array $row, string $fileToLoad, string $total, string $current) {
+        $note = new Note();
+
+        if ((int)trim($row[1]) > 362867) {
+            $eval = $this->entityManager->getRepository(Evaluation::class)->findOneBy(['d7Nid'=>$row[1]]);
+            if ($eval) {
+                $note->setEvaluation($eval);
+
+                $note->setBody($row[2]);
+
+                if (trim($row[3]) == 'Yes') {
+                    $note->setVisibleToRequester(1);
+                } else {
+                    $note->setVisibleToRequester(0);
+                }
+
+                $author = $this->entityManager->getRepository(User::class)->findOneBy(['d7Uid'=>$row[4]]);
+                if ($author) {
+                    $note->setAuthor($author);
+                }
+
+                $dt4 = date_create_from_format("Y-m-d H:i:s", trim($row[5]));
+                if ($dt4) {
+                    $note->setCreated($dt4);
+                }
+
+                $note->setD7Nid($row[6]);
+                $note->setLoadedFrom($fileToLoad);
+
+                $this->entityManager->persist($note);
+                $this->entityManager->flush();
+
+                $io->text(
+                    sprintf("%04d/%04d\t%8s\t%8s", 
+                    $current, 
+                    $total, 
+                    $note->getD7Nid(), 
+                    $note->getEvaluation()->getD7Nid()
+                ));
+
+            } else {
+
+                $io->text(
+                    sprintf("%04d/%04d\t%40s", 
+                    $current, 
+                    $total, 
+                    "Not loaded. No evaluation."
+                ));
+                
             }
         }
     }

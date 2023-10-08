@@ -6,6 +6,7 @@ use App\Entity\Course;
 use App\Entity\Department;
 use App\Entity\Evaluation;
 use App\Entity\Institution;
+use App\Entity\Note;
 use App\Entity\Trail;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,7 +27,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class DataUnloadCommand extends Command
 {
-    private $unloadableEntities = ['User','Course','Institution','Department','Evaluation','Trail'];
+    private $unloadableEntities = ['User','Course','Institution','Department','Evaluation','Trail','Note'];
 
     public function __construct(
         private readonly LoggerInterface $logger,
@@ -76,6 +77,11 @@ class DataUnloadCommand extends Command
 
         if ($targetEntity === 'Trail') {
             $io->title("Unloading trails");
+            return $this->unloadTrails($io, $targetEntity, $fileToUnload);
+        }
+
+        if ($targetEntity === 'Note') {
+            $io->title("Unloading notes");
             return $this->unloadTrails($io, $targetEntity, $fileToUnload);
         }
 
@@ -134,6 +140,11 @@ class DataUnloadCommand extends Command
         }
         if ($targetEntity === 'Trail') {
             if ($this->entityManager->getRepository(Trail::class)->findBy(['loadedFrom'=>$fileToUnload], null, 1)) {
+                return true;
+            }
+        }
+        if ($targetEntity === 'Note') {
+            if ($this->entityManager->getRepository(Note::class)->findBy(['loadedFrom'=>$fileToUnload], null, 1)) {
                 return true;
             }
         }
@@ -361,6 +372,42 @@ class DataUnloadCommand extends Command
             ));
 
             $this->entityManager->remove($trail);
+            $this->entityManager->flush();
+
+            $i++;
+        }
+        $io->newLine();
+    }
+
+    /*
+     * Note
+     */
+    protected function unloadNotes(SymfonyStyle $io, string $targetEntity, string $fileToUnload): int {
+        if ($this->runChecks($io, $targetEntity, $fileToUnload, 2, 2) === 0) {
+            $this->deleteNotesFromNoteTable($io, $fileToUnload);
+        } else {
+            $io->warning('Notes from '.$fileToUnload.' have NOT been unloaded.');
+            return Command::FAILURE;
+        }
+        $io->success('Notes from '.$fileToUnload.' have been unloaded.');
+        return Command::SUCCESS;
+    }
+
+    protected function deleteNotesFromNoteTable(SymfonyStyle $io, string $fileToUnload) {
+        $io->section("Deleting notes from database");
+        $notes = $this->entityManager->getRepository(Note::class)->findBy(['loadedFrom'=>$fileToUnload]);
+        $total = count($notes);
+        $i = 1;
+        foreach ($notes as $note) {
+            $io->text(
+                sprintf("%04d/%04d\t%8s\t%8s", 
+                $i, 
+                $total, 
+                $note->getD7Nid(), 
+                $note->getEvaluation()->getD7Nid()
+            ));
+
+            $this->entityManager->remove($note);
             $this->entityManager->flush();
 
             $i++;

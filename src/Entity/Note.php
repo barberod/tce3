@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\NoteRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: NoteRepository::class)]
 class Note
@@ -27,7 +26,6 @@ class Note
     #[ORM\ManyToOne(inversedBy: 'notes')]
     private ?User $author = null;
 
-    #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $created = null;
 
