@@ -507,7 +507,7 @@ class DataLoadCommand extends Command
         $evaluation->setReqAdmin($row[3]);
 
         // $evaluation->setInstitution($row[4]);
-        $institution = $this->entityManager->getRepository(Institution::class)->findOneBy(['d7Nid'=>$row[41]]);
+        $institution = $this->entityManager->getRepository(Institution::class)->findOneBy(['d7Nid'=>$row[4]]);
         if ($institution) {
             $evaluation->setInstitution($institution);
         }

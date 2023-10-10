@@ -7,59 +7,73 @@
 
             <div class="col-12 col-lg-6 d-flex flex-column mb-4">
                 <label for="recordInput1" class="form-label mb-0">Required for Admission?</label>
-                <div class="font-monospace" id="recordInput1">Yes</div>
+                <div class="font-monospace" id="recordInput1">{{ evaluation.reqAdmin }}</div>
             </div>
 
             <div class="col-12 col-lg-6 d-flex flex-column mb-4">
                 <label for="recordInput2" class="form-label mb-0">Current Phase</label>
-                <div class="font-monospace" id="recordInput1">Complete</div>
+                <div class="font-monospace" id="recordInput2">{{ evaluation.phase }}</div>
             </div>
 
             <div class="col-12 col-lg-6 d-flex flex-column mb-4">
                 <label for="recordInput3" class="form-label mb-0">Date Submitted</label>
-                <div class="font-monospace" id="recordInput1">2023-09-01 12:30:59</div>
+                <div class="font-monospace" id="recordInput3">{{ evaluation.created | date('Y-m-d H:i:s') }}</div>
             </div>
 
             <div class="col-12 col-lg-6 d-flex flex-column mb-4">
                 <label for="recordInput4" class="form-label mb-0">Latest Update</label>
-                <div class="font-monospace" id="recordInput1">2023-09-05 18:24:02</div>
+                <div class="font-monospace" id="recordInput4">{{ evaluation.updated | date('Y-m-d H:i:s') }}</div>
             </div>
 
             <div class="col-12 col-lg-6 d-flex flex-column mb-4">
-                <label for="recordInput3" class="form-label mb-0">Requester</label>
-                <div class="font-monospace" id="recordInput1">
-                    George Burdell<br>
-                    987654321<br>
-                    gburdell@fake.gatech.edu<br>
-                    Student
+                <label for="recordInput5" class="form-label mb-0">Requester</label>
+                <div class="font-monospace" id="recordInput5">
+                    {{ evaluation.requester.displayName }}<br>
+                    {{ evaluation.requester.orgID }}<br>
+                    {{ evaluation.requester.email }}<br>
+                    {{ evaluation.requester.category }}
                 </div>
             </div>
 
             <div class="col-12 col-lg-6 d-flex flex-column mb-4">
-                <label for="recordInput4" class="form-label mb-0">Assignee</label>
-                <div class="font-monospace" id="recordInput1">
-                    Crystal Elster<br>
-                    celster3</div>
+            {% if evaluation.assignee is not empty %}
+                <label for="recordInput6" class="form-label mb-0">Assignee</label>
+                <div class="font-monospace" id="recordInput6">
+                    {{ evaluation.assignee.displayName }}<br>
+                    {{ evaluation.assignee.username }}
+                </div>
+            {% endif %}
             </div>
 
             <div class="col-12 d-flex flex-column mb-4">
-                <label for="recordInput5" class="form-label mb-0">Institution</label>
-                <div class="font-monospace" id="recordInput5">
-                    University of West Georgia<br>
-                    1601 Maple St., Carrollton, GA 30118-0001<br>
-                    United States<br>
-                    [111887]
+                <label for="recordInput7" class="form-label mb-0">Institution</label>
+                <div class="font-monospace" id="recordInput7">
+                    {% if evaluation.institution is not empty %}
+                        {{ evaluation.institution.name }}<br>
+                    {% endif %}
+
+                    {% if evaluation.institutionOther is not empty %}
+                        {{ evaluation.institutionOther }}<br>
+                    {% endif %}
+
+                    {% if evaluation.institution is not empty %}
+                        {{ evaluation.institution.address }}<br>
+                        United States<br>
+                        [ {{ evaluation.institution.dapipID }} ]<br>
+                    {% else %}
+                        {{ evaluation.institutionCountry }}<br>
+                    {% endif %}
                 </div>
             </div>
 
             <div class="col-12 col-lg-6 d-flex flex-column mb-4">
-                <label for="recordInput3" class="form-label mb-0">Evaluation Course</label>
-                <div class="font-monospace" id="recordInput1">
-                    TEST 9000<br>
-                    Introduction to Transfer Credit Evaluation<br>
-                    Summer 2023<br>
-                    (Semester Basis)<br>
-                    3 credit hours
+                <label for="recordInput8" class="form-label mb-0">Evaluation Course</label>
+                <div class="font-monospace" id="recordInput8">
+                    {{ evaluation.courseSubjCode }} {{ evaluation.courseCrseNum }}<br>
+                    [Course Title]<br>
+                    {{ evaluation.courseTerm }}<br>
+                    ({{ evaluation.courseCreditBasis }} Basis)<br>
+                    {{ evaluation.courseCreditHrs }} credit hours
                 </div>
                 <div class="mt-3">
                     <a href="#" target="_blank"><i class="fa-regular fa-file fa-fw me-2"></i>Syllabus</a><br>
@@ -68,46 +82,113 @@
             </div>
 
             <div class="col-12 col-lg-6 d-flex flex-column mb-4">
-                <label for="recordInput4" class="form-label mb-0">Evaluation Lab</label>
-                <div class="font-monospace" id="recordInput1">
-                    TEST 9001<br>
-                    Transfer Lab<br>
-                    Fall 2023<br>
-                    (Quarter Basis)<br>
-                    12 credit hours
+            {% if evaluation.labSubjCode|trim is not empty %}
+                <label for="recordInput9" class="form-label mb-0">Evaluation Lab</label>
+                <div class="font-monospace" id="recordInput9">
+                    {{ evaluation.labSubjCode }} {{ evaluation.labCrseNum }}<br>
+                    [Course Title]<br>
+                    {{ evaluation.labTerm }}<br>
+                    ({{ evaluation.labCreditBasis }} Basis)<br>
+                    {{ evaluation.labCreditHrs }} credit hours
                 </div>
                 <div class="mt-3">
                     <a href="#" target="_blank"><i class="fa-regular fa-file fa-fw me-2"></i>Syllabus</a><br>
                     <a href="#" target="_blank"><i class="fa-regular fa-file fa-fw me-2"></i>Description</a>
                 </div>
+            {% endif %}
             </div>
 
+            {% if evaluation.draftEquiv1Course|trim is not empty and context != "requester" %}
             <div class="col-12 d-flex flex-column mb-4">
-                <label for="recordInput5" class="form-label mb-0">Final Equiv(s)</label>
-                <div class="font-monospace" id="recordInput5">
-                    BIOS 1107, 4 credit hours<br>
-                    Not Policy
-                </div>
-            </div>
+                <label for="recordInput10" class="form-label text-muted mb-0">Draft Equiv(s)</label>
+                <div class="font-monospace text-muted fst-italic" id="recordInput10">
+                    {{ evaluation.draftEquiv1Course }}, {{ evaluation.draftEquiv1CreditHrs }} credit hours {{ evaluation.draftEquiv1Operator }}<br>
 
-            <div class="col-12 d-flex flex-column mb-4">
-                <label for="recordInput5" class="form-label mb-0">Draft Equiv(s)</label>
-                <div class="font-monospace" id="recordInput5">
-                    BIOS 1107, 3 credit hours -AND-<br>
-                    BIOS 1107L, 1 credit horus<br>
-                    Policy
-                </div>
-            </div>
+                    {% if evaluation.draftEquiv2Course|trim is not empty %}
+                        {{ evaluation.draftEquiv2Course }}, {{ evaluation.draftEquiv2CreditHrs }} credit hours {{ evaluation.draftEquiv2Operator }}<br>
+                    {% endif %}
 
-            <div class="col-12 d-flex flex-column mb-4">
-                <label for="recordInput5" class="form-label mb-2">Tags</label>
-                <div class="font-monospace">
-                    <i class="fa-solid fa-tag fa-fw me-2 text-muted"></i>spot-articulated
-                </div>
-                <div class="font-monospace">
-                    <i class="fa-solid fa-tag fa-fw me-2 text-muted"></i>dept-to-dept
+                    {% if evaluation.draftEquiv3Course|trim is not empty %}
+                        {{ evaluation.draftEquiv3Course }}, {{ evaluation.draftEquiv3CreditHrs }} credit hours {{ evaluation.draftEquiv3Operator }}<br>
+                    {% endif %}
+
+                    {% if evaluation.draftEquiv4Course|trim is not empty %}
+                        {{ evaluation.draftEquiv4Course }}, {{ evaluation.draftEquiv4CreditHrs }} credit hours<br>
+                    {% endif %}
+
+                    {{ evaluation.draftPolicy }}
                 </div>
             </div>
+            {% endif %}
+
+            {% if evaluation.finalEquiv1Course is not empty %}
+            <div class="col-12 d-flex flex-column mb-4">
+                <label for="recordInput11" class="form-label mb-0">Final Equiv(s)</label>
+                <div class="font-monospace" id="recordInput11">
+                    {{ evaluation.finalEquiv1Course.subjectCode }} {{ evaluation.finalEquiv1Course.courseNumber }}, {{ evaluation.finalEquiv1CreditHrs }} credit hours {{ evaluation.finalEquiv1Operator }}<br>
+                    
+                    {% if evaluation.finalEquiv2Course is not empty %}
+                        {{ evaluation.finalEquiv2Course.subjectCode }} {{ evaluation.finalEquiv2Course.courseNumber }}, {{ evaluation.finalEquiv2CreditHrs }} credit hours {{ evaluation.finalEquiv2Operator }}<br>
+                    {% endif %}
+
+                    {% if evaluation.finalEquiv3Course is not empty %}
+                        {{ evaluation.finalEquiv3Course.subjectCode }} {{ evaluation.finalEquiv3Course.courseNumber }}, {{ evaluation.finalEquiv3CreditHrs }} credit hours {{ evaluation.finalEquiv3Operator }}<br>
+                    {% endif %}
+
+                    {% if evaluation.finalEquiv4Course is not empty %}
+                        {{ evaluation.finalEquiv4Course.subjectCode }} {{ evaluation.finalEquiv4Course.courseNumber }}, {{ evaluation.finalEquiv4CreditHrs }} credit hours<br>
+                    {% endif %}
+
+                    {{ evaluation.finalPolicy }}
+                </div>
+            </div>
+            {% endif %}
+
+            {% set tagsExist = false %}
+            {% if evaluation.tagSpotArticulated == 1 %}{% set tagsExist = true %}{% endif %}
+            {% if evaluation.tagR1ToStudent == 1 %}{% set tagsExist = true %}{% endif %}
+            {% if evaluation.tagDeptToStudent == 1 %}{% set tagsExist = true %}{% endif %}
+            {% if evaluation.tagDeptToR1 == 1 %}{% set tagsExist = true %}{% endif %}
+            {% if evaluation.tagR2ToStudent == 1 %}{% set tagsExist = true %}{% endif %}
+            {% if evaluation.tagR2ToDept == 1 %}{% set tagsExist = true %}{% endif %}
+            {% if evaluation.tagReassigned == 1 %}{% set tagsExist = true %}{% endif %}
+
+            {% if tagsExist == true and context != 'requester' %}
+            <div class="col-12 d-flex flex-column mb-4">
+                <label for="recordInput12" class="form-label mb-2">Tags</label>
+                <div class="font-monospace" id="recordInput12">
+
+                    {% if evaluation.tagSpotArticulated == 1 %}
+                    <i class="fa-solid fa-tag fa-fw me-2 text-muted"></i>spot-articulated<br>
+                    {% endif %}
+
+                    {% if evaluation.tagR1ToStudent == 1 %}
+                    <i class="fa-solid fa-tag fa-fw me-2 text-muted"></i>r1-to-student<br>
+                    {% endif %}
+
+                    {% if evaluation.tagDeptToStudent == 1 %}
+                    <i class="fa-solid fa-tag fa-fw me-2 text-muted"></i>dept-to-student<br>
+                    {% endif %}
+
+                    {% if evaluation.tagDeptToR1 == 1 %}
+                    <i class="fa-solid fa-tag fa-fw me-2 text-muted"></i>dept-to-r1<br>
+                    {% endif %}
+
+                    {% if evaluation.tagR2ToStudent == 1 %}
+                    <i class="fa-solid fa-tag fa-fw me-2 text-muted"></i>r2-to-student<br>
+                    {% endif %}
+
+                    {% if evaluation.tagR2ToDept == 1 %}
+                    <i class="fa-solid fa-tag fa-fw me-2 text-muted"></i>r2-to-dept<br>
+                    {% endif %}
+
+                    {% if evaluation.tagReassigned == 1 %}
+                    <i class="fa-solid fa-tag fa-fw me-2 text-muted"></i>reassigned<br>
+                    {% endif %}
+
+                </div>
+            </div>
+            {% endif %}
             
         </div>
     </div>

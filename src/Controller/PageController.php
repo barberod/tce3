@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Evaluation;
 use App\Repository\EvaluationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -66,15 +67,15 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/secure/coordinator/evaluation/{id}', name: 'coordinator_evaluation_page')]
-    public function coordinatorEvaluationPage(int $id, EvaluationRepository $evaluationRepository): Response
+    #[Route('/secure/coordinator/evaluation/{id}', name: 'coordinator_evaluation_page', methods: ['GET'])]
+    public function coordinatorEvaluationPage(Evaluation $evaluation): Response
     {
-        $evaluation = $evaluationRepository->find($id);
         return $this->render('evaluation/page.html.twig', [
             'context' => 'coordinator',
             'page_title' => 'Evaluation #'.$evaluation->getID(),
-            'prepend' => 'Evaluation #'.$evaluation->getID(),
-            'uuid' => $evaluation->getID()
+            'prepend' => 'Evaluation #'.$evaluation->getD7Nid(),
+            'evaluation' => $evaluation,
+            'uuid' => $evaluation->getD7Nid()
         ]);
     }
 

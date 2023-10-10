@@ -1,14 +1,18 @@
+{% if evaluation.trails is not empty %}
 <div id="evaluation-trails" class="card mb-3">
     <h2 class="card-header h5">
         Trail Log
     </h2>
-    <div class="card-body">
-        <h3 class="fs-6 fw-bold">2023-09-30 12:32:59</h3>
-        <p class="font-monospace mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque eu ante vestibulum, aliquet nisi at, tempor quam. Proin eget nisl molestie, luctus velit eget, eleifend diam</p>
+    {% for trail in evaluation.trails %}
+    <div class="card-body {% if loop.last %}last{% endif %}">
+        <h3 class="fs-6 fw-bold">{{ trail.created | date('Y-m-d H:i:s') }}</h3>
+        {% if context == "requester" %}
+        <p class="font-monospace mb-0">{{ trail.bodyAnon }}</p>
+        {% else %}
+        <p class="font-monospace mb-0">{{ trail.body }}</p>
+        {% endif %}
     </div>
-    <div class="card-body last">
-        <h3 class="fs-6 fw-bold">2023-09-30 12:34:01</h3>
-        <p class="font-monospace mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque eu ante vestibulum, aliquet nisi at, tempor quam. Proin eget nisl molestie, luctus velit eget, eleifend diam</p>
-    </div>
+    {% endfor %}
 </div>
 <!-- #/evaluation-trails -->
+{% endif %}
