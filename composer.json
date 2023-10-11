@@ -14,6 +14,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.15",
         "ecphp/cas-bundle": "*",
+        "knplabs/knp-time-bundle": "^2.1",
         "monolog/monolog": "*",
         "nyholm/psr7": "*",
         "pagerfanta/doctrine-orm-adapter": "^4.2",
