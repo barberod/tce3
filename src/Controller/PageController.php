@@ -61,15 +61,18 @@ class PageController extends AbstractController
     #[Route('/secure/coordinator/evaluation', name: 'coordinator_evaluation_table', methods: ['GET'])]
     public function coordinatorEvaluationTable(EvaluationRepository $evaluationRepository): Response
     {
-        $queryBuilder = $evaluationRepository->getQB();
+        $page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
+        $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
+        $direction = ($_GET['dir'] == 'asc') ? 'asc' : 'desc';
+
+        $queryBuilder = $evaluationRepository->getQB($orderby, $direction);
         $adapter = new QueryAdapter($queryBuilder);
-        $pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, 1, 30);
+        $pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
         
         return $this->render('evaluation/table.html.twig', [
             'context' => 'coordinator',
             'page_title' => 'Evaluations',
             'prepend' => 'Evaluations',
-            'evaluations' => $evaluationRepository->findAll(),
             'pager' => $pagerfanta,
         ]);
     }

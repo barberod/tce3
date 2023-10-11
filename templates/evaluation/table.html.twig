@@ -20,6 +20,7 @@
 {% block content %}
     {% if context|default() %}
         {% if (context == "manager") or (context == "coordinator") or (context == "observer") or (context == "assignee") or (context == "requester") %}
+            {% set evaluation_table = context ~ '_evaluation_table' %}
             {% set evaluation_page = context ~ '_evaluation_page' %}
 
             <div class="col-12">
@@ -33,7 +34,7 @@
                                     <p class="text-muted mb-0">Evaluations older than 500 days are not shown.</p>
                                 </div>
                                 <div class="col text-end">
-                                    <p class="mb-0">Showing 4 of 9876</p>
+                                    <p class="mb-0">Showing {{ pager.currentPageOffsetStart() }} - {{ pager.currentPageOffsetEnd() }} of {{ pager.nbResults }}</p>
                                 </div>
                             </div>
 
@@ -62,10 +63,10 @@
                                                 <th scope="col">Requestor</th>
                                                 <th scope="col">Assignee</th>
                                                 <th scope="col">
-                                                    <a href="#" sort="asc">Created</a>
+                                                    <a href="{{ app.request.pathinfo }}?orderby=created&sort=desc" sort="asc">Created</a>
                                                 </th>
                                                 <th scope="col">
-                                                    <a href="#" sort="asc">Updated</a>
+                                                    <a href="{{ app.request.pathinfo }}">Updated</a>
                                                 </th>
                                                 <th scope="col">Phase</th>
                                                 <th scope="col">Links</th>
@@ -88,8 +89,16 @@
                                                     {{ evaluation.assignee.displayName }}<br><span class="text-muted">{{ evaluation.assignee.username }}</span>
                                                     {% endif %}
                                                     </td>
-                                                    <td>{{ evaluation.created | date('Y-m-d H:i') }}<br><span class="text-muted">{{ evaluation.created|time_diff }}</span></td>
-                                                    <td>{{ evaluation.updated | date('Y-m-d H:i') }}<br><span class="text-muted">{{ evaluation.updated|time_diff }}</span></td>
+                                                    <td>
+                                                    {% if evaluation.created %}
+                                                    {{ evaluation.created | date('Y-m-d H:i') }}<br><span class="text-muted">{{ evaluation.created|time_diff }}</span>
+                                                    {% endif %}
+                                                    </td>
+                                                    <td>
+                                                    {% if evaluation.updated %}
+                                                    {{ evaluation.updated | date('Y-m-d H:i') }}<br><span class="text-muted">{{ evaluation.updated|time_diff }}</span>
+                                                    {% endif %}
+                                                    </td>
                                                     <td>{{ evaluation.phase }}</td>
                                                     <td>
                                                         <a class="me-2" href="{{ url(evaluation_page, {'id':evaluation.id}) }}">View</a>
@@ -105,7 +114,7 @@
                             {{ pagerfanta(pager) }}
 
                             <!-- Page Navigation -->
-                            <div id="page-navigation" class="row justify-content-center mb-3">
+                            <div id="page-navigation" class="row justify-content-center mb-3" style="display: none;">
                                 <div class="col-12 col-lg-8 col-xl-10">
                                     <nav aria-label="Page navigation">
                                         <ul class="pagination">

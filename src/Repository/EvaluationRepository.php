@@ -22,17 +22,29 @@ class EvaluationRepository extends ServiceEntityRepository
         parent::__construct($registry, Evaluation::class);
     }
 
-    public function getQB(string $orderBy = 'e.created', string $orderDirection = 'DESC', string $criteria = null): QueryBuilder
+    public function getQB(
+        string $orderBy = 'created', 
+        string $direction = 'desc', 
+        string $reqAdmin = null,
+        string $phase = null,
+        int $requesterID = null,
+        int $assigneeID = null
+    ): QueryBuilder
     {
         $queryBuilder = $this->createQueryBuilder('e');
         $queryBuilder->andWhere('e.status = :one')
         ->setParameter('one', 1)
-        ->orderBy($orderBy, $orderDirection);
+        ->orderBy('e.'.$orderBy, $direction);
 
-        if ($criteria) {
-            $queryBuilder->andWhere('e.requester.orgID LIKE :val')
-                ->setParameter('val', $criteria);
+        if (!is_null($reqAdmin)) {$queryBuilder->andWhere('e.reqAdmin=:val1')->setParameter('val1', $reqAdmin);}
+        if (!is_null($phase)) {$queryBuilder->andWhere('e.phase=:val2')->setParameter('val2', $phase);}
+        if (!is_null($requesterID)) {
+            $queryBuilder->andWhere('e.requester.id=:val3')->setParameter('val3', $requesterID);
         }
+        if (!is_null($assigneeID)) {
+            $queryBuilder->andWhere('e.assignee.id=:val4')->setParameter('val4', $assigneeID);
+        }
+
         return $queryBuilder;
     }
 
