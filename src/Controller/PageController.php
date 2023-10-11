@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Evaluation;
 use App\Repository\EvaluationRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -59,11 +61,16 @@ class PageController extends AbstractController
     #[Route('/secure/coordinator/evaluation', name: 'coordinator_evaluation_table', methods: ['GET'])]
     public function coordinatorEvaluationTable(EvaluationRepository $evaluationRepository): Response
     {
+        $queryBuilder = $evaluationRepository->getQB();
+        $adapter = new QueryAdapter($queryBuilder);
+        $pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, 1, 30);
+        
         return $this->render('evaluation/table.html.twig', [
             'context' => 'coordinator',
             'page_title' => 'Evaluations',
             'prepend' => 'Evaluations',
             'evaluations' => $evaluationRepository->findAll(),
+            'pager' => $pagerfanta,
         ]);
     }
 

@@ -72,47 +72,37 @@
                                             </tr>
                                             </thead>
                                             <tbody class="table-group-divider">
+                                                {% for evaluation in pager %}
                                                 <tr>
-                                                    <td><span class="text-danger me-2"><i class="fa-solid fa-circle fa-fw"></i></span>Yes</td>
-                                                    <td>TEST 3000 (3)<br><span class="text-muted">University of West Georgia</span></td>
-                                                    <td>David Barbero<br><span class="text-muted">903203313</span></td>
-                                                    <td>Makesia Scott<br><span class="text-muted">ms366</span></td>
-                                                    <td>2023-09-01 12:30<br><span class="text-muted">5 days 12 hours</span></td>
-                                                    <td>2023-09-03 18:45<br><span class="text-muted">3 days 6 hours</span></td>
-                                                    <td>Registrar 1</td>
                                                     <td>
-                                                        <a class="me-2" href="{{ url(evaluation_page, {'id':'1234'}) }}">View</a>
+                                                    {% if evaluation.reqAdmin == "No" %}
+                                                    <span class="text-danger me-2"><i class="fa-solid fa-circle fa-fw"></i></span>{{ evaluation.reqAdmin }}
+                                                    {% elseif evaluation.reqAdmin == "Yes" %}
+                                                    <span class="text-success me-2"><i class="fa-solid fa-circle fa-fw"></i></span>{{ evaluation.reqAdmin }}
+                                                    {% endif %}
+                                                    </td>
+                                                    <td>{{ evaluation.courseSubjCode }} {{ evaluation.courseCrseNum }} ({{ evaluation.courseCreditHrs }})<br><span class="text-muted">University of West Georgia</span></td>
+                                                    <td>{{ evaluation.requester.displayName }}<br><span class="text-muted">{{ evaluation.requester.orgID }}</span></td>
+                                                    <td>
+                                                    {% if evaluation.assignee.username != 'admin' %}
+                                                    {{ evaluation.assignee.displayName }}<br><span class="text-muted">{{ evaluation.assignee.username }}</span>
+                                                    {% endif %}
+                                                    </td>
+                                                    <td>{{ evaluation.created | date('Y-m-d H:i') }}<br><span class="text-muted">{{ evaluation.created|time_diff }}</span></td>
+                                                    <td>{{ evaluation.updated | date('Y-m-d H:i') }}<br><span class="text-muted">{{ evaluation.updated|time_diff }}</span></td>
+                                                    <td>{{ evaluation.phase }}</td>
+                                                    <td>
+                                                        <a class="me-2" href="{{ url(evaluation_page, {'id':evaluation.id}) }}">View</a>
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td><span class="text-muted me-2"><i class="fa-regular fa-circle fa-fw"></i></span>No</td>
-                                                    <td>TEST 3000 (3)<br><span class="text-muted">University of West Georgia</span></td>
-                                                    <td>David Barbero<br><span class="text-muted">903203313</span></td>
-                                                    <td>Makesia Scott<br><span class="text-muted">ms366</span></td>
-                                                    <td>2023-09-01 12:30<br><span class="text-muted">5 days 12 hours</span></td>
-                                                    <td>2023-09-03 18:45<br><span class="text-muted">3 days 6 hours</span></td>
-                                                    <td>Registrar 1</td>
-                                                    <td>
-                                                        <a class="me-2" href="{{ url(evaluation_page, {'id':'5678'}) }}">View</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td><span class="text-danger me-2"><i class="fa-solid fa-circle fa-fw"></i></span>Yes</td>
-                                                    <td>TEST 3000 (3)<br><span class="text-muted">University of West Georgia</span></td>
-                                                    <td>David Barbero<br><span class="text-muted">903203313</span></td>
-                                                    <td>Makesia Scott<br><span class="text-muted">ms366</span></td>
-                                                    <td>2023-09-01 12:30<br><span class="text-muted">5 days 12 hours</span></td>
-                                                    <td>2023-09-03 18:45<br><span class="text-muted">3 days 6 hours</span></td>
-                                                    <td>Registrar 1</td>
-                                                    <td>
-                                                        <a class="me-2" href="{{ url(evaluation_page, {'id':'9630'}) }}">View</a>
-                                                    </td>
-                                                </tr>
+                                                {% endfor %}
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
+
+                            {{ pagerfanta(pager) }}
 
                             <!-- Page Navigation -->
                             <div id="page-navigation" class="row justify-content-center mb-3">
