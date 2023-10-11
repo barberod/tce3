@@ -17,6 +17,7 @@
         "monolog/monolog": "*",
         "nyholm/psr7": "*",
         "pagerfanta/doctrine-orm-adapter": "^4.2",
+        "pagerfanta/twig": "^4.2",
         "sensio/framework-extra-bundle": "^6.2",
         "stof/doctrine-extensions-bundle": "^1.8",
         "symfony/apache-pack": "^1.0",
