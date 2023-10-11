@@ -62,10 +62,10 @@ class PageController extends AbstractController
     public function coordinatorEvaluationTable(EvaluationRepository $evaluationRepository): Response
     {
         $page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
-        $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
-        $direction = ($_GET['dir'] == 'asc') ? 'asc' : 'desc';
+        // $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
+        // $direction = ($_GET['dir'] == 'asc') ? 'asc' : 'desc';
 
-        $queryBuilder = $evaluationRepository->getQB($orderby, $direction);
+        $queryBuilder = $evaluationRepository->getQB();
         $adapter = new QueryAdapter($queryBuilder);
         $pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
         
