@@ -545,9 +545,11 @@ class DataLoadCommand extends Command
         // updated is set by the database
 
         // $evaluation->setAssignee($row[20]);
-        $assignee = $this->entityManager->getRepository(User::class)->findOneBy(['d7Uid'=>$row[20]]);
-        if ($assignee) {
-            $evaluation->setAssignee($assignee);
+        if ((int)trim($row[20]) != 0) {
+            $assignee = $this->entityManager->getRepository(User::class)->findOneBy(['d7Uid'=>$row[20]]);
+            if ($assignee) {
+                $evaluation->setAssignee($assignee);
+            }
         }
 
         $evaluation->setDraftEquiv1Course(trim($row[21]));
