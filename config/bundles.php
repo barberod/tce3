@@ -15,4 +15,5 @@ return [
     Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle::class => ['all' => true],
     loophp\PsrHttpMessageBridgeBundle\PsrHttpMessageBridgeBundle::class => ['all' => true],
     EcPhp\CasBundle\CasBundle::class => ['all' => true],
+    BabDev\PagerfantaBundle\BabDevPagerfantaBundle::class => ['all' => true],
 ];
