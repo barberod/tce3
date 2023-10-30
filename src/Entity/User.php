@@ -262,7 +262,7 @@ class User implements UserInterface
      */
     public function attributes() {
         $roles = $this->getRoles();
-        array_push($roles, 'ROLE_USER');
+        $roles[] = 'ROLE_USER';
 
         $profile = [
             'id' => $this->getId(),

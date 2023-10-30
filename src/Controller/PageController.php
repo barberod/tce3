@@ -3,20 +3,23 @@
 namespace App\Controller;
 
 use App\Entity\Evaluation;
+use App\Entity\User;
 use App\Repository\EvaluationRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use EcPhp\CasBundle\Security\Core\User\CasUser;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PageController extends AbstractController
 {
     public function __construct(
-        private readonly EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager
     ) {}
 
     #[Route('/', name: 'homepage')]
@@ -26,6 +29,29 @@ class PageController extends AbstractController
             'page_title' => 'Transfer Credit Evaluation'
         ]);
     }
+
+		#[Route('/my', name: 'redirect_to_secure_page')]
+		public function redirectToSecurePage(Security $security): RedirectResponse
+		{
+				if ($security->getUser() instanceof User) {
+						$roles = $security->getUser()->attributes()['profile']['roles'];
+				} elseif ($security->getUser() instanceof CasUser) {
+						$roles = $security->getUser()->getAttributes()['profile']['roles'];
+				} else {
+						$roles = [];
+				}
+
+				if (in_array('ROLE_COORDINATOR', $roles)) {
+						return $this->redirectToRoute('coordinator_home');
+				} elseif (in_array('ROLE_OBSERVER', $roles)){
+						return $this->redirectToRoute('observer_home');
+				} elseif (in_array('ROLE_ASSIGNEE', $roles)){
+						return $this->redirectToRoute('assignee_home');
+				} elseif (in_array('ROLE_REQUESTER', $roles)){
+						return $this->redirectToRoute('requester_home');
+				}
+				return $this->redirectToRoute('roles');
+		}
 
     #[Route('/secure', name: 'roles')]
     public function roles(): Response

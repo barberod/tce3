@@ -27,10 +27,12 @@
     <!-- Right side -->
     <div id="right-side" class="col-12 col-lg-9 d-flex flex-column">
         <div class="card mb-3">
+            <h2 class="card-header h5">
+                <i class="fa-solid fa-diagram-next text-muted me-2"></i>Assignee Role
+            </h2>
             <div class="card-body">
                 {% set role_description = "An assignee is a faculty or staff member responsible for articulating equivalencies for the transfer courses sent to them." %}
-                <p><span class="fw-bold me-2">Role:</span>{{ context|capitalize }}</p>
-                <p>{{ role_description }}</p>
+                <p class="mb-0">{{ role_description }}</p>
             </div>
         </div>
         {% include "fragment/info.html.twig" %}

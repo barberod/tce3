@@ -15,10 +15,12 @@
     <!-- Right side -->
     <div id="right-side" class="col-12 col-lg-9 d-flex flex-column">
         <div class="card mb-3">
+            <h2 class="card-header h5">
+                <i class="fa-solid fa-sitemap text-muted me-2"></i>Manager Role
+            </h2>
             <div class="card-body">
                 {% set role_description = "A manager is a leader in the Registrar's Office who has special permissions." %}
-                <p><span class="fw-bold me-2">Role:</span>{{ context|capitalize }}</p>
-                <p>{{ role_description }}</p>
+                <p class="mb-0">{{ role_description }}</p>
             </div>
         </div>
         {% include "fragment/info.html.twig" %}

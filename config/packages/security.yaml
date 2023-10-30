@@ -10,7 +10,7 @@ when@prod:
                 pattern: ^/(_(profiler|wdt)|css|images|js)/
                 security: false
             secured:
-                pattern: ^/secure
+                pattern: ^/admin|^/my|^/secure
                 provider: prod_user_provider
                 custom_authenticator: EcPhp\CasBundle\Security\CasAuthenticator
                 form_login:
@@ -21,7 +21,7 @@ when@prod:
                 security: false
                 request_matcher: App\Security\HomepageMatcher
         access_control:
-            - { path: ^/secure, roles: ROLE_CAS_AUTHENTICATED }
+            - { path: ^/admin|^/my|^/secure, roles: ROLE_CAS_AUTHENTICATED }
 
 when@test:
     security:
@@ -58,8 +58,8 @@ when@dev:
                 security: false
                 request_matcher: App\Security\HomepageMatcher
             never_for_production:
-                pattern: ^/secure
+                pattern: ^/admin|^/my|^/secure
                 provider: chained_providers
                 custom_authenticator: App\Security\DevAuthenticator
         access_control:
-            - { path: ^/secure, roles: IS_AUTHENTICATED_FULLY }
+            - { path: ^/admin|^/my|^/secure, roles: IS_AUTHENTICATED_FULLY }
