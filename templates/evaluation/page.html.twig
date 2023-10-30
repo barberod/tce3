@@ -2,7 +2,7 @@
 
 {% block breadcrumbs %}
 <div class="col-12">
-    <nav clsss="row" aria-label="breadcrumb">
+    <nav class="row" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ url('homepage') }}">Home</a></li>
             {% if context|default() %}
@@ -13,14 +13,16 @@
                     <li class="breadcrumb-item"><a href="{{ url(evaluation_table) }}">Evaluations</a></li>
                     {% if verb|default() %}
                         {% set evaluation_page = context ~ '_evaluation_page' %}
-                        <li class="breadcrumb-item"><a href="{{ url(evaluation_page, {'uuid':uuid}) }}">Evaluation #{{ uuid }}</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url(evaluation_page, {'id':id}) }}">Evaluation #{{ id }}</a></li>
                         <li class="breadcrumb-item active" aria-current="page">{{ verb|replace({'-': ' '})|capitalize }}</li>
                     {% else %}
-                        <li class="breadcrumb-item active" aria-current="page">Evaluation #{{ uuid }}</li>
+                        <li class="breadcrumb-item active" aria-current="page">Evaluation #{{ id }}</li>
                     {% endif %}
                 {% endif %}
             {% endif %}
-            
+            {% if verb|default() %}
+                <li class="breadcrumb-item active" aria-current="page">Verb = {{ verb }}</li>
+            {% endif %}
         </ol>
     </nav>
 </div>

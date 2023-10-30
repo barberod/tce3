@@ -109,20 +109,23 @@ class PageController extends AbstractController
         return $this->render('evaluation/page.html.twig', [
             'context' => 'coordinator',
             'page_title' => 'Evaluation #'.$evaluation->getID(),
-            'prepend' => 'Evaluation #'.$evaluation->getD7Nid(),
+            'prepend' => 'Evaluation #'.$evaluation->getID(),
             'evaluation' => $evaluation,
-            'uuid' => $evaluation->getD7Nid()
+            'id' => $evaluation->getID(),
+						'uuid' => $evaluation->getID(),
         ]);
     }
 
-    #[Route('/secure/coordinator/evaluation/{uuid}/{verb}', name: 'coordinator_evaluation_form')]
-    public function coordinatorEvaluationForm(string $uuid, string $verb): Response
+    #[Route('/secure/coordinator/evaluation/{id}/{verb}', name: 'coordinator_evaluation_form', methods: ['GET'])]
+    public function coordinatorEvaluationForm(Evaluation $evaluation, string $verb): Response
     {
         return $this->render('evaluation/page.html.twig', [
-            'context' => 'coordinator',
-            'page_title' => 'Evaluation #'.$uuid,
-            'prepend' => 'Evaluation #'.$uuid,
-            'uuid' => $uuid,
+						'context' => 'coordinator',
+						'page_title' => 'Evaluation #'.$evaluation->getID(),
+						'prepend' => 'Evaluation #'.$evaluation->getID(),
+						'evaluation' => $evaluation,
+						'id' => $evaluation->getID(),
+						'uuid' => $evaluation->getID(),
             'verb' => $verb
         ]);
     }

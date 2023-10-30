@@ -9,84 +9,84 @@
             <a href="#" id="option-01" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Edit Details
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'annotate' }) }}" id="option-02" class="list-group-item list-group-item-action">
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'annotate' }) }}" id="option-02" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Write a Note
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'annotate-as-requester' }) }}" id="option-22" class="list-group-item list-group-item-action">
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'annotate-as-requester' }) }}" id="option-22" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Write a Note
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'append' }) }}" id="option-03" class="list-group-item list-group-item-action">
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'append' }) }}" id="option-03" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Upload a File
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'hide' }) }}" id="option-04" class="list-group-item list-group-item-action">
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'hide' }) }}" id="option-04" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Hide this Evaluation
             </a>
 
             <!-- Student Phase -->
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'from-student-to-r1' }) }}" id="option-05" class="list-group-item list-group-item-action">
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'from-student-to-r1' }) }}" id="option-05" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Advance to Registrar
             </a>
 
             <!-- Student Phase as Student -->
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'resubmit' }) }}" id="option-06" class="list-group-item list-group-item-action">
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'resubmit' }) }}" id="option-06" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Submit
             </a>
 
             <!-- R1 Phase -->
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'spot-articulate' }) }}" id="option-07" class="list-group-item list-group-item-action">
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'spot-articulate' }) }}" id="option-07" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Spot Articulate
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'assign' }) }}" id="option-08" class="list-group-item list-group-item-action">
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'assign' }) }}" id="option-08" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Assign to Department
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'from-r1-to-student' }) }}" id="option-09" class="list-group-item list-group-item-action">
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'from-r1-to-student' }) }}" id="option-09" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Send Back to Student
             </a>
 
             <!-- Dept Phase -->
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'evaluate' }) }}" id="option-10" class="list-group-item list-group-item-action">
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'evaluate' }) }}" id="option-10" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Enter Equivalencies
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'from-dept-to-r1' }) }}" id="option-11" class="list-group-item list-group-item-action">
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'from-dept-to-r1' }) }}" id="option-11" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Send Back to Registrar 1
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'reassign' }) }}" id="option-12" class="list-group-item list-group-item-action">
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'reassign' }) }}" id="option-12" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Change Assignee
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'from-dept-to-student' }) }}" id="option-13" class="list-group-item list-group-item-action">
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'from-dept-to-student' }) }}" id="option-13" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Send Back to Student
             </a>
 
             <!-- Dept Phase as Assignee -->
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'pass' }) }}" id="option-14" class="list-group-item list-group-item-action">
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'pass' }) }}" id="option-14" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Send Back to Registrar without Evaluating
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'forward' }) }}" id="option-15" class="list-group-item list-group-item-action">
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'forward' }) }}" id="option-15" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Forward to a Colleague
             </a>
 
             <!-- R2 Phase -->
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'finalize' }) }}" id="option-16" class="list-group-item list-group-item-action">
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'finalize' }) }}" id="option-16" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Evaluate and Finalize Articulation
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'hold' }) }}" id="option-17" class="list-group-item list-group-item-action">
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'hold' }) }}" id="option-17" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Put on Hold
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'from-r2-to-student' }) }}" id="option-18" class="list-group-item list-group-item-action">
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'from-r2-to-student' }) }}" id="option-18" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Send Back to Student
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'from-r2-to-dept' }) }}from-r2-to-dept" id="option-19" class="list-group-item list-group-item-action">
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'from-r2-to-dept' }) }}" id="option-19" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Re-assign to Department
             </a>
 
             <!-- Complete -->
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'from-complete-to-hold' }) }}" id="option-20" class="list-group-item list-group-item-action">
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'from-complete-to-hold' }) }}" id="option-20" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Move from "Complete" to "Hold"
             </a>
 
             <!-- Manager -->
-            <a href="{{ url( context ~ '_evaluation_form', { 'uuid':uuid|raw, 'verb':'delete' }) }}" id="option-22" class="list-group-item list-group-item-action">
-                <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Delete thie Evaluation
+            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'delete' }) }}" id="option-22" class="list-group-item list-group-item-action">
+                <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Delete the Evaluation
             </a>
 
         {% endif %}

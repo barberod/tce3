@@ -105,7 +105,7 @@ final class UserProvider implements CasUserProviderInterface
         $spoofStorage['attributes']['profile']['created'] = $processedUser->getCreated();
         $spoofStorage['attributes']['profile']['updated'] = $processedUser->getUpdated();
         $spoofStorage['attributes']['profile']['roles'] = $processedUser->getRoles();
-        array_push($spoofStorage['attributes']['profile']['roles'], 'ROLE_USER');
+        $spoofStorage['attributes']['profile']['roles'][] = 'ROLE_USER';
 
         return new CasUser($spoofStorage);
     }
