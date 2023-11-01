@@ -21,6 +21,9 @@ when@prod:
                 security: false
                 request_matcher: App\Security\HomepageMatcher
         access_control:
+            - { path: ^/secure/manager, request_matcher: App\Security\CasUserIsManagerMatcher }
+            - { path: ^/secure/coordinator, request_matcher: App\Security\CasUserIsCoordinatorMatcher }
+            -
             - { path: ^/admin|^/my|^/secure, roles: ROLE_CAS_AUTHENTICATED }
 
 when@test:

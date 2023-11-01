@@ -142,7 +142,7 @@ class EvaluationVoter extends Voter
 		}
 
 		private function canAnnotate(Evaluation $evaluation, UserInterface $user): bool {
-				return false;
+				return true;
 		}
 
 		private function canAnnotateAsRequester(Evaluation $evaluation, UserInterface $user): bool {
@@ -150,11 +150,11 @@ class EvaluationVoter extends Voter
 		}
 
 		private function canAppend(Evaluation $evaluation, UserInterface $user): bool {
-				return false;
+				return true;
 		}
 
 		private function canAssign(Evaluation $evaluation, UserInterface $user): bool {
-				return false;
+				return true;
 		}
 
 		private function canEvaluate(Evaluation $evaluation, UserInterface $user): bool {

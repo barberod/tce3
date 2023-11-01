@@ -5,7 +5,7 @@ namespace App\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 
-final class HomepageMatcher implements RequestMatcherInterface
+class HomepageMatcher implements RequestMatcherInterface
 {
     /**
      * Decides whether the rule(s) implemented by the strategy matches the supplied request.

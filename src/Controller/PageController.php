@@ -110,22 +110,29 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/secure/coordinator/evaluation/{id}',
+		#[Route('/secure/coordinator/evaluation/{id}',
 			name: 'coordinator_evaluation_page', methods: ['GET'])]
 		#[IsGranted('READ', 'evaluation')]
-    public function coordinatorEvaluationPage(Evaluation $evaluation): Response
-    {
-				$optionsService = new EvaluationOptionsService($this->entityManager);
+		public function coordinatorEvaluationPage(
+			Evaluation $evaluation,
+			Security $security,
+			EvaluationOptionsService $optionsService
+		):
+		Response {
 				return $this->render('evaluation/page.html.twig', [
-            'context' => 'coordinator',
-            'page_title' => 'Evaluation #'.$evaluation->getID(),
-            'prepend' => 'Evaluation #'.$evaluation->getID(),
-            'evaluation' => $evaluation,
-            'id' => $evaluation->getID(),
-						'uuid' => $evaluation->getID(),
-						'options' => $optionsService->getOptions('coordinator', $evaluation, $this->getUser()),
-        ]);
-    }
+					'context' => 'coordinator',
+					'page_title' => 'Evaluation #'.$evaluation->getID(),
+					'prepend' => 'Evaluation #'.$evaluation->getID(),
+					'evaluation' => $evaluation,
+					'id' => $evaluation->getID(),
+					'uuid' => $evaluation->getID(),
+					'options' => $optionsService->getOptions(
+						'coordinator',
+						$evaluation,
+						$security->getUser()
+					),
+				]);
+		}
 
     #[Route('/secure/coordinator/evaluation/{id}/update',
 			name: 'coordinator_evaluation_update_form', methods: ['GET', 'POST'])]
