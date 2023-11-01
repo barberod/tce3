@@ -3,91 +3,146 @@
         Options
     </h2>
     <div class="list-group">
-        {% if context|default() %}
+        {% if context|default() and options|default() %}
 
             <!-- Any Phase -->
             <a href="#" id="option-01" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Edit Details
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'annotate' }) }}" id="option-02" class="list-group-item list-group-item-action">
+
+            {% if options.annotate == true %}
+            <a href="{{ url( context ~ '_evaluation_annotate_form', { 'id':id|raw }) }}" id="option-02" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Write a Note
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'annotate-as-requester' }) }}" id="option-22" class="list-group-item list-group-item-action">
+            {% endif %}
+
+            {% if options.annotate_as_requester == true %}
+            <a href="{{ url( context ~ '_evaluation_annotate_as_requester_form', { 'id':id|raw }) }}" id="option-22" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Write a Note
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'append' }) }}" id="option-03" class="list-group-item list-group-item-action">
+            {% endif %}
+
+            {% if options.append == true %}
+            <a href="{{ url( context ~ '_evaluation_append_form', { 'id':id|raw }) }}" id="option-03" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Upload a File
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'hide' }) }}" id="option-04" class="list-group-item list-group-item-action">
+            {% endif %}
+
+            {% if options.hide == true %}
+            <a href="{{ url( context ~ '_evaluation_hide_form', { 'id':id|raw }) }}" id="option-04" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Hide this Evaluation
             </a>
+            {% endif %}
 
             <!-- Student Phase -->
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'from-student-to-r1' }) }}" id="option-05" class="list-group-item list-group-item-action">
+            {% if options.from_student_to_r1 == true %}
+            <a href="{{ url( context ~ '_evaluation_from_student_to_r1_form', { 'id':id|raw }) }}" id="option-05" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Advance to Registrar
             </a>
+            {% endif %}
 
             <!-- Student Phase as Student -->
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'resubmit' }) }}" id="option-06" class="list-group-item list-group-item-action">
+            {% if options.resubmit == true %}
+            <a href="{{ url( context ~ '_evaluation_resubmit_form', { 'id':id|raw }) }}" id="option-06" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Submit
             </a>
+            {% endif %}
 
             <!-- R1 Phase -->
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'spot-articulate' }) }}" id="option-07" class="list-group-item list-group-item-action">
+            {% if options.spot_articulate == true %}
+            <a href="{{ url( context ~ '_evaluation_spot_articulate_form', { 'id':id|raw }) }}" id="option-07" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Spot Articulate
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'assign' }) }}" id="option-08" class="list-group-item list-group-item-action">
+            {% endif %}
+
+            {% if options.assign == true %}
+            <a href="{{ url( context ~ '_evaluation_assign_form', { 'id':id|raw }) }}" id="option-08" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Assign to Department
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'from-r1-to-student' }) }}" id="option-09" class="list-group-item list-group-item-action">
+            {% endif %}
+
+            {% if options.from_r1_to_student == true %}
+            <a href="{{ url( context ~ '_evaluation_from_r1_to_student_form', { 'id':id|raw }) }}" id="option-09" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Send Back to Student
             </a>
+            {% endif %}
 
             <!-- Dept Phase -->
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'evaluate' }) }}" id="option-10" class="list-group-item list-group-item-action">
+            {% if options.evaluate == true %}
+            <a href="{{ url( context ~ '_evaluation_evaluate_form', { 'id':id|raw }) }}" id="option-10" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Enter Equivalencies
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'from-dept-to-r1' }) }}" id="option-11" class="list-group-item list-group-item-action">
+            {% endif %}
+
+            {% if options.from_dept_to_r1 == true %}
+            <a href="{{ url( context ~ '_evaluation_from_dept_to_r1_form', { 'id':id|raw }) }}" id="option-11" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Send Back to Registrar 1
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'reassign' }) }}" id="option-12" class="list-group-item list-group-item-action">
+            {% endif %}
+
+            {% if options.reassign == true %}
+            <a href="{{ url( context ~ '_evaluation_reassign_form', { 'id':id|raw }) }}" id="option-12" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Change Assignee
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'from-dept-to-student' }) }}" id="option-13" class="list-group-item list-group-item-action">
+            {% endif %}
+
+            {% if options.from_dept_to_student == true %}
+            <a href="{{ url( context ~ '_evaluation_from_dept_to_student_form', { 'id':id|raw }) }}" id="option-13" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Send Back to Student
             </a>
+            {% endif %}
 
             <!-- Dept Phase as Assignee -->
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'pass' }) }}" id="option-14" class="list-group-item list-group-item-action">
+            {% if options.pass == true %}
+            <a href="{{ url( context ~ '_evaluation_pass_form', { 'id':id|raw }) }}" id="option-14" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Send Back to Registrar without Evaluating
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'forward' }) }}" id="option-15" class="list-group-item list-group-item-action">
+            {% endif %}
+
+            {% if options.forward == true %}
+            <a href="{{ url( context ~ '_evaluation_forward_form', { 'id':id|raw }) }}" id="option-15" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Forward to a Colleague
             </a>
+            {% endif %}
 
             <!-- R2 Phase -->
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'finalize' }) }}" id="option-16" class="list-group-item list-group-item-action">
+            {% if options.finalize == true %}
+            <a href="{{ url( context ~ '_evaluation_finalize_form', { 'id':id|raw }) }}" id="option-16" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Evaluate and Finalize Articulation
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'hold' }) }}" id="option-17" class="list-group-item list-group-item-action">
+            {% endif %}
+
+            {% if options.hold == true %}
+            <a href="{{ url( context ~ '_evaluation_hold_form', { 'id':id|raw }) }}" id="option-17" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Put on Hold
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'from-r2-to-student' }) }}" id="option-18" class="list-group-item list-group-item-action">
+            {% endif %}
+
+            {% if options.from_r2_to_student == true %}
+            <a href="{{ url( context ~ '_evaluation_from_r2_to_student_form', { 'id':id|raw }) }}" id="option-18" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Send Back to Student
             </a>
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'from-r2-to-dept' }) }}" id="option-19" class="list-group-item list-group-item-action">
+            {% endif %}
+
+            {% if options.from_r2_to_dept == true %}
+            <a href="{{ url( context ~ '_evaluation_from_r2_to_dept_form', { 'id':id|raw }) }}" id="option-19" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Re-assign to Department
             </a>
+            {% endif %}
 
             <!-- Complete -->
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'from-complete-to-hold' }) }}" id="option-20" class="list-group-item list-group-item-action">
+            {% if options.from_complete_to_hold == true %}
+            <a href="{{ url( context ~ '_evaluation_from_complete_to_hold_form', { 'id':id|raw }) }}" id="option-20" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Move from "Complete" to "Hold"
             </a>
+            {% endif %}
 
             <!-- Manager -->
-            <a href="{{ url( context ~ '_evaluation_form', { 'id':id|raw, 'verb':'delete' }) }}" id="option-22" class="list-group-item list-group-item-action">
+            {% if options.delete == true %}
+            <a href="{{ url( context ~ '_evaluation_delete_form', { 'id':id|raw }) }}" id="option-22" class="list-group-item list-group-item-action">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Delete the Evaluation
             </a>
+            {% endif %}
 
         {% endif %}
     </div>
