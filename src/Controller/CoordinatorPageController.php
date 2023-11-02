@@ -54,7 +54,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}', name: 'coordinator_evaluation_page', defaults: ['context' => 'coordinator'], methods: ['GET'])]
+		#[Route('/secure/coordinator/evaluation/{id}', name: 'coordinator_evaluation_page', methods: ['GET'])]
 		#[IsGranted('coordinator+read', 'evaluation')]
 		public function coordinatorEvaluationPage(
 			Evaluation $evaluation,
@@ -72,7 +72,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/update', name: 'coordinator_evaluation_update_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/update', name: 'coordinator_evaluation_update_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+update', 'evaluation' )]
 		public function coordinatorEvaluationUpdateForm(Evaluation $evaluation): Response
 		{
@@ -87,7 +87,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/delete', name: 'coordinator_evaluation_delete_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/delete', name: 'coordinator_evaluation_delete_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+delete', 'evaluation' )]
 		public function coordinatorEvaluationDeleteForm(Evaluation $evaluation): Response
 		{
@@ -102,7 +102,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/annotate', name: 'coordinator_evaluation_annotate_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/annotate', name: 'coordinator_evaluation_annotate_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+annotate', 'evaluation' )]
 		public function coordinatorEvaluationAnnotateForm(Evaluation $evaluation): Response
 		{
@@ -117,7 +117,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/annotate-as-requester', name: 'coordinator_evaluation_annotate_as_requester_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/annotate-as-requester', name: 'coordinator_evaluation_annotate_as_requester_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+annotate_as_requester', 'evaluation' )]
 		public function coordinatorEvaluationAnnotateAsRequesterForm(Evaluation $evaluation): Response
 		{
@@ -132,7 +132,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/append', name: 'coordinator_evaluation_append_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/append', name: 'coordinator_evaluation_append_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+append', 'evaluation' )]
 		public function coordinatorEvaluationAppendForm(Evaluation $evaluation):
 		Response
@@ -148,7 +148,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/assign', name: 'coordinator_evaluation_assign_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/assign', name: 'coordinator_evaluation_assign_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+assign', 'evaluation' )]
 		public function coordinatorEvaluationAssignForm(Evaluation $evaluation):
 		Response
@@ -165,7 +165,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/evaluate', name: 'coordinator_evaluation_evaluate_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/evaluate', name: 'coordinator_evaluation_evaluate_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+evaluate', 'evaluation' )]
 		public function coordinatorEvaluationEvaluateForm(Evaluation $evaluation):
 		Response
@@ -182,7 +182,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/example', name: 'coordinator_evaluation_example_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/example', name: 'coordinator_evaluation_example_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+example', 'evaluation' )]
 		public function coordinatorEvaluationExampleForm(Evaluation $evaluation):
 		Response
@@ -198,7 +198,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/finalize', name: 'coordinator_evaluation_finalize_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/finalize', name: 'coordinator_evaluation_finalize_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+finalize', 'evaluation' )]
 		public function coordinatorEvaluationFinalizeForm(Evaluation $evaluation):
 		Response
@@ -214,7 +214,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/forward', name: 'coordinator_evaluation_forward_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/forward', name: 'coordinator_evaluation_forward_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+forward', 'evaluation' )]
 		public function coordinatorEvaluationForwardForm(Evaluation $evaluation):
 		Response
@@ -231,7 +231,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/from-complete-to-hold', name: 'coordinator_evaluation_from_complete_to_hold_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/from-complete-to-hold', name: 'coordinator_evaluation_from_complete_to_hold_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+from_complete_to_hold', 'evaluation' )]
 		public function coordinatorEvaluationFromCompleteToHoldForm(Evaluation $evaluation):	Response
 		{
@@ -246,7 +246,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/from-dept-to-r1', name: 'coordinator_evaluation_from_dept_to_r1_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/from-dept-to-r1', name: 'coordinator_evaluation_from_dept_to_r1_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+from_dept_to_r1', 'evaluation' )]
 		public function coordinatorEvaluationFromDeptToR1Form(Evaluation $evaluation):	Response
 		{
@@ -261,7 +261,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/from-dept-to-student', name: 'coordinator_evaluation_from_dept_to_student_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/from-dept-to-student', name: 'coordinator_evaluation_from_dept_to_student_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+from_dept_to_student', 'evaluation' )]
 		public function coordinatorEvaluationFromDeptToStudentForm(Evaluation $evaluation):	Response
 		{
@@ -276,7 +276,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/from-r1-to-student', name: 'coordinator_evaluation_from_r1_to_student_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/from-r1-to-student', name: 'coordinator_evaluation_from_r1_to_student_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+from_r1_to_student', 'evaluation' )]
 		public function coordinatorEvaluationFromR1ToStudentForm(Evaluation $evaluation):	Response
 		{
@@ -291,7 +291,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/from-r2-to-dept', name: 'coordinator_evaluation_from_r2_to_dept_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/from-r2-to-dept', name: 'coordinator_evaluation_from_r2_to_dept_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+from_r2_to_dept', 'evaluation' )]
 		public function coordinatorEvaluationFromR2ToDeptForm(Evaluation $evaluation):	Response
 		{
@@ -306,7 +306,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/from-r2-to-student', name: 'coordinator_evaluation_from_r2_to_student_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/from-r2-to-student', name: 'coordinator_evaluation_from_r2_to_student_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+from_r2_to_student', 'evaluation' )]
 		public function coordinatorEvaluationFromR2ToStudentForm(Evaluation $evaluation):	Response
 		{
@@ -321,7 +321,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/from-student-to-r1', name: 'coordinator_evaluation_from_student_to_r1_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/from-student-to-r1', name: 'coordinator_evaluation_from_student_to_r1_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+from_student_to_r1', 'evaluation' )]
 		public function coordinatorEvaluationFromStudentToR1Form(Evaluation $evaluation):	Response
 		{
@@ -336,7 +336,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/hide', name: 'coordinator_evaluation_hide_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/hide', name: 'coordinator_evaluation_hide_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+hide', 'evaluation' )]
 		public function coordinatorEvaluationHideForm(Evaluation $evaluation): Response
 		{
@@ -351,7 +351,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/hold', name: 'coordinator_evaluation_hold_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/hold', name: 'coordinator_evaluation_hold_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+hold', 'evaluation' )]
 		public function coordinatorEvaluationHoldForm(Evaluation $evaluation): Response
 		{
@@ -366,7 +366,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/pass', name: 'coordinator_evaluation_pass_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/pass', name: 'coordinator_evaluation_pass_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+pass', 'evaluation' )]
 		public function coordinatorEvaluationPassForm(Evaluation $evaluation): Response
 		{
@@ -381,7 +381,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/reassign', name: 'coordinator_evaluation_reassign_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/reassign', name: 'coordinator_evaluation_reassign_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+reassign', 'evaluation' )]
 		public function coordinatorEvaluationReassignForm(Evaluation $evaluation): Response
 		{
@@ -396,7 +396,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/resubmit', name: 'coordinator_evaluation_resubmit_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/resubmit', name: 'coordinator_evaluation_resubmit_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+resubmit', 'evaluation' )]
 		public function coordinatorEvaluationResubmitForm(Evaluation $evaluation): Response
 		{
@@ -411,7 +411,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/{id}/spot-articulate', name: 'coordinator_evaluation_spot_articulate_form', defaults: ['context' => 'coordinator'], methods: ['GET', 'POST'])]
+		#[Route('/secure/coordinator/evaluation/{id}/spot-articulate', name: 'coordinator_evaluation_spot_articulate_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+spot_articulate', 'evaluation' )]
 		public function coordinatorEvaluationSpotArticulateForm(Evaluation $evaluation): Response
 		{
@@ -426,7 +426,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/course', name: 'coordinator_course_table', defaults: ['context' => 'coordinator'], methods: ['GET'])]
+		#[Route('/secure/coordinator/course', name: 'coordinator_course_table', methods: ['GET'])]
 		public function coordinatorCourseTable(): Response
 		{
 				return $this->render('course/table.html.twig', [
@@ -436,7 +436,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/department', name: 'coordinator_department_table', defaults: ['context' => 'coordinator'], methods: ['GET'])]
+		#[Route('/secure/coordinator/department', name: 'coordinator_department_table', methods: ['GET'])]
 		public function coordinatorDepartmentTable(): Response
 		{
 				return $this->render('department/table.html.twig', [
@@ -446,7 +446,7 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/institution', name: 'coordinator_institution_table', defaults: ['context' => 'coordinator'], methods: ['GET'])]
+		#[Route('/secure/coordinator/institution', name: 'coordinator_institution_table', methods: ['GET'])]
 		public function coordinatorInstitutionTable(): Response
 		{
 				return $this->render('institution/table.html.twig', [
