@@ -5,35 +5,6 @@
     <div class="list-group">
         {% if context|default() and options|default() %}
 
-            <!-- Any Phase -->
-            <a href="#" id="option-01" class="list-group-item list-group-item-action">
-                <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Edit Details
-            </a>
-
-            {% if options.annotate %}
-            <a href="{{ url( context ~ '_evaluation_annotate_form', { 'id':id|raw }) }}" id="option-02" class="list-group-item list-group-item-action">
-                <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Write a Note
-            </a>
-            {% endif %}
-
-            {% if options.annotate_as_requester %}
-            <a href="{{ url( context ~ '_evaluation_annotate_as_requester_form', { 'id':id|raw }) }}" id="option-22" class="list-group-item list-group-item-action">
-                <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Write a Note
-            </a>
-            {% endif %}
-
-            {% if options.append %}
-            <a href="{{ url( context ~ '_evaluation_append_form', { 'id':id|raw }) }}" id="option-03" class="list-group-item list-group-item-action">
-                <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Upload a File
-            </a>
-            {% endif %}
-
-            {% if options.hide %}
-            <a href="{{ url( context ~ '_evaluation_hide_form', { 'id':id|raw }) }}" id="option-04" class="list-group-item list-group-item-action">
-                <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Hide this Evaluation
-            </a>
-            {% endif %}
-
             <!-- Student Phase -->
             {% if options.from_student_to_r1 %}
             <a href="{{ url( context ~ '_evaluation_from_student_to_r1_form', { 'id':id|raw }) }}" id="option-05" class="list-group-item list-group-item-action">
@@ -137,10 +108,39 @@
             </a>
             {% endif %}
 
+            <!-- Any Phase -->
+            <a href="#" id="option-01" class="list-group-item list-group-item-action">
+                <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Edit Details
+            </a>
+
+            {% if options.annotate %}
+                <a href="{{ url( context ~ '_evaluation_annotate_form', { 'id':id|raw }) }}" id="option-02" class="list-group-item list-group-item-action">
+                    <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Write a Note
+                </a>
+            {% endif %}
+
+            {% if options.annotate_as_requester %}
+                <a href="{{ url( context ~ '_evaluation_annotate_as_requester_form', { 'id':id|raw }) }}" id="option-22" class="list-group-item list-group-item-action">
+                    <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Write a Note
+                </a>
+            {% endif %}
+
+            {% if options.append %}
+                <a href="{{ url( context ~ '_evaluation_append_form', { 'id':id|raw }) }}" id="option-03" class="list-group-item list-group-item-action">
+                    <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Upload a File
+                </a>
+            {% endif %}
+
+            {% if options.hide %}
+                <a href="{{ url( context ~ '_evaluation_hide_form', { 'id':id|raw }) }}" id="option-04" class="list-group-item list-group-item-action">
+                    <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Hide
+                </a>
+            {% endif %}
+
             <!-- Manager -->
             {% if options.delete %}
             <a href="{{ url( context ~ '_evaluation_delete_form', { 'id':id|raw }) }}" id="option-22" class="list-group-item list-group-item-action">
-                <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Delete the Evaluation
+                <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Delete
             </a>
             {% endif %}
 
