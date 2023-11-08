@@ -198,8 +198,8 @@ class EvaluationVoter extends Voter
 		}
 
 		private function canAppend(Evaluation $evaluation, UserInterface $user, string $context): bool {
-				// Admin, Manager, Coordinator, Observer, Assignee can append to everything
-				if (in_array($context, [self::ADMIN, self::MANAGER, self::COORDINATOR, self::OBSERVER, self::ASSIGNEE])) {
+				// Admin, Manager, Coordinator can append to everything
+				if (in_array($context, [self::ADMIN, self::MANAGER, self::COORDINATOR])) {
 						return true;
 				}
 				return false;
