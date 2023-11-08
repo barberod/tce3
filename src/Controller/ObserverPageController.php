@@ -86,4 +86,34 @@ class ObserverPageController extends AbstractController
 					'verb' => 'annotate'
 				]);
 		}
+
+		#[Route('/secure/observer/course', name: 'observer_course_table', methods: ['GET'])]
+		public function observerCourseTable(): Response
+		{
+				return $this->render('course/table.html.twig', [
+					'context' => 'observer',
+					'page_title' => 'Courses',
+					'prepend' => 'Courses'
+				]);
+		}
+
+		#[Route('/secure/observer/department', name: 'observer_department_table', methods: ['GET'])]
+		public function observerDepartmentTable(): Response
+		{
+				return $this->render('department/table.html.twig', [
+					'context' => 'observer',
+					'page_title' => 'Departments',
+					'prepend' => 'Departments'
+				]);
+		}
+
+		#[Route('/secure/observer/institution', name: 'observer_institution_table', methods: ['GET'])]
+		public function observerInstitutionTable(): Response
+		{
+				return $this->render('institution/table.html.twig', [
+					'context' => 'observer',
+					'page_title' => 'Institutions',
+					'prepend' => 'Institutions'
+				]);
+		}
 }
