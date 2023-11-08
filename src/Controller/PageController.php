@@ -235,57 +235,6 @@ class PageController extends AbstractController
         ]);
     }
 
-
-
-    #[Route('/secure/requester', name: 'requester_home')]
-		#[IsGranted('requester', null)]
-    public function requester(): Response
-    {
-        return $this->render('page/homepage.html.twig', [
-            'context' => 'requester',
-            'page_title' => 'Transfer Credit Evaluation',
-            'prepend' => 'Requester'
-        ]);
-    }
-
-    #[Route('/secure/requester/evaluation', name: 'requester_evaluation_table')]
-		#[IsGranted('requester', null)]
-    public function requesterEvaluationTable(): Response
-    {
-        return $this->render('evaluation/table.html.twig', [
-            'context' => 'requester',
-            'page_title' => 'Evaluations',
-            'prepend' => 'Evaluations'
-        ]);
-    }
-
-    #[Route('/secure/requester/evaluation/{uuid}', name: 'requester_evaluation_page')]
-		#[IsGranted('requester', null)]
-    public function requesterEvaluationPage(string $uuid): Response
-    {
-        return $this->render('evaluation/page.html.twig', [
-            'context' => 'requester',
-            'page_title' => 'Evaluation #'.$uuid,
-            'prepend' => 'Evaluation #'.$uuid,
-            'uuid' => $uuid
-        ]);
-    }
-
-    #[Route('/secure/requester/evaluation/{uuid}/{verb}', name: 'requester_evaluation_form')]
-		#[IsGranted('requester', null)]
-    public function requesterEvaluationForm(string $uuid, string $verb): Response
-    {
-        return $this->render('evaluation/page.html.twig', [
-            'context' => 'requester',
-            'page_title' => 'Evaluation #'.$uuid,
-            'prepend' => 'Evaluation #'.$uuid,
-            'uuid' => $uuid,
-            'verb' => $verb
-        ]);
-    }
-
-
-
     #[Route('/login', name: 'login')]
     public function login(): Response
     {
