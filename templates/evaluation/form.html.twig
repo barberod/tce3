@@ -1,0 +1,165 @@
+{% extends 'page/page.html.twig' %}
+
+{% block breadcrumbs %}
+  <div class="col-12 px-3">
+    <nav class="row" aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url('homepage') }}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ url('requester_home') }}">Requester</a></li>
+        <li class="breadcrumb-item"><a href="{{ url('requester_evaluation_table') }}">Evaluations</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Create a New Evaluation</li>
+      </ol>
+    </nav>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="col-12">
+    <div class="row content">
+      <div class="col-12 d-flex flex-column">
+        {{ form(form) }}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var stateSelect = document.getElementById('scratch_form_state');
+      var institutionSelect = document.getElementById('scratch_form_institution');
+
+      stateSelect.addEventListener('change', function() {
+        var selectedState = stateSelect.value;
+
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+              var response = JSON.parse(xhr.responseText);
+              updateInstitutionOptions(response);
+            } else {
+              // Handle error if needed
+            }
+          }
+        };
+
+        xhr.open('GET', '/get-institutions?usState=' + selectedState);
+        xhr.send();
+      });
+
+      function updateInstitutionOptions(data) {
+        institutionSelect.innerHTML = '<option value="">Select an institution</option>';
+        Object.keys(data).forEach(function(key) {
+          var option = document.createElement('option');
+          option.value = data[key];
+          option.textContent = key;
+          institutionSelect.appendChild(option);
+        });
+      }
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var departmentSelect = document.getElementById('scratch_form_department');
+      var assigneeSelect = document.getElementById('scratch_form_assignee');
+
+      departmentSelect.addEventListener('change', function() {
+        var selectedDepartment = departmentSelect.value;
+
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+              var response = JSON.parse(xhr.responseText);
+              updateAssigneeOptions(response);
+            } else {
+              // Handle error if needed
+            }
+          }
+        };
+
+        xhr.open('GET', '/get-assignees?dept=' + selectedDepartment);
+        xhr.send();
+      });
+
+      function updateAssigneeOptions(data) {
+        assigneeSelect.innerHTML = '<option value="">Select an assignee</option>';
+        Object.keys(data).forEach(function(key) {
+          var option = document.createElement('option');
+          option.value = data[key];
+          option.textContent = key;
+          assigneeSelect.appendChild(option);
+        });
+      }
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var subjectSelect = document.getElementById('scratch_form_subject');
+      var courseSelect = document.getElementById('scratch_form_course');
+
+      subjectSelect.addEventListener('change', function() {
+        var selectedSubject = subjectSelect.value;
+
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+              var response = JSON.parse(xhr.responseText);
+              updateCourseOptions(response);
+            } else {
+              // Handle error if needed
+            }
+          }
+        };
+
+        xhr.open('GET', '/get-courses?subjectCode=' + selectedSubject);
+        xhr.send();
+      });
+
+      function updateCourseOptions(data) {
+        courseSelect.innerHTML = '<option value="">Select a course</option>';
+        Object.keys(data).forEach(function(key) {
+          var option = document.createElement('option');
+          option.value = data[key];
+          option.textContent = key;
+          courseSelect.appendChild(option);
+        });
+      }
+    });
+  </script>
+
+  <script>
+    const addNoteField = document.getElementById('scratch_form_addNote');
+    const visibleNoteLabel = document.querySelector('label[for="scratch_form_visibleNote"]');
+    const visibleNoteField = document.getElementById('scratch_form_visibleNote');
+    const noteBodyLabel = document.querySelector('label[for="scratch_form_noteBody"]');
+    const noteBodyField = document.getElementById('scratch_form_noteBody');
+
+    addNoteField.addEventListener('change', function() {
+      if (this.value === 'Yes') {
+        visibleNoteLabel.style.display = 'block';
+        visibleNoteField.style.display = 'block';
+        noteBodyLabel.style.display = 'block';
+        noteBodyField.style.display = 'block';
+      } else {
+        visibleNoteLabel.style.display = 'none';
+        visibleNoteField.style.display = 'none';
+        noteBodyLabel.style.display = 'none';
+        noteBodyField.style.display = 'none';
+      }
+    });
+
+    // Initially hide the fields if 'No' is selected on page load
+    if (addNoteField.value === 'No') {
+        visibleNoteLabel.style.display = 'none';
+        visibleNoteField.style.display = 'none';
+        noteBodyLabel.style.display = 'none';
+        noteBodyField.style.display = 'none';
+    }
+  </script>
+{% endblock %}
+

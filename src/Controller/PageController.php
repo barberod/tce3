@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\ScratchFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use EcPhp\CasBundle\Security\Core\User\CasUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -93,5 +95,25 @@ class PageController extends AbstractController
         $url = $this->getParameter('cas_host') . ((($this->getParameter('cas_port')!=80) || ($this->getParameter('cas_port')!=443)) ? ":".$this->getParameter('cas_port') : "") . $this->getParameter('cas_path') . '/logout?service=';
         return $this->redirect($url . $target);
     }
+
+		#[Route('/example-form', name: 'example-form')]
+		public function exampleForm(Request $request): Response
+		{
+				$form = $this->createForm(ScratchFormType::class);
+
+				$form->handleRequest($request);
+
+				if ($form->isSubmitted() && $form->isValid()) {
+						// Handle the form submission, e.g., persist data to the database
+						// Redirect to a success page or perform other actions
+				}
+
+				return $this->render('evaluation/form.html.twig', [
+						'context' => 'coordinator',
+						'page_title' => 'Example Form',
+						'prepend' => 'Example Form',
+						'form' => $form,
+				]);
+		}
 
 }
