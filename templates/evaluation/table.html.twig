@@ -128,7 +128,7 @@
                                                     {% set maxLength = 36 %}
                                                     {% set ellipsis = '...' %}
                                                     {% if institution|length > maxLength %}
-                                                        {{ institution|slice(0, maxLength) ~ ellipsis }}
+                                                        {{ set institution = institution|slice(0, maxLength) ~ ellipsis }}
                                                     {% endif %}
 
                                                 <tr>
