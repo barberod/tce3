@@ -116,6 +116,15 @@
                                             </thead>
                                             <tbody class="table-group-divider">
                                                 {% for evaluation in pager %}
+                                                    {% if evaluation.institution is not empty %}
+                                                        {% for i in evaluation.institution %}
+                                                            {% set institution = i %}
+                                                        {% endfor %}
+                                                    {% elseif evaluation.institutionOther|default() %}
+                                                        {% set institution = evaluation.institutionOther %}
+                                                    {% else %}
+                                                        {% set institution = 'Unknown' %}
+                                                    {% endif %}
                                                 <tr>
                                                     <td>
                                                     {% if evaluation.reqAdmin == "No" %}
@@ -124,7 +133,7 @@
                                                     <span class="text-success me-2"><i class="fa-solid fa-circle fa-fw"></i></span>{{ evaluation.reqAdmin }}
                                                     {% endif %}
                                                     </td>
-                                                    <td>{{ evaluation.courseSubjCode }} {{ evaluation.courseCrseNum }} ({{ evaluation.courseCreditHrs }})<br><span class="text-muted">University of West Georgia</span></td>
+                                                    <td>{{ evaluation.courseSubjCode }} {{ evaluation.courseCrseNum }} ({{ evaluation.courseCreditHrs }})<br><span class="text-muted">{{ institution }}</span></td>
                                                     <td>{{ evaluation.requester.displayName }}<br><span class="text-muted">{{ evaluation.requester.orgID }}</span></td>
                                                     <td>
                                                     {% if evaluation.assignee.username != 'admin' %}
