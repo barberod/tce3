@@ -9,8 +9,31 @@
                 {% if (context == "manager") or (context == "coordinator") or (context == "observer") or (context == "assignee") or (context == "requester") %}
                     {% set home_route = context ~ '_home' %}
                     <li class="breadcrumb-item"><a href="{{ url(home_route) }}">{{ context|capitalize }}</a></li>
+
                     {% set evaluation_table = context ~ '_evaluation_table' %}
+                    {% if (context == "coordinator") or (context == "observer") %}
+                        {% if evaluation.phase == "Student" %}
+                            {% set evaluation_table = context ~ '_evaluation_table_student' %}
+                        {% elseif evaluation.phase == "Registrar 1" %}
+                            {% set evaluation_table = context ~ '_evaluation_table_r1' %}
+                        {% elseif evaluation.phase == "Deptartment" %}
+                            {% set evaluation_table = context ~ '_evaluation_table_dept' %}
+                        {% elseif evaluation.phase == "Registrar 2" %}
+                            {% set evaluation_table = context ~ '_evaluation_table_r2' %}
+                        {% elseif evaluation.phase == "Hold" %}
+                            {% set evaluation_table = context ~ '_evaluation_table_hold' %}
+                        {% elseif evaluation.phase == "Complete" %}
+                            {% set evaluation_table = context ~ '_evaluation_table_complete' %}
+                        {% endif %}
+                    {% else if (context == "assignee") %}
+                        {% if evaluation.phase == "Department" %}
+                            {% set evaluation_table = 'assignee_evaluation_table_needs_attention' %}
+                        {% else %}
+                            {% set evaluation_table = 'assignee_evaluation_table_history' %}
+                        {% endif %}
+                    {% endif %}
                     <li class="breadcrumb-item"><a href="{{ url(evaluation_table) }}">Evaluations</a></li>
+
                     {% if verb|default() %}
                         {% set evaluation_page = context ~ '_evaluation_page' %}
                         <li class="breadcrumb-item"><a href="{{ url(evaluation_page, {'id':id}) }}">Evaluation #{{ id }}</a></li>
