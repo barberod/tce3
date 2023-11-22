@@ -54,6 +54,54 @@ class AssigneePageController extends AbstractController
 				]);
 		}
 
+		#[Route('/secure/assignee/evaluation/needs-attention', name: 'assignee_evaluation_table_needs_attention', methods: ['GET'])]
+		public function assigneeEvaluationTableDept(EvaluationRepository
+		$evaluationRepository): Response
+		{
+				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
+				// $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
+				// $direction = ($_GET['dir'] == 'asc') ? 'asc' : 'desc';
+
+				$queryBuilder = $evaluationRepository->getQB();
+				$queryBuilder
+					->andWhere('e.phase = :phase')
+					->setParameter('phase', 'Department');
+				$adapter = new QueryAdapter($queryBuilder);
+				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
+
+				return $this->render('evaluation/table.html.twig', [
+					'context' => 'assignee',
+					'page_title' => 'Needs Attention',
+					'prepend' => 'Evaluations',
+					'pager' => $pagerfanta,
+					'assignee_flag' => 'Needs Attention',
+				]);
+		}
+
+		#[Route('/secure/assignee/evaluation/history', name: 'assignee_evaluation_table_history', methods: ['GET'])]
+		public function assigneeEvaluationTableComplete(EvaluationRepository
+		$evaluationRepository): Response
+		{
+				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
+				// $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
+				// $direction = ($_GET['dir'] == 'asc') ? 'asc' : 'desc';
+
+				$queryBuilder = $evaluationRepository->getQB();
+				$queryBuilder
+					->andWhere('e.phase != :phase')
+					->setParameter('phase', 'Department');
+				$adapter = new QueryAdapter($queryBuilder);
+				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
+
+				return $this->render('evaluation/table.html.twig', [
+					'context' => 'assignee',
+					'page_title' => 'Evaluation History',
+					'prepend' => 'Evaluations',
+					'pager' => $pagerfanta,
+					'assignee_flag' => 'History',
+				]);
+		}
+
 		#[Route('/secure/assignee/evaluation/{id}', name: 'assignee_evaluation_page', methods: ['GET'])]
 		#[IsGranted('assignee+read', 'evaluation')]
 		public function assigneeEvaluationPage(

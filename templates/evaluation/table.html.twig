@@ -56,6 +56,21 @@
                             </div>
                             {% endif %}
 
+                            {% if assignee_flag|default() %}
+                                <div class="row row-cols-1 mb-4">
+                                    <div class="col">
+                                        <ul class="row nav nav-pills" id="pills-tab" role="tablist">
+                                            <li class="col-12 col-lg-auto nav-item d-grid" role="presentation">
+                                                <a href="{{ url('assignee_evaluation_table_needs_attention')}}" class="nav-link{% if assignee_flag == 'Needs Attention' %} active{% endif %}" role="tab">Needs Attention</a>
+                                            </li>
+                                            <li class="col-12 col-lg-auto nav-item d-grid" role="presentation">
+                                                <a href="{{ url('assignee_evaluation_table_history')}}" class="nav-link{% if assignee_flag == 'History' %} active{% endif %}" role="tab">History</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            {% endif %}
+
                             <div class="row row-cols-2 mb-3">
                                 <div class="col">
                                     <p class="text-muted mb-0">Evaluations older than 500 days are not shown.</p>
