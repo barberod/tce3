@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -56,7 +57,7 @@ class AssigneePageController extends AbstractController
 
 		#[Route('/secure/assignee/evaluation/needs-attention', name: 'assignee_evaluation_table_needs_attention', methods: ['GET'])]
 		public function assigneeEvaluationTableDept(EvaluationRepository
-		$evaluationRepository): Response
+		$evaluationRepository, Security $security): Response
 		{
 				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
 				// $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
@@ -65,7 +66,9 @@ class AssigneePageController extends AbstractController
 				$queryBuilder = $evaluationRepository->getQB();
 				$queryBuilder
 					->andWhere('e.phase = :phase')
-					->setParameter('phase', 'Department');
+					->andWhere('e.assignee = :assignee')
+					->setParameter('phase', 'Department')
+					->setParameter('assignee', $security->getUser());
 				$adapter = new QueryAdapter($queryBuilder);
 				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
 
@@ -80,7 +83,7 @@ class AssigneePageController extends AbstractController
 
 		#[Route('/secure/assignee/evaluation/history', name: 'assignee_evaluation_table_history', methods: ['GET'])]
 		public function assigneeEvaluationTableComplete(EvaluationRepository
-		$evaluationRepository): Response
+		$evaluationRepository, Security $security): Response
 		{
 				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
 				// $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
@@ -89,7 +92,9 @@ class AssigneePageController extends AbstractController
 				$queryBuilder = $evaluationRepository->getQB();
 				$queryBuilder
 					->andWhere('e.phase != :phase')
-					->setParameter('phase', 'Department');
+					->andWhere('e.assignee = :assignee')
+					->setParameter('phase', 'Department')
+					->setParameter('assignee', $security->getUser());
 				$adapter = new QueryAdapter($queryBuilder);
 				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
 
