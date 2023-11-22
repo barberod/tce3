@@ -108,7 +108,7 @@ class PageController extends AbstractController
 						// Redirect to a success page or perform other actions
 				}
 
-				return $this->render('evaluation/form.html.twig', [
+				return $this->render('evaluation/scratch.html.twig', [
 						'context' => 'coordinator',
 						'page_title' => 'Example Form',
 						'prepend' => 'Example Form',

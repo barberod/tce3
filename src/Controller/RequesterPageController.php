@@ -3,12 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Evaluation;
+use App\Form\EvaluationCreateType;
+use App\Form\ScratchFormType;
 use App\Repository\EvaluationRepository;
 use App\Service\EvaluationOptionsService;
+use App\Service\EvaluationProcessingService;
 use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -17,11 +22,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class RequesterPageController extends AbstractController
 {
 		private EntityManagerInterface $entityManager;
+		private Security $security;
 
 		public function __construct(
-			EntityManagerInterface $entityManager
+			EntityManagerInterface $entityManager,
+			Security $security,
 		) {
 				$this->entityManager = $entityManager;
+				$this->security = $security;
 		}
 
 
@@ -53,6 +61,31 @@ class RequesterPageController extends AbstractController
 					'pager' => $pagerfanta,
 				]);
 		}
+
+		#[Route('/secure/requester/evaluation/create', name: 'requester_evaluation_create_form', methods: ['GET', 'POST'])]
+		public function requesterEvaluationCreateForm(Request $request): Response
+		{
+				$form = $this->createForm(EvaluationCreateType::class);
+
+				$form->handleRequest($request);
+
+				if ($form->isSubmitted() && $form->isValid()) {
+						// Handle the form submission, e.g., persist data to the database
+						// Redirect to a success page or perform other actions
+
+						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+						$evaluationProcessingService->createEvaluation($form->getData());
+						return $this->redirectToRoute('requester_evaluation_table');
+				}
+
+				return $this->render('evaluation/form/create.html.twig', [
+					'context' => 'requester',
+					'page_title' => 'Create Evaluation',
+					'prepend' => 'Create Evaluation',
+					'form' => $form,
+				]);
+		}
+
 
 		#[Route('/secure/requester/evaluation/{id}', name: 'requester_evaluation_page', methods: ['GET'])]
 		#[IsGranted('requester+read', 'evaluation')]

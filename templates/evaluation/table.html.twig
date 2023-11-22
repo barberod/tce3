@@ -27,7 +27,34 @@
                 <div class="row content">
 
                     <div id="table-evaluations" class="row table-wrapper">
-                        <div class="col-12">   
+                        <div class="col-12">
+
+                            {% if phase|default() %}
+                            <div class="row row-cols-1 mb-4">
+                                <div class="col">
+                                    <ul class="row nav nav-pills" id="pills-tab" role="tablist">
+                                        <li class="col-12 col-lg-auto nav-item d-grid" role="presentation">
+                                            <a href="{{ url(context ~ '_evaluation_table_student')}}" class="nav-link{% if phase == 'Student' %} active{% endif %}" role="tab">Student</a>
+                                        </li>
+                                        <li class="col-12 col-lg-auto nav-item d-grid" role="presentation">
+                                            <a href="{{ url(context ~ '_evaluation_table_r1')}}" class="nav-link{% if phase == 'Registrar 1' %} active{% endif %}" role="tab">Registrar 1</a>
+                                        </li>
+                                        <li class="col-12 col-lg-auto nav-item d-grid" role="presentation">
+                                            <a href="{{ url(context ~ '_evaluation_table_dept')}}" class="nav-link{% if phase == 'Department' %} active{% endif %}" role="tab">Department</a>
+                                        </li>
+                                        <li class="col-12 col-lg-auto nav-item d-grid" role="presentation">
+                                            <a href="{{ url(context ~ '_evaluation_table_r2')}}" class="nav-link{% if phase == 'Registrar 2' %} active{% endif %}" role="tab">Registrar 2</a>
+                                        </li>
+                                        <li class="col-12 col-lg-auto nav-item d-grid" role="presentation">
+                                            <a href="{{ url(context ~ '_evaluation_table_hold')}}" class="nav-link{% if phase == 'Hold' %} active{% endif %}" role="tab">Hold</a>
+                                        </li>
+                                        <li class="col-12 col-lg-auto nav-item d-grid" role="presentation">
+                                            <a href="{{ url(context ~ '_evaluation_table_complete')}}" class="nav-link{% if phase == 'Complete' %} active{% endif %}" role="tab">Complete</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            {% endif %}
 
                             <div class="row row-cols-2 mb-3">
                                 <div class="col">

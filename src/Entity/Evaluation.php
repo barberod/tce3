@@ -16,7 +16,7 @@ class Evaluation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $serialNum = null;
 
     #[ORM\ManyToOne(inversedBy: 'evaluations')]
@@ -50,7 +50,7 @@ class Evaluation
     #[ORM\Column(length: 12, nullable: true)]
     private ?string $courseCreditBasis = null;
 
-    #[ORM\Column(length: 12)]
+    #[ORM\Column(length: 12, nullable: true)]
     private ?string $labSubjCode = null;
 
     #[ORM\Column(length: 12, nullable: true)]
@@ -65,7 +65,7 @@ class Evaluation
     #[ORM\Column(length: 12, nullable: true)]
     private ?string $labCreditBasis = null;
 
-    #[ORM\Column(length: 12)]
+    #[ORM\Column(length: 12, nullable: true)]
     private ?string $phase = null;
 
     #[ORM\Column(options: ["default" => 1])]

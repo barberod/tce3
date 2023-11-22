@@ -1,0 +1,149 @@
+{% extends 'page/page.html.twig' %}
+
+{% block breadcrumbs %}
+    <div class="col-12 px-3">
+        <nav class="row" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url('homepage') }}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ url('requester_home') }}">Requester</a></li>
+                <li class="breadcrumb-item"><a href="{{ url('requester_evaluation_table') }}">Evaluations</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Create a New Evaluation</li>
+            </ol>
+        </nav>
+    </div>
+{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+    <div class="col-12">
+        <div class="row content">
+            <div class="col-12">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="mb-0"><strong>Instructions:</strong> Complete the form below to request a new evaluation. Be ready to upload your syllabi and other course documents.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card border-primary mb-3">
+                    <h2 class="card-header bg-primary border-primary h5">Basic Information</h2>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 col-lg-5">
+                                {% if app.user %}
+                                <div class="mb-3">
+                                    <label for="requesterUn" class="form-label">Requester</label>
+                                    <input id="requesterUn" disabled="disabled" class="form-control" value="{{ app.user.username }}" />
+                                </div>
+                                {% endif %}
+                                {{ form_row(form.evaluationBasics.submissionDateTime) }}
+                            </div>
+                            <div class="col-12 col-lg-5 offset-lg-1">
+                                {{ form_row(form.evaluationBasics.requiredForAdmission) }}
+                                {{ form_row(form.evaluationBasics.hasLab) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card border-primary mb-3">
+                    <h2 class="card-header bg-primary border-primary h5">About the Institution</h2>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 col-lg-5">
+                                {{ form_row(form.evaluationInstitution.locatedUsa) }}
+                                {{ form_row(form.evaluationInstitution.state) }}
+                                {{ form_row(form.evaluationInstitution.institution) }}
+                                {{ form_row(form.evaluationInstitution.institutionListed) }}
+                                {{ form_row(form.evaluationInstitution.country) }}
+                                {{ form_row(form.evaluationInstitution.institutionName) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card border-primary mb-3">
+                    <h2 class="card-header bg-primary border-primary h5">About the Course</h2>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 col-lg-5">
+                                {{ form_row(form.evaluationCourse.coursePrefix) }}
+                                {{ form_row(form.evaluationCourse.courseNumber) }}
+                                {{ form_row(form.evaluationCourse.courseTitle) }}
+                                {{ form_row(form.evaluationCourse.courseSemester) }}
+                                {{ form_row(form.evaluationCourse.courseCreditBasis) }}
+                                {{ form_row(form.evaluationCourse.courseCreditHours) }}
+                                {{ form_row(form.evaluationCourse.courseSyllabus) }}
+                                {{ form_row(form.evaluationCourse.courseDocument) }}
+                            </div>
+                            <div id="labFieldSet" class="col-12 col-lg-5 offset-lg-1">
+                                {{ form_row(form.evaluationLab.labPrefix) }}
+                                {{ form_row(form.evaluationLab.labNumber) }}
+                                {{ form_row(form.evaluationLab.labTitle) }}
+                                {{ form_row(form.evaluationLab.labSemester) }}
+                                {{ form_row(form.evaluationLab.labCreditBasis) }}
+                                {{ form_row(form.evaluationLab.labCreditHours) }}
+                                {{ form_row(form.evaluationLab.labSyllabus) }}
+                                {{ form_row(form.evaluationLab.labDocument) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card border-primary mb-3">
+                    <h2 class="card-header bg-primary border-primary h5">Important</h2>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="mb-0">I understand that I must submit the syllabus from the actual course I completed. I understand that the syllabus must include a weekly schedule with topics covered.</p>
+                                <p class="mb-0">I have checked the <a href="https://registrar.gatech.edu/info/transfer-credit-equivalency-tables" target="_blank">Transfer Credit Equivalency Table</a> for my transfer school, and the courses do not have an equivalency.</p>
+                                <p>I understand that I must provide these documents and check the Transfer Credit Equivalency Table or else the course will not be reviewed.</p>
+                            </div>
+                            <div class="col-12 col-lg-5">
+                                {{ form_row(form.evaluationAttestation.attest) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card border-primary mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="mb-0">Click the "Submit" button to submit your request for a new evaluation.</p>
+                            </div>
+                            <div class="col-12 mt-4">
+                                {{ form_row(form.submit) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="mb-0"><strong>Caution:</strong> If your request is incomplete or if you've provided invalid answers, errors messages will appear after you click "Submit." If this happens, your request will not be saved unless you correct all validation errors and click "Submit" again.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{{ asset('js/evaluation/create.js') }}"></script>
+{% endblock %}
+
