@@ -25,7 +25,7 @@
                         {% elseif evaluation.phase == "Complete" %}
                             {% set evaluation_table = context ~ '_evaluation_table_complete' %}
                         {% endif %}
-                    {% else if (context == "assignee") %}
+                    {% elseif context == "assignee" %}
                         {% if evaluation.phase == "Department" %}
                             {% set evaluation_table = 'assignee_evaluation_table_needs_attention' %}
                         {% else %}
