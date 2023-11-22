@@ -116,15 +116,21 @@
                                             </thead>
                                             <tbody class="table-group-divider">
                                                 {% for evaluation in pager %}
+
                                                     {% if evaluation.institution is not empty %}
-                                                        {% for i in evaluation.institution %}
-                                                            {% set institution = i %}
-                                                        {% endfor %}
+                                                        {% set institution = evaluation.institution.name %}
                                                     {% elseif evaluation.institutionOther|default() %}
                                                         {% set institution = evaluation.institutionOther %}
                                                     {% else %}
                                                         {% set institution = 'Unknown' %}
                                                     {% endif %}
+
+                                                    {% set maxLength = 36 %}
+                                                    {% set ellipsis = '...' %}
+                                                    {% if institution|length > maxLength %}
+                                                        {{ institution|slice(0, maxLength) ~ ellipsis }}
+                                                    {% endif %}
+
                                                 <tr>
                                                     <td>
                                                     {% if evaluation.reqAdmin == "No" %}
