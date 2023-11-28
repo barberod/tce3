@@ -28,7 +28,16 @@ class EvaluationProcessingService
 				$evaluation = new Evaluation();
 
 				// Set properties of the Evaluation entity
-				$evaluation->setRequester($this->security->getUser());
+				if ($this->security->getUser() instanceof User) {
+						$evaluation->setRequester($this->security->getUser());;
+				} elseif ($this->security->getUser() instanceof CasUser) {
+						$userAtHand = $this->entityManager->getRepository(User::class)
+							->findOneBy(['username' => $this->security->getUser()->getUserIdentifier()]);
+						$evaluation->setRequester($userAtHand);;
+				} else {
+						$evaluation->setRequester(null);
+				}
+
 				$evaluation->setStatus(1);
 				$evaluation->setCreated(new \DateTime());
 				$evaluation->setUpdated(new \DateTime());
