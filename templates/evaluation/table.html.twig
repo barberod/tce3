@@ -145,9 +145,14 @@
                                                     </td>
                                                     <td>{{ evaluation.requester.displayName }}<br><span class="text-muted">{{ evaluation.requester.orgID }}</span></td>
                                                     <td>
-                                                    {% if evaluation.assignee.username != 'admin' %}
-                                                    {{ evaluation.assignee.displayName }}<br><span class="text-muted">{{ evaluation.assignee.username }}</span>
-                                                    {% endif %}
+                                                        {% if evaluation.assignee.username is defined %}
+                                                            {% if evaluation.assignee.username != 'admin' %}
+                                                                {% if evaluation.assignee.displayName is defined %}
+                                                                    {{ evaluation.assignee.displayName }}<br>
+                                                                {% endif %}
+                                                                    <span class="text-muted">{{ evaluation.assignee.username }}</span>
+                                                            {% endif %}
+                                                        {% endif %}
                                                     </td>
                                                     <td>
                                                     {% if evaluation.created %}

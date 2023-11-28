@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Department;
+use App\Entity\Institution;
 use Doctrine\ORM\EntityManagerInterface;
 
 class FormOptionsService
@@ -606,6 +607,16 @@ class FormOptionsService
 				$selectors['Yemen'] = 'Yemen';
 				$selectors['Zambia'] = 'Zambia';
 				$selectors['Zimbabwe'] = 'Zimbabwe';
+				return $selectors;
+		}
+
+		function getInstitutionsByUSState(string $usState): array {
+				$institutions = $this->entityManager->getRepository(Institution::class)
+					->findBy(['state' => $usState]);
+				$selectors = [];
+				foreach ($institutions as $institution) {
+						$selectors[$institution->getName()] = $institution->getId();
+				}
 				return $selectors;
 		}
 }

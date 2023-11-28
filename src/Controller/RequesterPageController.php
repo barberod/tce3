@@ -69,6 +69,8 @@ class RequesterPageController extends AbstractController
 
 				$form->handleRequest($request);
 
+				$postData = $request->request->all();
+
 				if ($form->isSubmitted() && $form->isValid()) {
 						// Handle the form submission, e.g., persist data to the database
 						// Redirect to a success page or perform other actions
@@ -82,7 +84,8 @@ class RequesterPageController extends AbstractController
 					'context' => 'requester',
 					'page_title' => 'Create Evaluation',
 					'prepend' => 'Create Evaluation',
-					'form' => $form,
+					'form' => $form->createView(),
+					'postData' => $form->getData(),
 				]);
 		}
 

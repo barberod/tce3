@@ -40,11 +40,11 @@
                                     <input id="requesterUn" disabled="disabled" class="form-control" value="{{ app.user.username }}" />
                                 </div>
                                 {% endif %}
-                                {{ form_row(form.evaluationBasics.submissionDateTime) }}
+                                {{ form_row(form.submissionDateTime) }}
                             </div>
                             <div class="col-12 col-lg-5 offset-lg-1">
-                                {{ form_row(form.evaluationBasics.requiredForAdmission) }}
-                                {{ form_row(form.evaluationBasics.hasLab) }}
+                                {{ form_row(form.requiredForAdmission) }}
+                                {{ form_row(form.hasLab) }}
                             </div>
                         </div>
                     </div>
@@ -56,12 +56,12 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12 col-lg-5">
-                                {{ form_row(form.evaluationInstitution.locatedUsa) }}
-                                {{ form_row(form.evaluationInstitution.state) }}
-                                {{ form_row(form.evaluationInstitution.institution) }}
-                                {{ form_row(form.evaluationInstitution.institutionListed) }}
-                                {{ form_row(form.evaluationInstitution.country) }}
-                                {{ form_row(form.evaluationInstitution.institutionName) }}
+                                {{ form_row(form.locatedUsa) }}
+                                {{ form_row(form.state) }}
+                                {{ form_row(form.institution) }}
+                                {{ form_row(form.institutionListed) }}
+                                {{ form_row(form.country) }}
+                                {{ form_row(form.institutionName) }}
                             </div>
                         </div>
                     </div>
@@ -73,24 +73,24 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12 col-lg-5">
-                                {{ form_row(form.evaluationCourse.coursePrefix) }}
-                                {{ form_row(form.evaluationCourse.courseNumber) }}
-                                {{ form_row(form.evaluationCourse.courseTitle) }}
-                                {{ form_row(form.evaluationCourse.courseSemester) }}
-                                {{ form_row(form.evaluationCourse.courseCreditBasis) }}
-                                {{ form_row(form.evaluationCourse.courseCreditHours) }}
-                                {{ form_row(form.evaluationCourse.courseSyllabus) }}
-                                {{ form_row(form.evaluationCourse.courseDocument) }}
+                                {{ form_row(form.coursePrefix) }}
+                                {{ form_row(form.courseNumber) }}
+                                {{ form_row(form.courseTitle) }}
+                                {{ form_row(form.courseSemester) }}
+                                {{ form_row(form.courseCreditBasis) }}
+                                {{ form_row(form.courseCreditHours) }}
+                                {{ form_row(form.courseSyllabus) }}
+                                {{ form_row(form.courseDocument) }}
                             </div>
                             <div id="labFieldSet" class="col-12 col-lg-5 offset-lg-1">
-                                {{ form_row(form.evaluationLab.labPrefix) }}
-                                {{ form_row(form.evaluationLab.labNumber) }}
-                                {{ form_row(form.evaluationLab.labTitle) }}
-                                {{ form_row(form.evaluationLab.labSemester) }}
-                                {{ form_row(form.evaluationLab.labCreditBasis) }}
-                                {{ form_row(form.evaluationLab.labCreditHours) }}
-                                {{ form_row(form.evaluationLab.labSyllabus) }}
-                                {{ form_row(form.evaluationLab.labDocument) }}
+                                {{ form_row(form.labPrefix) }}
+                                {{ form_row(form.labNumber) }}
+                                {{ form_row(form.labTitle) }}
+                                {{ form_row(form.labSemester) }}
+                                {{ form_row(form.labCreditBasis) }}
+                                {{ form_row(form.labCreditHours) }}
+                                {{ form_row(form.labSyllabus) }}
+                                {{ form_row(form.labDocument) }}
                             </div>
                         </div>
                     </div>
@@ -107,7 +107,7 @@
                                 <p>I understand that I must provide these documents and check the Transfer Credit Equivalency Table or else the course will not be reviewed.</p>
                             </div>
                             <div class="col-12 col-lg-5">
-                                {{ form_row(form.evaluationAttestation.attest) }}
+                                {{ form_row(form.attest) }}
                             </div>
                         </div>
                     </div>
@@ -121,7 +121,7 @@
                                 <p class="mb-0">Click the "Submit" button to submit your request for a new evaluation.</p>
                             </div>
                             <div class="col-12 mt-4">
-                                {{ form_row(form.submit) }}
+                                <button class="btn btn-primary btn-lg" type="submit">Submit</button>
                             </div>
                         </div>
                     </div>
@@ -141,6 +141,9 @@
         </div>
     </div>
     {{ form_end(form) }}
+    <div class="col-12">
+        {{ dump(postData) }}
+    </div>
 {% endblock %}
 
 {% block scripts %}

@@ -24,7 +24,28 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\data\csv\uploads\Note\notes-02.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\data\csv\uploads\Note\notes-04.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\data\csv\uploads\User\users-03.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\data\csv\uploads\User\users-10.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

@@ -1,4 +1,4 @@
-const hasLabField = document.getElementById('evaluation_create_evaluationBasics_hasLab');
+const hasLabField = document.getElementById('evaluation_create_hasLab');
 const labFieldSet = document.getElementById('labFieldSet');
 
 hasLabField.addEventListener('change', function() {
@@ -13,19 +13,19 @@ if (hasLabField.value !== 'Yes') {
   labFieldSet.style.display = 'none';
 }
 
-const usaField = document.getElementById('evaluation_create_evaluationInstitution_locatedUsa');
-const usaLabel = document.querySelector('label[for="evaluation_create_evaluationInstitution_locatedUsa"]');
-const stateField = document.getElementById('evaluation_create_evaluationInstitution_state');
-const stateLabel = document.querySelector('label[for="evaluation_create_evaluationInstitution_state"]');
-const institutionField = document.getElementById('evaluation_create_evaluationInstitution_institution');
-const institutionLabel = document.querySelector('label[for="evaluation_create_evaluationInstitution_institution"]');
-const listedField = document.getElementById('evaluation_create_evaluationInstitution_institutionListed');
-const listedLabel = document.querySelector('label[for="evaluation_create_evaluationInstitution_institutionListed"]');
-const countryField = document.getElementById('evaluation_create_evaluationInstitution_country');
-const countryLabel = document.querySelector('label[for="evaluation_create_evaluationInstitution_country"]');
-const institutionNameField = document.getElementById('evaluation_create_evaluationInstitution_institutionName');
-const institutionNameLabel = document.querySelector('label[for="evaluation_create_evaluationInstitution_institutionName"]');
-const institutionNameHelp = document.getElementById('evaluation_create_evaluationInstitution_institutionName_help');
+const usaField = document.getElementById('evaluation_create_locatedUsa');
+const usaLabel = document.querySelector('label[for="evaluation_create_locatedUsa"]');
+const stateField = document.getElementById('evaluation_create_state');
+const stateLabel = document.querySelector('label[for="evaluation_create_state"]');
+const institutionField = document.getElementById('evaluation_create_institution');
+const institutionLabel = document.querySelector('label[for="evaluation_create_institution"]');
+const listedField = document.getElementById('evaluation_create_institutionListed');
+const listedLabel = document.querySelector('label[for="evaluation_create_institutionListed"]');
+const countryField = document.getElementById('evaluation_create_country');
+const countryLabel = document.querySelector('label[for="evaluation_create_country"]');
+const institutionNameField = document.getElementById('evaluation_create_institutionName');
+const institutionNameLabel = document.querySelector('label[for="evaluation_create_institutionName"]');
+const institutionNameHelp = document.getElementById('evaluation_create_institutionName_help');
 
 usaField.addEventListener('change', function() {
   determineInstitutionSituation()
@@ -138,8 +138,8 @@ function whenInternationalInstitution() {
 determineInstitutionSituation();
 
 document.addEventListener('DOMContentLoaded', function () {
-  const stateSelect = document.getElementById('evaluation_create_evaluationInstitution_state');
-  const institutionSelect = document.getElementById('evaluation_create_evaluationInstitution_institution');
+  const stateSelect = document.getElementById('evaluation_create_state');
+  const institutionSelect = document.getElementById('evaluation_create_institution');
 
   stateSelect.addEventListener('change', function () {
     const selectedState = stateSelect.value;
