@@ -32,7 +32,6 @@ class RequesterPageController extends AbstractController
 				$this->security = $security;
 		}
 
-
 		#[Route('/secure/requester', name: 'requester_home')]
 		public function requester(): Response
 		{
@@ -66,15 +65,8 @@ class RequesterPageController extends AbstractController
 		public function requesterEvaluationCreateForm(Request $request): Response
 		{
 				$form = $this->createForm(EvaluationCreateType::class);
-
 				$form->handleRequest($request);
-
-				$postData = $request->request->all();
-
 				if ($form->isSubmitted() && $form->isValid()) {
-						// Handle the form submission, e.g., persist data to the database
-						// Redirect to a success page or perform other actions
-
 						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
 						$evaluationProcessingService->createEvaluation($form->getData());
 						return $this->redirectToRoute('requester_evaluation_table');

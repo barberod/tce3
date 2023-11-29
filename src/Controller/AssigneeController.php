@@ -42,7 +42,7 @@ class AssigneeController extends AbstractController
 
 				$options = [];
 				foreach ($assignees as $assignee) {
-						$options[$assignee->getDisplayName()] = $assignee->getId();
+						$options[$assignee->getDisplayName()] = $assignee->getUsername();
 				}
 
 				return new JsonResponse($options);

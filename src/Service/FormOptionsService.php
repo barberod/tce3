@@ -2,8 +2,10 @@
 
 namespace App\Service;
 
+use App\Entity\Affiliation;
 use App\Entity\Department;
 use App\Entity\Institution;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 class FormOptionsService
@@ -119,6 +121,20 @@ class FormOptionsService
 				$selectors = [];
 				foreach ($departments as $department) {
 						$selectors[$department->getName()] = $department->getId();
+				}
+				return $selectors;
+		}
+
+		function getAssigneesByDepartment(int $deptID): array {
+				$department = $this->entityManager->getRepository(Department::class)->findOneBy(['id' => $deptID]);
+				$affiliations = $this->entityManager->getRepository(Affiliation::class)->findBy(['department' => $department]);
+				$assignees = [];
+				foreach ($affiliations as $affiliation) {
+						$assignees[] = $affiliation->getFacstaff();
+				}
+				$selectors = [];
+				foreach ($assignees as $assignee) {
+						$selectors[$assignee->getDisplayName()] = $assignee->getUsername();
 				}
 				return $selectors;
 		}

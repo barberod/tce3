@@ -3,12 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Evaluation;
+use App\Form\EvaluationAssignType;
+use App\Form\EvaluationCreateType;
 use App\Repository\EvaluationRepository;
 use App\Service\EvaluationOptionsService;
+use App\Service\EvaluationProcessingService;
 use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -17,13 +22,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class CoordinatorPageController extends AbstractController
 {
 		private EntityManagerInterface $entityManager;
+		private Security $security;
 
 		public function __construct(
-			EntityManagerInterface $entityManager
+			EntityManagerInterface $entityManager,
+			Security $security,
 		) {
 				$this->entityManager = $entityManager;
+				$this->security = $security;
 		}
-
 
 		#[Route('/secure/coordinator', name: 'coordinator_home')]
 		public function coordinator(): Response
@@ -294,18 +301,26 @@ class CoordinatorPageController extends AbstractController
 
 		#[Route('/secure/coordinator/evaluation/{id}/assign', name: 'coordinator_evaluation_assign_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+assign', 'evaluation' )]
-		public function coordinatorEvaluationAssignForm(Evaluation $evaluation):
-		Response
+		public function coordinatorEvaluationAssignForm(Request $request,
+			Evaluation $evaluation): Response
 		{
-				return $this->render('evaluation/page.html.twig', [
+				$form = $this->createForm(EvaluationAssignType::class);
+				$form->handleRequest($request);
+				if ($form->isSubmitted()) {
+						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+						$evaluationProcessingService->assignEvaluation($evaluation, $form->getData());
+						return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+				}
+
+				return $this->render('evaluation/form/assign.html.twig', [
 					'context' => 'coordinator',
 					'page_title' => 'Evaluation #'.$evaluation->getID(),
-					'prepend' => 'Assign to Department | Evaluation #'
-						.$evaluation->getID(),
+					'prepend' => 'Assign to Department | Evaluation #'.$evaluation->getID(),
 					'evaluation' => $evaluation,
 					'id' => $evaluation->getID(),
 					'uuid' => $evaluation->getID(),
-					'verb' => 'assign'
+					'verb' => 'assign',
+					'form' => $form->createView(),
 				]);
 		}
 
