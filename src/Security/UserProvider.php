@@ -31,18 +31,15 @@ use function get_class;
 final class UserProvider implements CasUserProviderInterface
 {
     private IntrospectorInterface $introspector;
-    private LoggerInterface $logger;
     private LookupService $lookup;
     private RequestStack $requestStack;
 
     public function __construct(
         IntrospectorInterface $introspector,
-        LoggerInterface $logger,
         LookupService $lookup,
         RequestStack $requestStack
     ) {
         $this->introspector = $introspector;
-        $this->logger = $logger;
         $this->lookup = $lookup;
         $this->requestStack = $requestStack;
     }
@@ -77,7 +74,6 @@ final class UserProvider implements CasUserProviderInterface
         if (!$user instanceof CasUserInterface) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
         }
-        // $this->logger->debug('Refreshing user '.$user->getUserIdentifier());
 
         $processedUser = $this->lookup->processUser($user->getUserIdentifier());
         if ($processedUser->getStatus() !== 1) {
