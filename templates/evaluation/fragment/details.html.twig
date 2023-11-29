@@ -116,7 +116,9 @@
                         {{ evaluation.draftEquiv4Course }}, {{ evaluation.draftEquiv4CreditHours }} credit hours<br>
                     {% endif %}
 
-                    {{ evaluation.draftPolicy }}
+                    {% if evaluation.draftPolicy|trim is not empty %}
+                        {{ evaluation.draftPolicy|trim }}
+                    {% endif %}
                 </div>
             </div>
             {% endif %}
@@ -139,7 +141,9 @@
                         {{ evaluation.finalEquiv4Course.subjectCode }} {{ evaluation.finalEquiv4Course.courseNumber }}, {{ evaluation.finalEquiv4CreditHrs }} credit hours<br>
                     {% endif %}
 
-                    {{ evaluation.finalPolicy }}
+                    {% if evaluation.finalPolicy|trim is not empty %}
+                        {{ evaluation.finalPolicy|trim }}
+                    {% endif %}
                 </div>
             </div>
             {% endif %}

@@ -24,6 +24,12 @@ class EvaluationProcessingService
 				$this->entityManager = $entityManager;
 				$this->security = $security;
 		}
+
+		/**
+		 * Create
+		 *
+		 * @param array $formData
+		 */
 		public function createEvaluation(array $formData): void
 		{
 				// Create a new instance of the Evaluation entity
@@ -154,6 +160,61 @@ class EvaluationProcessingService
 				$this->entityManager->flush(); // Save changes to the database
 		}
 
+		/**
+		 * Update
+		 */
+
+		/**
+		 * Delete
+		 */
+
+		/**
+		 * Annotate
+		 */
+		public function annotateEvaluation(Evaluation $evaluation, array $formData): void
+		{
+				// Create a note
+				$note = new Note();
+				$note->setEvaluation($evaluation);
+
+				if ($this->security->getUser() instanceof User) {
+						$note->setAuthor($this->security->getUser());
+				} elseif ($this->security->getUser() instanceof CasUser) {
+						$userAtHand = $this->entityManager->getRepository(User::class)
+							->findOneBy(['username' => $this->security->getUser()->getUserIdentifier()]);
+						$note->setAuthor($userAtHand);
+				} else {
+						$note->setAuthor(null);
+				}
+
+				$note->setBody($formData['noteBody']);
+				$note->setCreated(new \DateTime());
+
+				if ($formData['visibleNote'] == 'Yes') {
+						$note->setVisibleToRequester(1);
+				} else {
+						$note->setVisibleToRequester(0);
+				}
+
+				// Persist the entity
+				$this->entityManager->persist($note);
+				$this->entityManager->flush(); // Save changes to the database
+		}
+
+		/**
+		 * Annotate-as-Requester
+		 */
+
+		/**
+		 * Append
+		 */
+
+		/**
+		 * Assign
+		 *
+		 * @param Evaluation $evaluation
+		 * @param array $formData
+		 */
 		public function assignEvaluation(Evaluation $evaluation, array $formData): void
 		{
 				$assignee = $this->entityManager->getRepository(User::class)
@@ -223,9 +284,72 @@ class EvaluationProcessingService
 				$this->entityManager->flush(); // Save changes to the database
 		}
 
+		/**
+		 * Evaluate
+		 */
+
+		/**
+		 * Example
+		 */
+
+		/**
+		 * Finalize
+		 */
+
+		/**
+		 * Forward
+		 */
+
+		/**
+		 * From-complete-to-hold
+		 */
+
+		/**
+		 * From-dept-to-r1
+		 */
+
+		/**
+		 * From-dept-to-student
+		 */
+
+		/**
+		 * From-r1-to-student
+		 */
+
+		/**
+		 * From-r2-to-dept
+		 */
+
+		/**
+		 * From-r2-to-student
+		 */
+
+		/**
+		 * From-student-to-r1
+		 */
+
+		/**
+		 * Hide
+		 */
+
+		/**
+		 * Pass
+		 */
+
+		/**
+		 * Reassign
+		 */
+
+		/**
+		 * Resubmit
+		 */
+
+		/**
+		 * Spot-articulate
+		 */
 		public function spotArticulateEvaluation(Evaluation $evaluation, array $formData): void
 		{
-				$draftEqvText = 'Draft equiv:';
+				$draftEqvText = ' Draft equiv:';
 				if ($formData['eqvCnt'] == 0) {
 						$draftEqvText .= 'No equivalencies ';
 				}
@@ -292,9 +416,9 @@ class EvaluationProcessingService
 				$evaluation->setDraftPolicy($formData['policy']);
 				$policyText = '';
 				if ($formData['policy'] == 'Yes') {
-						$policyText .= 'Policy.';
+						$policyText .= ' Policy.';
 				} elseif ($formData['policy'] == 'No') {
-						$policyText .= 'Not policy.';
+						$policyText .= ' Not policy.';
 				}
 
 				$evaluation->setPhase('Registrar 2');
@@ -349,7 +473,7 @@ class EvaluationProcessingService
 						$coordinatorText .= 'Unknown';
 				}
 
-				$trail->setBody('Spot articulation by '.$coordinatorText.'. Draft equiv: '.$draftEqvText.'. '.$policyText.' Phase set to Registrar 2.');
+				$trail->setBody('Spot articulation by '.$coordinatorText.$draftEqvText.$policyText.' Phase set to Registrar 2.');
 				$trail->setBodyAnon('Initial review by coordinator. Phase set to Registrar 2.');
 				$trail->setCreated(new \DateTime());
 
