@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\Affiliation;
 use App\Entity\Course;
 use App\Entity\Department;
 use App\Entity\Evaluation;
@@ -27,7 +28,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class DataLoadCommand extends Command
 {
-    private array $loadableEntities = ['User','Course','Institution','Department','Evaluation','Trail','Note'];
+    private array $loadableEntities = ['User','Course','Institution','Department','Evaluation','Trail','Note','Affiliation'];
 
     public function __construct(
         private readonly LoggerInterface $logger,
@@ -84,6 +85,11 @@ class DataLoadCommand extends Command
             $io->title("Loading notes");
             return $this->loadNotes($io, $targetEntity, $fileToLoad);
         }
+
+				if ($targetEntity === 'Affiliation') {
+						$io->title("Loading affiliations");
+						return $this->loadAffiliations($io, $targetEntity, $fileToLoad);
+				}
 
         $io->warning('Invalid.');
         return Command::INVALID;
@@ -861,4 +867,72 @@ class DataLoadCommand extends Command
             }
         }
     }
+
+		/*
+     * Affiliation
+     */
+		protected function loadAffiliations(SymfonyStyle $io, string $targetEntity,
+			string $fileToLoad) {
+				if ($this->runChecks($io, $targetEntity, $fileToLoad, 3, 2) === 0) {
+						$this->parseAffiliationFileAndLoadAffiliations($io, $fileToLoad);
+				} else {
+						$io->warning('Affiliations from '.$fileToLoad.' have NOT been loaded.');
+						return Command::FAILURE;
+				}
+				$io->success('Affiliations from '.$fileToLoad.' have been loaded.');
+				return Command::SUCCESS;
+		}
+
+		protected function parseAffiliationFileAndLoadAffiliations(SymfonyStyle $io, string $fileToLoad): void
+		{
+				$io->section("Parsing csv file and inserting affiliations into database");
+				$denominator = $this->getExpectedNumberOfNewRecords('Affiliation', $fileToLoad);
+				$row = 0;
+				if (($handle = fopen("data/csv/uploads/Affiliation/{$fileToLoad}", "r")) !== FALSE) {
+						while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+								if ($row > 0) {
+										$this->persistAffiliationToAffiliationTable($io, $data, $fileToLoad, (string)$denominator, (string)$row);
+								}
+								$row++;
+						}
+						fclose($handle);
+				}
+				$io->newLine();
+		}
+
+		protected function persistAffiliationToAffiliationTable(SymfonyStyle $io, array $row, string $fileToLoad, string $total, string $current): void
+		{
+				$affiliation = new Affiliation();
+
+				$facstaff = $this->entityManager->getRepository(User::class)
+					->findOneBy(['username'=>$row[0]]);
+				if ($facstaff) {
+						$affiliation->setFacstaff($facstaff);
+				}
+
+				$department = $this->entityManager->getRepository(Department::class)
+					->findOneBy(['d7Nid'=>$row[2]]);
+				if ($department) {
+						$affiliation->setDepartment($department);
+				}
+
+				$affiliation->setLoadedFrom($fileToLoad);
+
+				if (!is_null($facstaff) && !is_null($department)) {
+						$this->entityManager->persist($affiliation);
+						$this->entityManager->flush();
+
+						$io->text(
+							sprintf("%04d/%04d\t%16s\t%32s",
+								$current,
+								$total,
+								$affiliation->getFacstaff()->getUsername(),
+								$affiliation->getDepartment()->getName()
+							));
+
+						return;
+				}
+
+				$this->entityManager->flush();
+		}
 }
