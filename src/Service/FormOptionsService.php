@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Affiliation;
+use App\Entity\Course;
 use App\Entity\Department;
 use App\Entity\Institution;
 use App\Entity\User;
@@ -107,6 +108,16 @@ class FormOptionsService
 					'VIP' => 'VIP',
 					'WOLO' => 'WOLO',
 				);
+		}
+
+		public function getCoursesBySubjectCode(string $subjectCode): array {
+				$courses = $this->entityManager->getRepository(Course::class)->findBy(['subjectCode' => $subjectCode]);
+				$selectors = [];
+				foreach ($courses as $course) {
+						$selectors[$course->getSubjectCode().' '.$course->getCourseNumber()] =
+							$course->getId();
+				}
+				return $selectors;
 		}
 
 		public function getDepartmentOptions(): array {

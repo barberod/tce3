@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Evaluation;
 use App\Form\EvaluationAssignType;
 use App\Form\EvaluationCreateType;
+use App\Form\EvaluationSpotArticulateType;
 use App\Repository\EvaluationRepository;
 use App\Service\EvaluationOptionsService;
 use App\Service\EvaluationProcessingService;
@@ -572,16 +573,26 @@ class CoordinatorPageController extends AbstractController
 
 		#[Route('/secure/coordinator/evaluation/{id}/spot-articulate', name: 'coordinator_evaluation_spot_articulate_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+spot_articulate', 'evaluation' )]
-		public function coordinatorEvaluationSpotArticulateForm(Evaluation $evaluation): Response
+		public function coordinatorEvaluationSpotArticulateForm(Request $request,
+			Evaluation $evaluation): Response
 		{
-				return $this->render('evaluation/page.html.twig', [
+				$form = $this->createForm(EvaluationSpotArticulateType::class);
+				$form->handleRequest($request);
+				if ($form->isSubmitted()) {
+						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+						$evaluationProcessingService->spotArticulateEvaluation($evaluation, $form->getData());
+						return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+				}
+
+				return $this->render('evaluation/form/spot-articulate.html.twig', [
 					'context' => 'coordinator',
 					'page_title' => 'Evaluation #'.$evaluation->getID(),
 					'prepend' => 'Spot Articulate | Evaluation #'.$evaluation->getID(),
 					'evaluation' => $evaluation,
 					'id' => $evaluation->getID(),
 					'uuid' => $evaluation->getID(),
-					'verb' => 'spot-articulate'
+					'verb' => 'spot-articulate',
+					'form' => $form->createView(),
 				]);
 		}
 
