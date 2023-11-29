@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Evaluation;
+use App\Form\EvaluationAnnotateAsRequesterType;
 use App\Form\EvaluationAnnotateType;
 use App\Form\EvaluationAssignType;
 use App\Form\EvaluationCreateType;
@@ -283,16 +284,25 @@ class CoordinatorPageController extends AbstractController
 
 		#[Route('/secure/coordinator/evaluation/{id}/annotate-as-requester', name: 'coordinator_evaluation_annotate_as_requester_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+annotate_as_requester', 'evaluation' )]
-		public function coordinatorEvaluationAnnotateAsRequesterForm(Evaluation $evaluation): Response
+		public function coordinatorEvaluationAnnotateAsRequesterForm(Request $request, Evaluation $evaluation): Response
 		{
-				return $this->render('evaluation/page.html.twig', [
+				$form = $this->createForm(EvaluationAnnotateAsRequesterType::class);
+				$form->handleRequest($request);
+				if ($form->isSubmitted()) {
+						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+						$evaluationProcessingService->annotateAsRequesterEvaluation($evaluation, $form->getData());
+						return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+				}
+
+				return $this->render('evaluation/form/annotate-as-requester.html.twig', [
 					'context' => 'coordinator',
 					'page_title' => 'Evaluation #'.$evaluation->getID(),
 					'prepend' => 'Write a Note | Evaluation #'.$evaluation->getID(),
 					'evaluation' => $evaluation,
 					'id' => $evaluation->getID(),
 					'uuid' => $evaluation->getID(),
-					'verb' => 'annotate-as-requester'
+					'verb' => 'annotate-as-requester',
+					'form' => $form->createView(),
 				]);
 		}
 
