@@ -314,7 +314,144 @@ class EvaluationProcessingService
 
 		/**
 		 * Evaluate
+		 *
+		 * @param Evaluation $evaluation
+		 * @param array $formData
 		 */
+		public function evaluateEvaluation(Evaluation $evaluation, array $formData): void
+		{
+				$draftEqvText = ' Draft equiv:';
+				if ($formData['eqvCnt'] == 0) {
+						$draftEqvText .= 'No equivalencies ';
+				}
+
+				if (in_array($formData['eqvCnt'], array(1, 2, 3, 4))) {
+						$eqv1 = $this->entityManager->getRepository(Course::class)
+							->findOneBy(['id' => $formData['eqv1']]);
+						$evaluation->setDraftEquiv1Course($eqv1->getSubjectCode().' '.$eqv1->getCourseNumber());
+						$evaluation->setDraftEquiv1CreditHrs($formData['eqv1Hrs']);
+						$draftEqvText .= $eqv1->getSubjectCode().' '
+							.$eqv1->getCourseNumber().' ('.$formData['eqv1Hrs'].' hrs) ';
+				}
+
+				if (in_array($formData['eqvCnt'], array(2, 3, 4))) {
+						$evaluation->setDraftEquiv1Operator($formData['eqv1Opr']);
+						$eqv2 = $this->entityManager->getRepository(Course::class)
+							->findOneBy(['id' => $formData['eqv2']]);
+						$evaluation->setDraftEquiv2Course($eqv2->getSubjectCode().' '.$eqv2->getCourseNumber());
+						$evaluation->setDraftEquiv2CreditHrs($formData['eqv2Hrs']);
+
+						if (in_array($formData['eqv1Opr'], array('AND', 'OR'))) {
+								$draftEqvText .= $formData['eqv1Opr'].' ';
+						} else {
+								$draftEqvText .= ', ';
+						}
+						$draftEqvText .= $eqv2->getSubjectCode().' '
+							.$eqv2->getCourseNumber().' ('.$formData['eqv2Hrs'].' hrs) ';
+				}
+
+				if (in_array($formData['eqvCnt'], array(3, 4))) {
+						$evaluation->setDraftEquiv2Operator($formData['eqv2Opr']);
+						$eqv3 = $this->entityManager->getRepository(Course::class)
+							->findOneBy(['id' => $formData['eqv3']]);
+						$evaluation->setDraftEquiv3Course($eqv3->getSubjectCode().' '.$eqv3->getCourseNumber());
+						$evaluation->setDraftEquiv3CreditHrs($formData['eqv3Hrs']);
+
+						if (in_array($formData['eqv2Opr'], array('AND', 'OR'))) {
+								$draftEqvText .= $formData['eqv2Opr'].' ';
+						} else {
+								$draftEqvText .= ', ';
+						}
+						$draftEqvText .= $eqv3->getSubjectCode().' '
+							.$eqv3->getCourseNumber().' ('.$formData['eqv3Hrs'].' hrs) ';
+				}
+
+				if ($formData['eqvCnt'] == 4) {
+						$evaluation->setDraftEquiv3Operator($formData['eqv3Opr']);
+						$eqv4 = $this->entityManager->getRepository(Course::class)
+							->findOneBy(['id' => $formData['eqv4']]);
+						$evaluation->setDraftEquiv4Course($eqv4->getSubjectCode().' '.$eqv4->getCourseNumber());
+						$evaluation->setDraftEquiv4CreditHours($formData['eqv4Hrs']);
+
+						if (in_array($formData['eqv3Opr'], array('AND', 'OR'))) {
+								$draftEqvText .= $formData['eqv3Opr'].' ';
+						} else {
+								$draftEqvText .= ', ';
+						}
+						$draftEqvText .= $eqv4->getSubjectCode().' '
+							.$eqv4->getCourseNumber().' ('.$formData['eqv4Hrs'].' hrs) ';
+				}
+
+				$draftEqvText = substr($draftEqvText, 0, -1);
+				$draftEqvText .= '.';
+
+				$evaluation->setDraftPolicy($formData['policy']);
+				$policyText = '';
+				if ($formData['policy'] == 'Yes') {
+						$policyText .= ' Policy.';
+				} elseif ($formData['policy'] == 'No') {
+						$policyText .= ' Not policy.';
+				}
+
+				$evaluation->setPhase('Registrar 2');
+
+				// Persist the entity
+				$this->entityManager->persist($evaluation);
+				$this->entityManager->flush(); // Save changes to the database
+
+				// Create a note
+				if ($formData['addNote'] == 'Yes') {
+						$note = new Note();
+						$note->setEvaluation($evaluation);
+
+						if ($this->security->getUser() instanceof User) {
+								$note->setAuthor($this->security->getUser());
+						} elseif ($this->security->getUser() instanceof CasUser) {
+								$userAtHand = $this->entityManager->getRepository(User::class)
+									->findOneBy(['username' => $this->security->getUser()->getUserIdentifier()]);
+								$note->setAuthor($userAtHand);
+						} else {
+								$note->setAuthor(null);
+						}
+
+						$note->setBody($formData['noteBody']);
+						$note->setCreated(new \DateTime());
+
+						if ($formData['visibleNote'] == 'Yes') {
+								$note->setVisibleToRequester(1);
+						} else {
+								$note->setVisibleToRequester(0);
+						}
+
+						// Persist the entity
+						$this->entityManager->persist($note);
+						$this->entityManager->flush(); // Save changes to the database
+				}
+
+				// Create a trail
+				$trail = new Trail();
+				$trail->setEvaluation($evaluation);
+
+				$assignee = $this->security->getUser();
+				$assigneeText = '';
+				if ($assignee instanceof User) {
+						$assigneeText .= $this->security->getUser()->attributes()['profile']['dn'];
+						$assigneeText .= ' ('.$this->security->getUser()->attributes()['profile']['un'].')';
+				} elseif ($assignee instanceof CasUser) {
+						$assigneeText .= $this->security->getUser()->getAttributes()['profile']['dn'];
+						$assigneeText .= ' ('.$this->security->getUser()->getAttributes()['profile']['un'].')';
+				} else {
+						$assigneeText .= 'Unknown';
+				}
+
+				$trail->setBody('Equivalencies entered by '.$assigneeText.$draftEqvText.$policyText.' Phase set to Registrar 2.');
+				$trail->setBodyAnon('Initial review by department. Phase set to Registrar 2.');
+				$trail->setCreated(new \DateTime());
+
+				// Persist the entity
+				$this->entityManager->persist($trail);
+				$this->entityManager->flush(); // Save changes to the database
+		}
 
 		/**
 		 * Example
