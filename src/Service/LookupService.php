@@ -242,25 +242,25 @@ class LookupService
 						return 'TBD';
 				}
 
-				if ($this->isUndergraduateStudent($requesterAttributes)) {
+				if ($this->isUndergraduateStudent($requesterAttributes['Attr'])) {
 						return 'Student';
 				}
-				if ($this->isConfirmedUndergraduateApplicant($requesterAttributes)) {
+				if ($this->isConfirmedUndergraduateApplicant($requesterAttributes['Attr'])) {
 						return 'Confirmed Applicant';
 				}
-				if ($this->isAcceptedUndergraduateApplicant($requesterAttributes)) {
+				if ($this->isAcceptedUndergraduateApplicant($requesterAttributes['Attr'])) {
 						return 'Accepted Applicant';
 				}
-				if ($this->isUndergraduateApplicant($requesterAttributes)) {
+				if ($this->isUndergraduateApplicant($requesterAttributes['Attr'])) {
 						return 'Applicant';
 				}
-				if ($this->isGraduateStudent($requesterAttributes)) {
+				if ($this->isGraduateStudent($requesterAttributes['Attr'])) {
 						return 'Graduate Student';
 				}
-				if ($this->isGraduateApplicant($requesterAttributes)) {
+				if ($this->isGraduateApplicant($requesterAttributes['Attr'])) {
 						return 'Graduate Applicant';
 				}
-				if ($this->isFullTimeEmployee($requesterAttributes)) {
+				if ($this->isFullTimeEmployee($requesterAttributes['Attr'])) {
 						return 'Employee';
 				}
 				return 'Unknown';
