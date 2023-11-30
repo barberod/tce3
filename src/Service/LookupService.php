@@ -297,7 +297,7 @@ class LookupService
 				$requesterAttributes = array();
 				foreach ($relevantAttributes as $attribute) {
 					if (in_array($attribute, $result[0]->getAttribute('eduPersonScopedAffiliation'))) {
-						$requesterAttributes['gt'][] = $attribute;
+						$requesterAttributes[] = $attribute;
 					}
 				}
 				return array(
