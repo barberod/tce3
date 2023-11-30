@@ -61,8 +61,7 @@ class AssigneePageController extends AbstractController
 		}
 
 		#[Route('/secure/assignee/evaluation/needs-attention', name: 'assignee_evaluation_table_needs_attention', methods: ['GET'])]
-		public function assigneeEvaluationTableDept(EvaluationRepository
-		$evaluationRepository): Response
+		public function assigneeEvaluationTableDept(EvaluationRepository $evaluationRepository): Response
 		{
 				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
 				// $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
@@ -70,10 +69,8 @@ class AssigneePageController extends AbstractController
 
 				$queryBuilder = $evaluationRepository->getQB();
 				$queryBuilder
-					->andWhere('e.phase = :phase')
 					->andWhere('e.assignee = :assignee')
-					->setParameter('phase', 'Department')
-					->setParameter('assignee', $this->getUser());
+					->setParameter('assignee', $this->security->getUser());
 				$adapter = new QueryAdapter($queryBuilder);
 				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
 
