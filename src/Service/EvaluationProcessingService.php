@@ -527,6 +527,10 @@ class EvaluationProcessingService
 						$policyText .= ' Not policy.';
 				}
 
+				$evaluation->setRequesterType($formData['requesterType']);
+				$evaluation->setCourseInSis($formData['courseInSis']);
+				$evaluation->setTranscriptOnHand($formData['transcriptOnHand']);
+
 				$evaluation->setPhase('Complete');
 
 				// Persist the entity

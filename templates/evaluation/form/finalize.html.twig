@@ -109,29 +109,16 @@
                             <div id="conditionsGrp" class="mb-5">
                                 <h3 class="h6 mb-3">Conditions</h3>
                                 <div class="mb-4">
-                                    <label for="requesterType" class="form-label">Categorize the requester.</label>
-                                    <select class="form-select" id="requesterType" name="requesterType">
-                                        <option selected>- Select -</option>
-                                        <option value="Student">Student</option>
-                                        <option value="Accepted Applicant">Accepted Applicant</option>
-                                        <option value="Applicant">Applicant</option>
-                                    </select>
+                                    {{ form_row(form.lookup) }}
                                 </div>
                                 <div class="mb-4">
-                                    <label for="courseInSis" class="form-label">Has the course been entered in Banner?</label>
-                                    <select class="form-select" id="courseInSis" name="courseInSis">
-                                        <option selected>- Select -</option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
-                                    </select>
+                                    {{ form_row(form.requesterType) }}
                                 </div>
                                 <div class="mb-4">
-                                    <label for="transcriptOnHand" class="form-label">Do we have the transcript?</label>
-                                    <select class="form-select" id="transcriptOnHand" name="transcriptOnHand">
-                                        <option selected>- Select -</option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
-                                    </select>
+                                    {{ form_row(form.courseInSis) }}
+                                </div>
+                                <div class="mb-4">
+                                    {{ form_row(form.transcriptOnHand) }}
                                 </div>
                             </div>
 

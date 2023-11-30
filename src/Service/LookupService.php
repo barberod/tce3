@@ -4,21 +4,18 @@ namespace App\Service;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Ldap\Entry;
 use Symfony\Component\Ldap\Ldap;
+use Symfony\Component\Validator\Constraints\Date;
 
 class LookupService
 {
     private EntityManagerInterface $entityManager;
-    private LoggerInterface $logger;
 
     public function __construct(
-        EntityManagerInterface $entityManager,
-        LoggerInterface $logger
+        EntityManagerInterface $entityManager
     ) {
         $this->entityManager = $entityManager;
-        $this->logger = $logger;
     }
 
     public function processUser(string $givenUsername): User
@@ -38,9 +35,6 @@ class LookupService
         $user = new User();
         // $userData = $this->getDevUserData($givenUsername);
         $userData = $this->getUserData($givenUsername);
-
-        $this->logger->debug(print_r($userData,true));
-
         $user->setUsername($userData['username']);
         $user->setOrgID($userData['org_id']);
         $user->setDisplayName($userData['display_name']);
@@ -89,15 +83,11 @@ class LookupService
 
     public function getUserData(string $givenUsername): array
     {
-        $userData = array();
-
         $ldap = Ldap::create('ext_ldap', ['connection_string' => $_ENV["LDAP_HOST"].':'.(int)$_ENV["LDAP_PORT"]]);
         $ldap->bind($_ENV["LDAP_DN"], $_ENV["LDAP_PW"]);
         $query = $ldap->query('ou=accounts,ou=gtaccounts,ou=departments,dc=gted,dc=gatech,dc=edu', "(&(uid={$givenUsername}))");
         $result = $query->execute();
-        $userData = $this->crosswalkLdapDataToUserData($givenUsername, $result[0]);
-
-        return $userData;
+        return $this->crosswalkLdapDataToUserData($givenUsername, $result[0]);
     }
 
     private function crosswalkLdapDataToUserData(string $givenUsername, Entry $entry): array {
@@ -245,4 +235,136 @@ class LookupService
         }
         return '';
     }
+
+		public function getRequesterType(array $requesterAttributes): string
+		{
+				if ($_ENV["APP_ENV"] === 'dev') {
+						return 'TBD';
+				}
+
+				if ($this->isUndergraduateStudent($requesterAttributes)) {
+						return 'Student';
+				}
+				if ($this->isConfirmedUndergraduateApplicant($requesterAttributes)) {
+						return 'Confirmed Applicant';
+				}
+				if ($this->isAcceptedUndergraduateApplicant($requesterAttributes)) {
+						return 'Accepted Applicant';
+				}
+				if ($this->isUndergraduateApplicant($requesterAttributes)) {
+						return 'Applicant';
+				}
+				if ($this->isGraduateStudent($requesterAttributes)) {
+						return 'Graduate Student';
+				}
+				if ($this->isGraduateApplicant($requesterAttributes)) {
+						return 'Graduate Applicant';
+				}
+				if ($this->isFullTimeEmployee($requesterAttributes)) {
+						return 'Employee';
+				}
+				return 'Unknown';
+		}
+
+		public function getRequesterAttributes(int $givenID): array
+		{
+				if ($_ENV["APP_ENV"] === 'dev') {
+						return array(
+							'Time' => date('Y-m-d H:i:s'),
+							'GTID' => $givenID,
+							'Attr' => array('tbd@ro', 'dev-env@db'),
+						);
+				}
+
+				$ldap = Ldap::create('ext_ldap', ['connection_string' => $_ENV["LDAP_HOST"].':'.(int)$_ENV["LDAP_PORT"]]);
+				$ldap->bind($_ENV["LDAP_DN"], $_ENV["LDAP_PW"]);
+				$query = $ldap->query('ou=accounts,ou=gtaccounts,ou=departments,dc=gted,dc=gatech,dc=edu', "(&(gtGTID={$givenID}))");
+				$result = $query->execute();
+
+				$relevantAttributes = array(
+					'credit-student@gt',
+					'credit-applicant-accepted@gt',
+					'credit-applicant-confirmed@gt',
+					'credit-applicant@gt',
+					'former-credit-student@gt',
+					'full-time-employee@gt',
+					'grad-applicant@gt',
+					'graduate-student@gt',
+					'undergrad-student@gt',
+					'undergrad-applicant@gt'
+				);
+
+				$requesterAttributes = array();
+				foreach ($relevantAttributes as $attribute) {
+					if (in_array($attribute, $result[0])) {
+						$requesterAttributes['gt'][] = $attribute;
+					}
+				}
+				return array(
+					'Time' => date('Y-m-d H:i:s'),
+					'GTID' => $givenID,
+					'Attr' => $requesterAttributes,
+				);
+		}
+
+		private function isUndergraduateStudent(array $attributes): bool {
+				if (
+					(in_array("credit-student@gt", $attributes)) &&
+					(in_array("undergrad-student@gt", $attributes))
+				) {
+						return true;
+				}
+				return false;
+		}
+
+		private function isConfirmedUndergraduateApplicant(array $attributes): bool {
+				if (
+					in_array("credit-applicant-confirmed@gt", $attributes) &&
+					in_array("undergrad-applicant@gt", $attributes)
+				) {
+						return true;
+				}
+				return false;
+		}
+
+		private function isAcceptedUndergraduateApplicant(array $attributes): bool {
+				if (
+					in_array("credit-applicant-accepted@gt", $attributes) &&
+					in_array("undergrad-applicant@gt", $attributes)
+				) {
+						return true;
+				}
+				return false;
+		}
+
+		private function isUndergraduateApplicant(array $attributes): bool {
+				if (in_array("undergrad-applicant@gt", $attributes)) {
+						return true;
+				}
+				return false;
+		}
+
+		private function isGraduateStudent(array $attributes): bool {
+				if (
+					(in_array("credit-student@gt", $attributes)) &&
+					(in_array("graduate-student@gt", $attributes))
+				) {
+						return true;
+				}
+				return false;
+		}
+
+		private function isGraduateApplicant(array $attributes): bool {
+				if (in_array("grad-applicant@gt", $attributes)) {
+						return true;
+				}
+				return false;
+		}
+
+		private function isFullTimeEmployee(array $attributes): bool {
+				if (in_array("full-time-employee@gt", $attributes)) {
+						return true;
+				}
+				return false;
+		}
 }

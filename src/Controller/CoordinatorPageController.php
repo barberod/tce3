@@ -393,7 +393,7 @@ class CoordinatorPageController extends AbstractController
 		#[IsGranted( 'coordinator+finalize', 'evaluation' )]
 		public function coordinatorEvaluationFinalizeForm(Request $request, Evaluation $evaluation): Response
 		{
-				$form = $this->createForm(EvaluationFinalizeType::class);
+				$form = $this->createForm(EvaluationFinalizeType::class, null, ['evaluation' => $evaluation]);
 				$form->handleRequest($request);
 				if ($form->isSubmitted()) {
 						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);

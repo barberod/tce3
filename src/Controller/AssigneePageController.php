@@ -3,12 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Evaluation;
+use App\Form\EvaluationEvaluateType;
 use App\Repository\EvaluationRepository;
 use App\Service\EvaluationOptionsService;
+use App\Service\EvaluationProcessingService;
 use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -17,13 +21,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AssigneePageController extends AbstractController
 {
 		private EntityManagerInterface $entityManager;
+		private Security $security;
 
 		public function __construct(
-			EntityManagerInterface $entityManager
+			EntityManagerInterface $entityManager,
+			Security $security,
 		) {
 				$this->entityManager = $entityManager;
+				$this->security = $security;
 		}
-
 
 		#[Route('/secure/assignee', name: 'assignee_home')]
 		public function assignee(): Response
@@ -141,18 +147,25 @@ class AssigneePageController extends AbstractController
 
 		#[Route('/secure/assignee/evaluation/{id}/evaluate', name: 'assignee_evaluation_evaluate_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'assignee+evaluate', 'evaluation' )]
-		public function assigneeEvaluationEvaluateForm(Evaluation $evaluation):
-		Response
+		public function assigneeEvaluationEvaluateForm(Request $request, Evaluation $evaluation): Response
 		{
-				return $this->render('evaluation/page.html.twig', [
+				$form = $this->createForm(EvaluationEvaluateType::class);
+				$form->handleRequest($request);
+				if ($form->isSubmitted()) {
+						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+						$evaluationProcessingService->evaluateEvaluation($evaluation, $form->getData());
+						return $this->redirectToRoute('assignee_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+				}
+
+				return $this->render('evaluation/form/evaluate.html.twig', [
 					'context' => 'assignee',
 					'page_title' => 'Evaluation #'.$evaluation->getID(),
-					'prepend' => 'Enter Equivalencies | Evaluation #'
-						.$evaluation->getID(),
+					'prepend' => 'Enter Equivalencies | Evaluation #'.$evaluation->getID(),
 					'evaluation' => $evaluation,
 					'id' => $evaluation->getID(),
 					'uuid' => $evaluation->getID(),
-					'verb' => 'evaluate'
+					'verb' => 'evaluate',
+					'form' => $form->createView(),
 				]);
 		}
 
