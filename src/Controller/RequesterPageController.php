@@ -47,10 +47,7 @@ class RequesterPageController extends AbstractController
 		public function requesterEvaluationTable(EvaluationRepository $evaluationRepository): Response
 		{
 				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
-				// $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
-				// $direction = ($_GET['dir'] == 'asc') ? 'asc' : 'desc';
-
-				$queryBuilder = $evaluationRepository->getQB();
+				$queryBuilder = $evaluationRepository->getQB(requester: $this->security->getUser());
 				$adapter = new QueryAdapter($queryBuilder);
 				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
 

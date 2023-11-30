@@ -3,9 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\Evaluation;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @extends ServiceEntityRepository<Evaluation>
@@ -27,7 +30,7 @@ class EvaluationRepository extends ServiceEntityRepository
         string $direction = 'desc', 
         string $reqAdmin = null,
         string $phase = null,
-        int $requesterID = null,
+        User $requester = null,
         int $assigneeID = null
     ): QueryBuilder
     {
@@ -38,8 +41,8 @@ class EvaluationRepository extends ServiceEntityRepository
 
         if (!is_null($reqAdmin)) {$queryBuilder->andWhere('e.reqAdmin=:val1')->setParameter('val1', $reqAdmin);}
         if (!is_null($phase)) {$queryBuilder->andWhere('e.phase=:val2')->setParameter('val2', $phase);}
-        if (!is_null($requesterID)) {
-            $queryBuilder->andWhere('e.requester.id=:val3')->setParameter('val3', $requesterID);
+        if (!is_null($requester)) {
+            $queryBuilder->andWhere('e.requester=:val3')->setParameter('val3', $requester);
         }
         if (!is_null($assigneeID)) {
             $queryBuilder->andWhere('e.assignee.id=:val4')->setParameter('val4', $assigneeID);
