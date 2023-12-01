@@ -27,8 +27,8 @@ class EvaluationRepository extends ServiceEntityRepository
     }
 
     public function getQB(
-        ?string $orderBy = 'created',
-        ?string $direction = 'desc',
+        ?string $orderBy = null,
+        ?string $direction = null,
         ?string $reqAdmin = null,
         ?string $phase = null,
         ?UserInterface $requester = null,
@@ -50,7 +50,10 @@ class EvaluationRepository extends ServiceEntityRepository
 				}
 				if (!is_null($orderBy) && !is_null($direction)) {
 						$queryBuilder->addOrderBy('e.'.$orderBy, $direction);
+				} else {
+						$queryBuilder->addOrderBy('e.updated', 'desc');
 				}
+
 				return $queryBuilder;
 		}
 

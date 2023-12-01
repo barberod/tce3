@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Evaluation;
 use App\Repository\EvaluationRepository;
 use App\Service\EvaluationOptionsService;
-use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
