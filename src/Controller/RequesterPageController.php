@@ -53,8 +53,8 @@ class RequesterPageController extends AbstractController
 
 				return $this->render('evaluation/table.html.twig', [
 					'context' => 'requester',
-					'page_title' => 'Evaluations',
-					'prepend' => 'Evaluations',
+					'page_title' => 'My Evaluations',
+					'prepend' => 'My Evaluations',
 					'pager' => $pagerfanta,
 				]);
 		}

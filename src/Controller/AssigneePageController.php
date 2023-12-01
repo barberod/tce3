@@ -48,7 +48,7 @@ class AssigneePageController extends AbstractController
 				// $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
 				// $direction = ($_GET['dir'] == 'asc') ? 'asc' : 'desc';
 
-				$queryBuilder = $evaluationRepository->getQB();
+				$queryBuilder = $evaluationRepository->getQB(assignee: $this->security->getUser());
 				$adapter = new QueryAdapter($queryBuilder);
 				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
 
@@ -67,10 +67,10 @@ class AssigneePageController extends AbstractController
 				// $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
 				// $direction = ($_GET['dir'] == 'asc') ? 'asc' : 'desc';
 
-				$queryBuilder = $evaluationRepository->getQB();
+				$queryBuilder = $evaluationRepository->getQB(assignee: $this->security->getUser());
 				$queryBuilder
-					->andWhere('e.assignee = :assignee')
-					->setParameter('assignee', $this->security->getUser());
+					->andWhere('e.phase = :phase')
+					->setParameter('phase', 'Department');
 				$adapter = new QueryAdapter($queryBuilder);
 				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
 
@@ -91,12 +91,10 @@ class AssigneePageController extends AbstractController
 				// $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
 				// $direction = ($_GET['dir'] == 'asc') ? 'asc' : 'desc';
 
-				$queryBuilder = $evaluationRepository->getQB();
+				$queryBuilder = $evaluationRepository->getQB(assignee: $this->security->getUser());
 				$queryBuilder
 					->andWhere('e.phase != :phase')
-					->andWhere('e.assignee = :assignee')
-					->setParameter('phase', 'Department')
-					->setParameter('assignee', $this->getUser());
+					->setParameter('phase', 'Department');
 				$adapter = new QueryAdapter($queryBuilder);
 				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
 

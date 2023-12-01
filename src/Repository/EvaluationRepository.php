@@ -31,23 +31,25 @@ class EvaluationRepository extends ServiceEntityRepository
         string $reqAdmin = null,
         string $phase = null,
         User $requester = null,
-        int $assigneeID = null
+        User $assignee = null
     ): QueryBuilder
     {
         $queryBuilder = $this->createQueryBuilder('e');
         $queryBuilder->andWhere('e.status = :one')
-        ->setParameter('one', 1)
-        ->orderBy('e.'.$orderBy, $direction);
+        ->setParameter('one', 1);
 
         if (!is_null($reqAdmin)) {$queryBuilder->andWhere('e.reqAdmin=:val1')->setParameter('val1', $reqAdmin);}
         if (!is_null($phase)) {$queryBuilder->andWhere('e.phase=:val2')->setParameter('val2', $phase);}
         if (!is_null($requester)) {
-            $queryBuilder->andWhere('e.requester=:val3')->setParameter('val3', $requester);
+						$queryBuilder->leftJoin('e.requester', 'r');
+						$queryBuilder->andWhere('r.username=:val3')->setParameter('val3', $requester->getUsername());
         }
-        if (!is_null($assigneeID)) {
-            $queryBuilder->andWhere('e.assignee.id=:val4')->setParameter('val4', $assigneeID);
-        }
+        if (!is_null($assignee)) {
+						$queryBuilder->leftJoin('e.assignee', 'a');
+						$queryBuilder->andWhere('a.username=:val4')->setParameter('val4', $assignee->getUsername());
+				}
 
+				$queryBuilder->orderBy('e.'.$orderBy, $direction);
         return $queryBuilder;
     }
 
