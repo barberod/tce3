@@ -7,6 +7,7 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use EcPhp\CasBundle\Security\Core\User\CasUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 
@@ -30,23 +31,22 @@ class EvaluationRepository extends ServiceEntityRepository
         string $direction = 'desc', 
         string $reqAdmin = null,
         string $phase = null,
-        User $requester = null,
-        User $assignee = null
+        UserInterface $requester = null,
+        UserInterface $assignee = null
     ): QueryBuilder
     {
         $queryBuilder = $this->createQueryBuilder('e');
-        $queryBuilder->andWhere('e.status = :one')
-        ->setParameter('one', 1);
+        $queryBuilder->andWhere('e.status = :one')->setParameter('one', 1);
 
         if (!is_null($reqAdmin)) {$queryBuilder->andWhere('e.reqAdmin=:val1')->setParameter('val1', $reqAdmin);}
         if (!is_null($phase)) {$queryBuilder->andWhere('e.phase=:val2')->setParameter('val2', $phase);}
         if (!is_null($requester)) {
 						$queryBuilder->leftJoin('e.requester', 'r');
-						$queryBuilder->andWhere('r.username=:val3')->setParameter('val3', $requester->getUsername());
+						$queryBuilder->andWhere('r.username=:val3')->setParameter('val3', $requester->getUserIdentifier());
         }
         if (!is_null($assignee)) {
 						$queryBuilder->leftJoin('e.assignee', 'a');
-						$queryBuilder->andWhere('a.username=:val4')->setParameter('val4', $assignee->getUsername());
+						$queryBuilder->andWhere('a.username=:val4')->setParameter('val4', $assignee->getUserIdentifier());
 				}
 
 				$queryBuilder->orderBy('e.'.$orderBy, $direction);
