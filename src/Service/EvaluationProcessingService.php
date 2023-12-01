@@ -189,7 +189,6 @@ class EvaluationProcessingService
 
 				$note->setBody($formData['noteBody']);
 				$note->setCreated(new \DateTime());
-
 				if ($formData['visibleNote'] == 'Yes') {
 						$note->setVisibleToRequester(1);
 				} else {
@@ -198,6 +197,11 @@ class EvaluationProcessingService
 
 				// Persist the entity
 				$this->entityManager->persist($note);
+				$this->entityManager->flush(); // Save changes to the database
+
+				// Indicate the evaluation was updated
+				$evaluation->setUpdated(new \DateTime());
+				$this->entityManager->persist($evaluation);
 				$this->entityManager->flush(); // Save changes to the database
 		}
 
@@ -231,6 +235,11 @@ class EvaluationProcessingService
 				// Persist the entity
 				$this->entityManager->persist($note);
 				$this->entityManager->flush(); // Save changes to the database
+
+				// Indicate the evaluation was updated
+				$evaluation->setUpdated(new \DateTime());
+				$this->entityManager->persist($evaluation);
+				$this->entityManager->flush(); // Save changes to the database
 		}
 
 		/**
@@ -249,6 +258,7 @@ class EvaluationProcessingService
 					->findOneBy(['username' => $formData['assignee']]);
 				$evaluation->setAssignee($assignee);
 				$evaluation->setPhase('Department');
+				$evaluation->setUpdated(new \DateTime());
 
 				// Persist the entity
 				$this->entityManager->persist($evaluation);
@@ -394,6 +404,7 @@ class EvaluationProcessingService
 				}
 
 				$evaluation->setPhase('Registrar 2');
+				$evaluation->setUpdated(new \DateTime());
 
 				// Persist the entity
 				$this->entityManager->persist($evaluation);
@@ -532,6 +543,7 @@ class EvaluationProcessingService
 				$evaluation->setTranscriptOnHand($formData['transcriptOnHand']);
 
 				$evaluation->setPhase('Complete');
+				$evaluation->setUpdated(new \DateTime());
 
 				// Persist the entity
 				$this->entityManager->persist($evaluation);
@@ -717,6 +729,7 @@ class EvaluationProcessingService
 				}
 
 				$evaluation->setPhase('Registrar 2');
+				$evaluation->setUpdated(new \DateTime());
 				$evaluation->setTagSpotArticulated(1);
 
 				// Persist the entity

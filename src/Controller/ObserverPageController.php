@@ -16,14 +16,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('observer')]
 class ObserverPageController extends AbstractController
 {
-		private EntityManagerInterface $entityManager;
-
-		public function __construct(
-			EntityManagerInterface $entityManager
-		) {
-				$this->entityManager = $entityManager;
-		}
-
 
 		#[Route('/secure/observer', name: 'observer_home')]
 		public function observer(): Response
