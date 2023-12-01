@@ -39,10 +39,14 @@ class ObserverPageController extends AbstractController
 		public function observerEvaluationTable(EvaluationRepository $evaluationRepository): Response
 		{
 				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
-				// $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
-				// $direction = ($_GET['dir'] == 'asc') ? 'asc' : 'desc';
+				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
+				$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
 
-				$queryBuilder = $evaluationRepository->getQB();
+				$queryBuilder = $evaluationRepository->getQB(
+					orderBy: $orderBy,
+					direction: $direction,
+				);
 				$adapter = new QueryAdapter($queryBuilder);
 				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
 
@@ -51,6 +55,9 @@ class ObserverPageController extends AbstractController
 					'page_title' => 'Evaluations',
 					'prepend' => 'Evaluations',
 					'pager' => $pagerfanta,
+					'orderby' => $orderBy,
+					'direction' => $direction,
+					'direction_new' => $newDirection,
 				]);
 		}
 
@@ -59,13 +66,15 @@ class ObserverPageController extends AbstractController
 		$evaluationRepository): Response
 		{
 				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
-				// $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
-				// $direction = ($_GET['dir'] == 'asc') ? 'asc' : 'desc';
+				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
+				$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
 
-				$queryBuilder = $evaluationRepository->getQB();
-				$queryBuilder
-					->andWhere('e.phase = :phase')
-					->setParameter('phase', 'Student');
+				$queryBuilder = $evaluationRepository->getQB(
+					orderBy: $orderBy,
+					direction: $direction,
+					phase: 'Student'
+				);
 				$adapter = new QueryAdapter($queryBuilder);
 				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
 
@@ -74,6 +83,9 @@ class ObserverPageController extends AbstractController
 					'page_title' => 'Evaluations',
 					'prepend' => 'Evaluations',
 					'pager' => $pagerfanta,
+					'orderby' => $orderBy,
+					'direction' => $direction,
+					'direction_new' => $newDirection,
 					'phase' => 'Student',
 				]);
 		}
@@ -83,13 +95,15 @@ class ObserverPageController extends AbstractController
 		$evaluationRepository): Response
 		{
 				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
-				// $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
-				// $direction = ($_GET['dir'] == 'asc') ? 'asc' : 'desc';
+				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
+				$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
 
-				$queryBuilder = $evaluationRepository->getQB();
-				$queryBuilder
-					->andWhere('e.phase = :phase')
-					->setParameter('phase', 'Registrar 1');
+				$queryBuilder = $evaluationRepository->getQB(
+					orderBy: $orderBy,
+					direction: $direction,
+					phase: 'Registrar 1'
+				);
 				$adapter = new QueryAdapter($queryBuilder);
 				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
 
@@ -98,6 +112,9 @@ class ObserverPageController extends AbstractController
 					'page_title' => 'Evaluations',
 					'prepend' => 'Evaluations',
 					'pager' => $pagerfanta,
+					'orderby' => $orderBy,
+					'direction' => $direction,
+					'direction_new' => $newDirection,
 					'phase' => 'Registrar 1',
 				]);
 		}
@@ -107,13 +124,15 @@ class ObserverPageController extends AbstractController
 		$evaluationRepository): Response
 		{
 				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
-				// $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
-				// $direction = ($_GET['dir'] == 'asc') ? 'asc' : 'desc';
+				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
+				$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
 
-				$queryBuilder = $evaluationRepository->getQB();
-				$queryBuilder
-					->andWhere('e.phase = :phase')
-					->setParameter('phase', 'Department');
+				$queryBuilder = $evaluationRepository->getQB(
+					orderBy: $orderBy,
+					direction: $direction,
+					phase: 'Department'
+				);
 				$adapter = new QueryAdapter($queryBuilder);
 				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
 
@@ -122,6 +141,9 @@ class ObserverPageController extends AbstractController
 					'page_title' => 'Evaluations',
 					'prepend' => 'Evaluations',
 					'pager' => $pagerfanta,
+					'orderby' => $orderBy,
+					'direction' => $direction,
+					'direction_new' => $newDirection,
 					'phase' => 'Department',
 				]);
 		}
@@ -131,13 +153,15 @@ class ObserverPageController extends AbstractController
 		$evaluationRepository): Response
 		{
 				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
-				// $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
-				// $direction = ($_GET['dir'] == 'asc') ? 'asc' : 'desc';
+				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
+				$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
 
-				$queryBuilder = $evaluationRepository->getQB();
-				$queryBuilder
-					->andWhere('e.phase = :phase')
-					->setParameter('phase', 'Registrar 2');
+				$queryBuilder = $evaluationRepository->getQB(
+					orderBy: $orderBy,
+					direction: $direction,
+					phase: 'Registrar 2'
+				);
 				$adapter = new QueryAdapter($queryBuilder);
 				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
 
@@ -146,6 +170,9 @@ class ObserverPageController extends AbstractController
 					'page_title' => 'Evaluations',
 					'prepend' => 'Evaluations',
 					'pager' => $pagerfanta,
+					'orderby' => $orderBy,
+					'direction' => $direction,
+					'direction_new' => $newDirection,
 					'phase' => 'Registrar 2',
 				]);
 		}
@@ -155,13 +182,15 @@ class ObserverPageController extends AbstractController
 		$evaluationRepository): Response
 		{
 				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
-				// $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
-				// $direction = ($_GET['dir'] == 'asc') ? 'asc' : 'desc';
+				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
+				$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
 
-				$queryBuilder = $evaluationRepository->getQB();
-				$queryBuilder
-					->andWhere('e.phase = :phase')
-					->setParameter('phase', 'Hold');
+				$queryBuilder = $evaluationRepository->getQB(
+					orderBy: $orderBy,
+					direction: $direction,
+					phase: 'Hold'
+				);
 				$adapter = new QueryAdapter($queryBuilder);
 				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
 
@@ -170,6 +199,9 @@ class ObserverPageController extends AbstractController
 					'page_title' => 'Evaluations',
 					'prepend' => 'Evaluations',
 					'pager' => $pagerfanta,
+					'orderby' => $orderBy,
+					'direction' => $direction,
+					'direction_new' => $newDirection,
 					'phase' => 'Hold',
 				]);
 		}
@@ -179,13 +211,15 @@ class ObserverPageController extends AbstractController
 		$evaluationRepository): Response
 		{
 				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
-				// $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
-				// $direction = ($_GET['dir'] == 'asc') ? 'asc' : 'desc';
+				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
+				$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
 
-				$queryBuilder = $evaluationRepository->getQB();
-				$queryBuilder
-					->andWhere('e.phase = :phase')
-					->setParameter('phase', 'Complete');
+				$queryBuilder = $evaluationRepository->getQB(
+					orderBy: $orderBy,
+					direction: $direction,
+					phase: 'Complete'
+				);
 				$adapter = new QueryAdapter($queryBuilder);
 				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
 
@@ -194,6 +228,9 @@ class ObserverPageController extends AbstractController
 					'page_title' => 'Evaluations',
 					'prepend' => 'Evaluations',
 					'pager' => $pagerfanta,
+					'orderby' => $orderBy,
+					'direction' => $direction,
+					'direction_new' => $newDirection,
 					'phase' => 'Complete',
 				]);
 		}
