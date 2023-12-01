@@ -473,18 +473,26 @@ class CoordinatorPageController extends AbstractController
 
 		#[Route('/secure/coordinator/evaluation/{id}/forward', name: 'coordinator_evaluation_forward_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+forward', 'evaluation' )]
-		public function coordinatorEvaluationForwardForm(Evaluation $evaluation):
+		public function coordinatorEvaluationForwardForm(Request $request, Evaluation $evaluation):
 		Response
 		{
-				return $this->render('evaluation/page.html.twig', [
+				$form = $this->createForm(EvaluationAssignType::class);
+				$form->handleRequest($request);
+				if ($form->isSubmitted()) {
+						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+						$evaluationProcessingService->forwardEvaluation($evaluation, $form->getData());
+						return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+				}
+
+				return $this->render('evaluation/form/assign.html.twig', [
 					'context' => 'coordinator',
 					'page_title' => 'Evaluation #'.$evaluation->getID(),
-					'prepend' => 'Forward to a Colleague | Evaluation #'
-						.$evaluation->getID(),
+					'prepend' => 'Forward to a Colleague | Evaluation #'.$evaluation->getID(),
 					'evaluation' => $evaluation,
 					'id' => $evaluation->getID(),
 					'uuid' => $evaluation->getID(),
-					'verb' => 'forward'
+					'verb' => 'forward',
+					'form' => $form->createView(),
 				]);
 		}
 

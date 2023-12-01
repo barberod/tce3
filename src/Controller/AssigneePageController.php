@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Evaluation;
+use App\Form\EvaluationAssignType;
 use App\Form\EvaluationEvaluateType;
 use App\Repository\EvaluationRepository;
 use App\Service\EvaluationOptionsService;
@@ -195,18 +196,26 @@ class AssigneePageController extends AbstractController
 
 		#[Route('/secure/assignee/evaluation/{id}/forward', name: 'assignee_evaluation_forward_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'assignee+forward', 'evaluation' )]
-		public function assigneeEvaluationForwardForm(Evaluation $evaluation):
+		public function assigneeEvaluationForwardForm(Request $request, Evaluation $evaluation):
 		Response
 		{
-				return $this->render('evaluation/page.html.twig', [
+				$form = $this->createForm(EvaluationAssignType::class);
+				$form->handleRequest($request);
+				if ($form->isSubmitted()) {
+						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+						$evaluationProcessingService->forwardEvaluation($evaluation, $form->getData());
+						return $this->redirectToRoute('assignee_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+				}
+
+				return $this->render('evaluation/form/assign.html.twig', [
 					'context' => 'assignee',
 					'page_title' => 'Evaluation #'.$evaluation->getID(),
-					'prepend' => 'Forward to a Colleague | Evaluation #'
-						.$evaluation->getID(),
+					'prepend' => 'Forward to a Colleague | Evaluation #'.$evaluation->getID(),
 					'evaluation' => $evaluation,
 					'id' => $evaluation->getID(),
 					'uuid' => $evaluation->getID(),
-					'verb' => 'forward'
+					'verb' => 'forward',
+					'form' => $form->createView(),
 				]);
 		}
 
