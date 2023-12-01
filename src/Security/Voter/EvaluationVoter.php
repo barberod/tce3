@@ -227,7 +227,7 @@ class EvaluationVoter extends Voter
 						return true;
 				}
 				// Assignee can evaluate only evaluations assigned to them with phase "Department"
-				if ($context == self::ASSIGNEE && ($evaluation->getPhase() == 'Department') && ($evaluation->getAssignee() === $user)) {
+				if ($context == self::ASSIGNEE && ($evaluation->getPhase() == 'Department') && ($evaluation->getAssignee()->getUserIdentifier() === $user->getUserIdentifier())) {
 						return true;
 				}
 				return false;
@@ -247,7 +247,7 @@ class EvaluationVoter extends Voter
 
 		private function canForward(Evaluation $evaluation, UserInterface $user, string $context): bool {
 				// Assignee can forward only evaluations assigned to them with phase "Department"
-				if ($context == self::ASSIGNEE && ($evaluation->getPhase() == 'Department') && ($evaluation->getAssignee() === $user)) {
+				if ($context == self::ASSIGNEE && ($evaluation->getPhase() == 'Department') && ($evaluation->getAssignee()->getUserIdentifier() === $user->getUserIdentifier())) {
 						return true;
 				}
 				return false;
@@ -327,7 +327,7 @@ class EvaluationVoter extends Voter
 
 		private function canPass(Evaluation $evaluation, UserInterface $user, string $context): bool {
 				// Assignee can pass only evaluations assigned to them with phase "Department"
-				if ($context == self::ASSIGNEE && ($evaluation->getPhase() == 'Department') && ($evaluation->getAssignee() === $user)) {
+				if ($context == self::ASSIGNEE && ($evaluation->getPhase() == 'Department') && ($evaluation->getAssignee()->getUserIdentifier() === $user->getUserIdentifier())) {
 						return true;
 				}
 				return false;
