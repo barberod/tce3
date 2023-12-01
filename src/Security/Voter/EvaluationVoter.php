@@ -143,7 +143,7 @@ class EvaluationVoter extends Voter
 						return true;
 				}
 				// Requester can read only their own evaluations
-				if ($context == self::REQUESTER && ($evaluation->getRequester() === $user)) {
+				if ($context == self::REQUESTER && ($evaluation->getRequester()->getUserIdentifier() === $user->getUserIdentifier())) {
 						return true;
 				}
 				return false;
