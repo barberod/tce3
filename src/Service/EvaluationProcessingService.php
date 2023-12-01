@@ -728,6 +728,14 @@ class EvaluationProcessingService
 						$policyText .= ' Not policy.';
 				}
 
+				if ($this->security->getUser() instanceof User) {
+						$evaluation->setAssignee($this->security->getUser());
+				} elseif ($this->security->getUser() instanceof CasUser) {
+						$userAtHand = $this->entityManager->getRepository(User::class)
+							->findOneBy(['username' => $this->security->getUser()->getUserIdentifier()]);
+						$evaluation->setAssignee($userAtHand);
+				}
+
 				$evaluation->setPhase('Registrar 2');
 				$evaluation->setUpdated(new \DateTime());
 				$evaluation->setTagSpotArticulated(1);
