@@ -84,12 +84,12 @@
                                 <div class="col-8 col-md-6 col-lg-4 col-xl-3">
                                     <div class="input-group mb-3">
                                         <label for="reqAdmSelector" class="form-label fw-bold me-3 pt-2">Req Adm:</label>
-                                        <select class="form-select" id="regAdmSelector" aria-label="Filter by required for admission">
+                                        <select class="form-select" id="reqAdmSelector" aria-label="Filter by required for admission">
                                             <option selected>-Any-</option>
-                                            <option value="Yes">Yes</option>
-                                            <option value="No">No</option>
+                                            <option value="yes"{% if reqadm is defined %}{% if reqadm == 'Yes' %} selected{% endif %}{% endif %}>Yes</option>
+                                            <option value="no"{% if reqadm is defined %}{% if reqadm == 'No' %} selected{% endif %}{% endif %}>No</option>
                                         </select>
-                                        <button class="btn btn-outline-primary" type="button" id="filter-button">Filter</button>
+                                        <button class="btn btn-outline-primary" type="button" id="reqAdmBtn">Filter</button>
                                     </div> 
                                 </div>
                             </form>
@@ -97,11 +97,21 @@
                             {% set created_toggler = '' %}
                             {% if direction_new is defined %}
                                 {% set created_toggler = '?orderby=created&direction=' ~ direction_new %}
+                                {% if reqadm is defined %}
+                                    {% if reqadm == 'Yes' or reqadm == 'No' %}
+                                        {% set created_toggler = created_toggler ~ '&reqadm=' ~ reqadm|lower %}
+                                    {% endif %}
+                                {% endif %}
                             {% endif %}
 
                             {% set updated_toggler = '' %}
                             {% if direction_new is defined %}
                                 {% set updated_toggler = '?orderby=updated&direction=' ~ direction_new %}
+                                {% if reqadm is defined %}
+                                    {% if reqadm == 'Yes' or reqadm == 'No' %}
+                                        {% set updated_toggler = updated_toggler ~ '&reqadm=' ~ reqadm|lower %}
+                                    {% endif %}
+                                {% endif %}
                             {% endif %}
 
                             {% set created_caret = '' %}
@@ -283,5 +293,5 @@
 {% endblock %}
 
 {% block scripts %}
-<!-- no scripts -->
+    <script type="text/javascript" src="{{ asset('js/evaluation/table.js') }}"></script>
 {% endblock %}

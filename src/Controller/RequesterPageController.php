@@ -50,9 +50,11 @@ class RequesterPageController extends AbstractController
 				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
 				$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
 				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
+				$reqAdm = (isset($_GET['reqadm']) && (in_array($_GET['reqadm'], ['yes', 'no']))) ? ucfirst($_GET['reqadm']) : null;
 				$queryBuilder = $evaluationRepository->getQB(
 					orderBy: $orderBy,
 					direction: $direction,
+					reqAdmin: $reqAdm,
 					requester: $this->security->getUser()
 				);
 				$adapter = new QueryAdapter($queryBuilder);
@@ -66,6 +68,7 @@ class RequesterPageController extends AbstractController
 					'orderby' => $orderBy,
 					'direction' => $direction,
 					'direction_new' => $newDirection,
+					'reqadm' => $reqAdm,
 				]);
 		}
 

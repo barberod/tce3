@@ -48,8 +48,14 @@ class AssigneePageController extends AbstractController
 				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
 				$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
 				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
+				$reqAdm = (isset($_GET['reqadm']) && (in_array($_GET['reqadm'], ['yes', 'no']))) ? ucfirst($_GET['reqadm']) : null;
 
-				$queryBuilder = $evaluationRepository->getQB(assignee: $this->security->getUser());
+				$queryBuilder = $evaluationRepository->getQB(
+					orderBy: $orderBy,
+					direction: $direction,
+					reqAdmin: $reqAdm,
+					assignee: $this->security->getUser()
+				);
 				$adapter = new QueryAdapter($queryBuilder);
 				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
 
@@ -58,6 +64,10 @@ class AssigneePageController extends AbstractController
 					'page_title' => 'Evaluations',
 					'prepend' => 'Evaluations',
 					'pager' => $pagerfanta,
+					'orderby' => $orderBy,
+					'direction' => $direction,
+					'direction_new' => $newDirection,
+					'reqadm' => $reqAdm,
 				]);
 		}
 
@@ -68,10 +78,12 @@ class AssigneePageController extends AbstractController
 				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
 				$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
 				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
+				$reqAdm = (isset($_GET['reqadm']) && (in_array($_GET['reqadm'], ['yes', 'no']))) ? ucfirst($_GET['reqadm']) : null;
 
 				$queryBuilder = $evaluationRepository->getQB(
 					orderBy: $orderBy,
 					direction: $direction,
+					reqAdmin: $reqAdm,
 					phase: 'Department',
 					assignee: $this->security->getUser()
 				);
@@ -86,6 +98,7 @@ class AssigneePageController extends AbstractController
 					'orderby' => $orderBy,
 					'direction' => $direction,
 					'direction_new' => $newDirection,
+					'reqadm' => $reqAdm,
 					'assignee_flag' => 'Needs Attention',
 				]);
 		}
@@ -98,10 +111,12 @@ class AssigneePageController extends AbstractController
 				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
 				$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
 				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
+				$reqAdm = (isset($_GET['reqadm']) && (in_array($_GET['reqadm'], ['yes', 'no']))) ? ucfirst($_GET['reqadm']) : null;
 
 				$queryBuilder = $evaluationRepository->getQB(
 					orderBy: $orderBy,
 					direction: $direction,
+					reqAdmin: $reqAdm,
 					assignee: $this->security->getUser()
 				);
 				$queryBuilder->andWhere('e.phase != :phase')->setParameter('phase', 'Department');
@@ -116,6 +131,7 @@ class AssigneePageController extends AbstractController
 					'orderby' => $orderBy,
 					'direction' => $direction,
 					'direction_new' => $newDirection,
+					'reqadm' => $reqAdm,
 					'assignee_flag' => 'History',
 				]);
 		}
