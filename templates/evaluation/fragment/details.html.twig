@@ -152,6 +152,30 @@
             </div>
             {% endif %}
 
+            {% set holdsExist = false %}
+            {% if evaluation.holdForRequesterAdmit == 1 %}{% set holdsExist = true %}{% endif %}
+            {% if evaluation.holdForCourseInput == 1 %}{% set holdsExist = true %}{% endif %}
+            {% if evaluation.holdForTranscript == 1 %}{% set holdsExist = true %}{% endif %}
+
+            {% if holdsExist == true and context != 'requester' %}
+            <div class="col-12 d-flex flex-column mb-4">
+                <label for="recordInput12" class="form-label mb-2">Holds</label>
+                <div class="font-monospace" id="recordInput12">
+                    {% if evaluation.holdForRequesterAdmit == 1 %}
+                        <i class="fa-solid fa-lock fa-fw me-2 text-muted"></i>Hold for requester admission<br>
+                    {% endif %}
+
+                    {% if evaluation.holdForCourseInput == 1 %}
+                        <i class="fa-solid fa-lock fa-fw me-2 text-muted"></i>Hold for course input<br>
+                    {% endif %}
+
+                    {% if evaluation.holdForTranscript == 1 %}
+                        <i class="fa-solid fa-lock fa-fw me-2 text-muted"></i>Hold for transcript<br>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
             {% set tagsExist = false %}
             {% if evaluation.tagSpotArticulated == 1 %}{% set tagsExist = true %}{% endif %}
             {% if evaluation.tagR1ToStudent == 1 %}{% set tagsExist = true %}{% endif %}

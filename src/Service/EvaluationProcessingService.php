@@ -681,7 +681,101 @@ class EvaluationProcessingService
 
 		/**
 		 * From-complete-to-hold
+		 *
+		 * @param Evaluation $evaluation
+		 * @param array $formData
 		 */
+		public function fromCompleteToHoldEvaluation(Evaluation $evaluation, array $formData): void
+		{
+				if ($formData['holdForRequesterAdmit'] == 'Yes') {
+						$evaluation->setHoldForRequesterAdmit(1);
+				} else {
+						$evaluation->setHoldForRequesterAdmit(0);
+				}
+
+				if ($formData['holdForCourseInput'] == 'Yes') {
+						$evaluation->setHoldForCourseInput(1);
+				} else {
+						$evaluation->setHoldForCourseInput(0);
+				}
+
+				if ($formData['holdForTranscript'] == 'Yes') {
+						$evaluation->setHoldForTranscript(1);
+				} else {
+						$evaluation->setHoldForTranscript(0);
+				}
+
+				$evaluation->setPhase('Hold');
+				$evaluation->setUpdated(new \DateTime());
+
+				// Persist the entity
+				$this->entityManager->persist($evaluation);
+				$this->entityManager->flush(); // Save changes to the database
+
+				// Create a note
+				if ($formData['addNote'] == 'Yes') {
+						$note = new Note();
+						$note->setEvaluation($evaluation);
+
+						if ($this->security->getUser() instanceof User) {
+								$note->setAuthor($this->security->getUser());
+						} elseif ($this->security->getUser() instanceof CasUser) {
+								$userAtHand = $this->entityManager->getRepository(User::class)
+									->findOneBy(['username' => $this->security->getUser()->getUserIdentifier()]);
+								$note->setAuthor($userAtHand);
+						} else {
+								$note->setAuthor(null);
+						}
+
+						$note->setBody($formData['noteBody']);
+						$note->setCreated(new \DateTime());
+
+						if ($formData['visibleNote'] == 'Yes') {
+								$note->setVisibleToRequester(1);
+						} else {
+								$note->setVisibleToRequester(0);
+						}
+
+						// Persist the entity
+						$this->entityManager->persist($note);
+						$this->entityManager->flush(); // Save changes to the database
+				}
+
+				// Create a trail
+				$trail = new Trail();
+				$trail->setEvaluation($evaluation);
+
+				$coordinator = $this->security->getUser();
+				$coordinatorText = '';
+				if ($coordinator instanceof User) {
+						$coordinatorText .= $this->security->getUser()->attributes()['profile']['dn'];
+						$coordinatorText .= ' ('.$this->security->getUser()->attributes()['profile']['un'].')';
+				} elseif ($coordinator instanceof CasUser) {
+						$coordinatorText .= $this->security->getUser()->getAttributes()['profile']['dn'];
+						$coordinatorText .= ' ('.$this->security->getUser()->getAttributes()['profile']['un'].')';
+				} else {
+						$coordinatorText .= 'Unknown';
+				}
+
+				$holdText = '';
+				if ($formData['holdForRequesterAdmit'] == "Yes") {
+						$holdText .= 'Hold for requester admission.';
+				}
+				if ($formData['holdForCourseInput'] == "Yes") {
+						$holdText .= 'Hold for course input.';
+				}
+				if ($formData['holdForTranscript'] == "Yes") {
+						$holdText .= 'Hold for transcript.';
+				}
+
+				$trail->setBody('Put on hold by '.$coordinatorText.'. '.$holdText.' Phase set to Hold.');
+				$trail->setBodyAnon('Put on hold by coordinator.');
+				$trail->setCreated(new \DateTime());
+
+				// Persist the entity
+				$this->entityManager->persist($trail);
+				$this->entityManager->flush(); // Save changes to the database
+		}
 
 		/**
 		 * From-dept-to-r1
