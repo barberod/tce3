@@ -45,8 +45,9 @@ class AssigneePageController extends AbstractController
 		public function assigneeEvaluationTable(EvaluationRepository $evaluationRepository): Response
 		{
 				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
-				// $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
-				// $direction = ($_GET['dir'] == 'asc') ? 'asc' : 'desc';
+				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
+				$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
 
 				$queryBuilder = $evaluationRepository->getQB(assignee: $this->security->getUser());
 				$adapter = new QueryAdapter($queryBuilder);
@@ -64,13 +65,16 @@ class AssigneePageController extends AbstractController
 		public function assigneeEvaluationTableDept(EvaluationRepository $evaluationRepository): Response
 		{
 				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
-				// $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
-				// $direction = ($_GET['dir'] == 'asc') ? 'asc' : 'desc';
+				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
+				$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
 
-				$queryBuilder = $evaluationRepository->getQB(assignee: $this->security->getUser());
-				$queryBuilder
-					->andWhere('e.phase = :phase')
-					->setParameter('phase', 'Department');
+				$queryBuilder = $evaluationRepository->getQB(
+					orderBy: $orderBy,
+					direction: $direction,
+					phase: 'Department',
+					assignee: $this->security->getUser()
+				);
 				$adapter = new QueryAdapter($queryBuilder);
 				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
 
@@ -79,6 +83,9 @@ class AssigneePageController extends AbstractController
 					'page_title' => 'Needs Attention',
 					'prepend' => 'Evaluations',
 					'pager' => $pagerfanta,
+					'orderby' => $orderBy,
+					'direction' => $direction,
+					'direction_new' => $newDirection,
 					'assignee_flag' => 'Needs Attention',
 				]);
 		}
@@ -88,13 +95,16 @@ class AssigneePageController extends AbstractController
 		$evaluationRepository): Response
 		{
 				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
-				// $orderby = ($_GET['by'] == 'updated') ? 'updated' : 'created';
-				// $direction = ($_GET['dir'] == 'asc') ? 'asc' : 'desc';
+				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
+				$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
 
-				$queryBuilder = $evaluationRepository->getQB(assignee: $this->security->getUser());
-				$queryBuilder
-					->andWhere('e.phase != :phase')
-					->setParameter('phase', 'Department');
+				$queryBuilder = $evaluationRepository->getQB(
+					orderBy: $orderBy,
+					direction: $direction,
+					assignee: $this->security->getUser()
+				);
+				$queryBuilder->andWhere('e.phase != :phase')->setParameter('phase', 'Department');
 				$adapter = new QueryAdapter($queryBuilder);
 				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
 
@@ -103,6 +113,9 @@ class AssigneePageController extends AbstractController
 					'page_title' => 'Evaluation History',
 					'prepend' => 'Evaluations',
 					'pager' => $pagerfanta,
+					'orderby' => $orderBy,
+					'direction' => $direction,
+					'direction_new' => $newDirection,
 					'assignee_flag' => 'History',
 				]);
 		}

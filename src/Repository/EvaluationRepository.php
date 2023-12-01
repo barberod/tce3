@@ -27,12 +27,12 @@ class EvaluationRepository extends ServiceEntityRepository
     }
 
     public function getQB(
-        string $orderBy = 'created', 
-        string $direction = 'desc', 
-        string $reqAdmin = null,
-        string $phase = null,
-        UserInterface $requester = null,
-        UserInterface $assignee = null
+        ?string $orderBy = 'created',
+        ?string $direction = 'desc',
+        ?string $reqAdmin = null,
+        ?string $phase = null,
+        ?UserInterface $requester = null,
+        ?UserInterface $assignee = null
     ): QueryBuilder
     {
         $queryBuilder = $this->createQueryBuilder('e');
@@ -48,10 +48,11 @@ class EvaluationRepository extends ServiceEntityRepository
 						$queryBuilder->leftJoin('e.assignee', 'a');
 						$queryBuilder->andWhere('a.username=:val4')->setParameter('val4', $assignee->getUserIdentifier());
 				}
-
-				$queryBuilder->orderBy('e.'.$orderBy, $direction);
-        return $queryBuilder;
-    }
+				if (!is_null($orderBy) && !is_null($direction)) {
+						$queryBuilder->addOrderBy('e.'.$orderBy, $direction);
+				}
+				return $queryBuilder;
+		}
 
     /**
      * @return Evaluation[] Returns an array of Evaluation objects

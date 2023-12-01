@@ -47,7 +47,14 @@ class RequesterPageController extends AbstractController
 		public function requesterEvaluationTable(EvaluationRepository $evaluationRepository): Response
 		{
 				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
-				$queryBuilder = $evaluationRepository->getQB(requester: $this->security->getUser());
+				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
+				$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
+				$queryBuilder = $evaluationRepository->getQB(
+					orderBy: $orderBy,
+					direction: $direction,
+					requester: $this->security->getUser()
+				);
 				$adapter = new QueryAdapter($queryBuilder);
 				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
 
@@ -56,6 +63,9 @@ class RequesterPageController extends AbstractController
 					'page_title' => 'My Evaluations',
 					'prepend' => 'My Evaluations',
 					'pager' => $pagerfanta,
+					'orderby' => $orderBy,
+					'direction' => $direction,
+					'direction_new' => $newDirection,
 				]);
 		}
 
