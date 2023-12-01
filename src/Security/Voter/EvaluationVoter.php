@@ -159,7 +159,7 @@ class EvaluationVoter extends Voter
 
 		private function canUpdateAsRequester(Evaluation $evaluation, UserInterface $user, string $context): bool {
 				// Requester can update only their own evaluations of phase "Student"
-				if ($context == self::REQUESTER && ($evaluation->getRequester() === $user) && ($evaluation->getPhase() == 'Student')) {
+				if ($context == self::REQUESTER && ($evaluation->getRequester()->getUserIdentifier() === $user->getUserIdentifier()) && ($evaluation->getPhase() == 'Student')) {
 						return true;
 				}
 				return false;
@@ -175,7 +175,7 @@ class EvaluationVoter extends Voter
 
 		private function canDeleteAsRequester(Evaluation $evaluation, UserInterface $user, string $context): bool {
 				// Requester can delete only their own evaluations of phase "Student"
-				if ($context == self::REQUESTER && ($evaluation->getRequester() === $user) && ($evaluation->getPhase() == 'Student')) {
+				if ($context == self::REQUESTER && ($evaluation->getRequester()->getUserIdentifier() === $user->getUserIdentifier()) && ($evaluation->getPhase() == 'Student')) {
 						return true;
 				}
 				return false;
@@ -191,7 +191,7 @@ class EvaluationVoter extends Voter
 
 		private function canAnnotateAsRequester(Evaluation $evaluation, UserInterface $user, string $context): bool {
 				// Requester can annotate-as-requester only their own evaluations
-				if ($context == self::REQUESTER && ($evaluation->getRequester() === $user)) {
+				if ($context == self::REQUESTER && ($evaluation->getRequester()->getUserIdentifier() === $user->getUserIdentifier())) {
 						return true;
 				}
 				return false;
@@ -207,7 +207,7 @@ class EvaluationVoter extends Voter
 
 		private function canAppendAsRequester(Evaluation $evaluation, UserInterface $user, string $context): bool {
 				// Requester can append-as-requester only their own evaluations
-				if ($context == self::REQUESTER && ($evaluation->getRequester() === $user)) {
+				if ($context == self::REQUESTER && ($evaluation->getRequester()->getUserIdentifier() === $user->getUserIdentifier())) {
 						return true;
 				}
 				return false;
@@ -343,7 +343,7 @@ class EvaluationVoter extends Voter
 
 		private function canResubmit(Evaluation $evaluation, UserInterface $user, string $context): bool {
 				// Requester can resubmit only their own evaluations of phase "Student"
-				if ($context == self::REQUESTER && ($evaluation->getRequester() === $user) && ($evaluation->getPhase() == 'Student')) {
+				if ($context == self::REQUESTER && ($evaluation->getRequester()->getUserIdentifier() === $user->getUserIdentifier()) && ($evaluation->getPhase() == 'Student')) {
 						return true;
 				}
 				return false;
