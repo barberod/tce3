@@ -1314,7 +1314,82 @@ class EvaluationProcessingService
 
 		/**
 		 * Reassign
+		 *
+		 * @param Evaluation $evaluation
+		 * @param array $formData
 		 */
+		public function reassignEvaluation(Evaluation $evaluation, array
+		$formData): void
+		{
+				$assignee = $this->entityManager->getRepository(User::class)
+					->findOneBy(['username' => $formData['assignee']]);
+				$evaluation->setAssignee($assignee);
+				$evaluation->setPhase('Department');
+				$evaluation->setUpdated(new \DateTime());
+				$evaluation->setTagReassigned(1);
+
+				// Persist the entity
+				$this->entityManager->persist($evaluation);
+				$this->entityManager->flush(); // Save changes to the database
+
+				// Create a note
+				if ($formData['addNote'] == 'Yes') {
+						$note = new Note();
+						$note->setEvaluation($evaluation);
+
+						if ($this->security->getUser() instanceof User) {
+								$note->setAuthor($this->security->getUser());
+						} elseif ($this->security->getUser() instanceof CasUser) {
+								$userAtHand = $this->entityManager->getRepository(User::class)
+									->findOneBy(['username' => $this->security->getUser()->getUserIdentifier()]);
+								$note->setAuthor($userAtHand);
+						} else {
+								$note->setAuthor(null);
+						}
+
+						$note->setBody($formData['noteBody']);
+						$note->setCreated(new \DateTime());
+
+						if ($formData['visibleNote'] == 'Yes') {
+								$note->setVisibleToRequester(1);
+						} else {
+								$note->setVisibleToRequester(0);
+						}
+
+						// Persist the entity
+						$this->entityManager->persist($note);
+						$this->entityManager->flush(); // Save changes to the database
+				}
+
+				// Create a trail
+				$trail = new Trail();
+				$trail->setEvaluation($evaluation);
+
+				$assigneeText = '';
+				$assigneeText .= $assignee->attributes()['profile']['dn'];
+				$assigneeText .= ' ('.$assignee->attributes()['profile']['un'].')';
+
+				$coordinator = $this->security->getUser();
+				$coordinatorText = '';
+				if ($coordinator instanceof User) {
+						$coordinatorText .= $this->security->getUser()->attributes()['profile']['dn'];
+						$coordinatorText .= ' ('.$this->security->getUser()->attributes()['profile']['un'].')';
+				} elseif ($coordinator instanceof CasUser) {
+						$coordinatorText .= $this->security->getUser()->getAttributes()['profile']['dn'];
+						$coordinatorText .= ' ('.$this->security->getUser()->getAttributes()['profile']['un'].')';
+				} else {
+						$coordinatorText .= 'Unknown';
+				}
+
+				$trail->setBody('Reassigned to '.$assigneeText.' by '.$coordinatorText
+					.'. Phase set to Department.');
+				$trail->setBodyAnon('Reassigned to department by coordinator.');
+				$trail->setCreated(new \DateTime());
+
+				// Persist the entity
+				$this->entityManager->persist($trail);
+				$this->entityManager->flush(); // Save changes to the database
+		}
 
 		/**
 		 * Resubmit
