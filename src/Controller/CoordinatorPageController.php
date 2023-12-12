@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Evaluation;
+use App\Entity\User;
 use App\Form\EvaluationAnnotateAsRequesterType;
 use App\Form\EvaluationAnnotateType;
 use App\Form\EvaluationAssignType;
@@ -10,11 +11,14 @@ use App\Form\EvaluationCreateType;
 use App\Form\EvaluationEvaluateType;
 use App\Form\EvaluationFinalizeType;
 use App\Form\EvaluationFromCompleteToHoldType;
+use App\Form\EvaluationFromDeptToR1Type;
 use App\Form\EvaluationHoldType;
 use App\Form\EvaluationSpotArticulateType;
 use App\Repository\EvaluationRepository;
+use App\Service\EvaluationFormDefaultsService;
 use App\Service\EvaluationOptionsService;
 use App\Service\EvaluationProcessingService;
+use App\Service\LookupService;
 use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
@@ -267,6 +271,51 @@ class CoordinatorPageController extends AbstractController
 					'direction_new' => $newDirection,
 					'reqadm' => $reqAdm,
 					'phase' => 'Complete',
+				]);
+		}
+
+		#[Route('/secure/coordinator/evaluation/requester', name: 'coordinator_evaluation_table_requester', methods: ['GET'])]
+		public function coordinatorEvaluationTableRequester(EvaluationRepository $evaluationRepository): Response
+		{
+				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
+				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
+				$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
+				$reqAdm = (isset($_GET['reqadm']) && (in_array($_GET['reqadm'], ['yes', 'no']))) ? ucfirst($_GET['reqadm']) : null;
+
+				$id = (isset($_GET['id']) && (is_numeric($_GET['id'])) && ($_GET['id'] > 900000000) && ($_GET['id'] < 999999999)) ? $_GET['id'] : null;
+				$requester = $this->entityManager->getRepository(User::class)->findOneBy(['orgID' => $id]);
+
+				$requesterInfo = null;
+				if (!is_null($requester)) {
+						$lookup = new LookupService($this->entityManager);
+						$requesterAttributes = $lookup->getRequesterAttributes($requester->getOrgID());
+						$formDefaultsService = new EvaluationFormDefaultsService($this->entityManager);
+						$requesterInfo = $formDefaultsService->styleRequesterAttributesAsText($requesterAttributes);
+
+						$queryBuilder = $evaluationRepository->getQB(
+							orderBy: $orderBy,
+							direction: $direction,
+							reqAdmin: $reqAdm,
+							requester: $requester
+						);
+				} else {
+						$queryBuilder = $evaluationRepository->getQB(bypass: true);
+				}
+
+				$adapter = new QueryAdapter($queryBuilder);
+				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
+
+				return $this->render('evaluation/table.html.twig', [
+					'context' => 'coordinator',
+					'page_title' => 'Evaluations',
+					'prepend' => 'Evaluations',
+					'pager' => $pagerfanta,
+					'orderby' => $orderBy,
+					'direction' => $direction,
+					'direction_new' => $newDirection,
+					'requester_info' => $requesterInfo,
+					'bonus_form' => 'id_lookup',
 				]);
 		}
 
@@ -524,16 +573,25 @@ class CoordinatorPageController extends AbstractController
 
 		#[Route('/secure/coordinator/evaluation/{id}/from-dept-to-r1', name: 'coordinator_evaluation_from_dept_to_r1_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+from_dept_to_r1', 'evaluation' )]
-		public function coordinatorEvaluationFromDeptToR1Form(Evaluation $evaluation):	Response
+		public function coordinatorEvaluationFromDeptToR1Form(Request $request, Evaluation $evaluation):	Response
 		{
-				return $this->render('evaluation/page.html.twig', [
+				$form = $this->createForm(EvaluationFromDeptToR1Type::class);
+				$form->handleRequest($request);
+				if ($form->isSubmitted()) {
+						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+						$evaluationProcessingService->fromDeptToR1Evaluation($evaluation, $form->getData());
+						return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+				}
+
+				return $this->render('evaluation/form/from-dept-to-r1.html.twig', [
 					'context' => 'coordinator',
 					'page_title' => 'Evaluation #'.$evaluation->getID(),
 					'prepend' => 'Send to R1 | Evaluation #'.$evaluation->getID(),
 					'evaluation' => $evaluation,
 					'id' => $evaluation->getID(),
 					'uuid' => $evaluation->getID(),
-					'verb' => 'from-dept-to-r1'
+					'verb' => 'from-dept-to-r1',
+					'form' => $form->createView(),
 				]);
 		}
 

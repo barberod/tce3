@@ -32,10 +32,17 @@ class EvaluationRepository extends ServiceEntityRepository
         ?string $reqAdmin = null,
         ?string $phase = null,
         ?UserInterface $requester = null,
-        ?UserInterface $assignee = null
+        ?UserInterface $assignee = null,
+				?bool $bypass = false
     ): QueryBuilder
     {
-        $queryBuilder = $this->createQueryBuilder('e');
+				$queryBuilder = $this->createQueryBuilder('e');
+
+				if ($bypass) {
+						$queryBuilder->andWhere('e.id = :zero')->setParameter('zero', 0);
+						return $queryBuilder;
+				}
+
         $queryBuilder->andWhere('e.status = :one')->setParameter('one', 1);
 
         if (!is_null($reqAdmin)) {$queryBuilder->andWhere('e.reqAdmin=:val1')->setParameter('val1', $reqAdmin);}
@@ -56,6 +63,7 @@ class EvaluationRepository extends ServiceEntityRepository
 
 				return $queryBuilder;
 		}
+
 
     /**
      * @return Evaluation[] Returns an array of Evaluation objects

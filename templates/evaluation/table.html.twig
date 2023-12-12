@@ -80,6 +80,22 @@
                                 </div>
                             </div>
 
+                            {% if bonus_form is defined %}
+                                {%  if bonus_form == 'id_lookup' %}
+                                    <div class="p-3">
+                                        <form class="row mb-3">
+                                            <div class="col-8 col-md-6 col-lg-4 col-xl-3">
+                                                <div class="input-group mb-3">
+                                                    <label for="idLookup" class="form-label fw-bold me-3 pt-2">GTID:</label>
+                                                    <input type="text" class="form-control" id="idLookup" placeholder="GTID" aria-label="GTID">
+                                                    <button class="btn btn-outline-primary" type="button" id="reqAdmBtn">Find</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+
                             <form class="row mb-3">
                                 <div class="col-8 col-md-6 col-lg-4 col-xl-3">
                                     <div class="input-group mb-3">
@@ -294,4 +310,9 @@
 
 {% block scripts %}
     <script type="text/javascript" src="{{ asset('js/evaluation/table.js') }}"></script>
+    {% if bonus_form is defined %}
+        {%  if bonus_form == 'id_lookup' %}
+            <script type="text/javascript" src="{{ asset('js/evaluation/id-lookup.js') }}"></script>
+        {% endif %}
+    {% endif %}
 {% endblock %}

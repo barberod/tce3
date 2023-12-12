@@ -32,8 +32,8 @@
                     {{ evaluation.requester.orgID }}<br>
                     {{ evaluation.requester.email }}<br>
                     {% if evaluation.requesterType is defined %}
-                        {{ evaluation.requesterType }}<br>
-                    {% else %}
+                        {{ evaluation.requesterType }}
+                    {% elseif evaluation.requester.category is defined %}
                         <span class="text-muted">{{ evaluation.requester.category }}</span>
                     {% endif %}
                 </div>
