@@ -1393,7 +1393,68 @@ class EvaluationProcessingService
 
 		/**
 		 * Resubmit
+		 *
+		 * @param Evaluation $evaluation
+		 * @param array $formData
 		 */
+		public function resubmitEvaluation(Evaluation $evaluation, array
+		$formData): void
+		{
+				$evaluation->setPhase('Registrar 1');
+				$evaluation->setUpdated(new \DateTime());
+
+				// Persist the entity
+				$this->entityManager->persist($evaluation);
+				$this->entityManager->flush(); // Save changes to the database
+
+				// Create a note
+				if ($formData['addNote'] == 'Yes') {
+						$note = new Note();
+						$note->setEvaluation($evaluation);
+
+						if ($this->security->getUser() instanceof User) {
+								$note->setAuthor($this->security->getUser());
+						} elseif ($this->security->getUser() instanceof CasUser) {
+								$userAtHand = $this->entityManager->getRepository(User::class)
+									->findOneBy(['username' => $this->security->getUser()->getUserIdentifier()]);
+								$note->setAuthor($userAtHand);
+						} else {
+								$note->setAuthor(null);
+						}
+
+						$note->setBody($formData['noteBody']);
+						$note->setCreated(new \DateTime());
+						$note->setVisibleToRequester(1);
+
+						// Persist the entity
+						$this->entityManager->persist($note);
+						$this->entityManager->flush(); // Save changes to the database
+				}
+
+				// Create a trail
+				$trail = new Trail();
+				$trail->setEvaluation($evaluation);
+
+				$requester = $this->security->getUser();
+				$requesterText = '';
+				if ($requester instanceof User) {
+						$requesterText .= $this->security->getUser()->attributes()['profile']['dn'];
+						$requesterText .= ' ('.$this->security->getUser()->attributes()['profile']['un'].')';
+				} elseif ($requester instanceof CasUser) {
+						$requesterText .= $this->security->getUser()->getAttributes()['profile']['dn'];
+						$requesterText .= ' ('.$this->security->getUser()->getAttributes()['profile']['un'].')';
+				} else {
+						$requesterText .= 'Unknown';
+				}
+
+				$trail->setBody('Resubmitted to Registrar 1 by '.$requesterText.'. Phase set to Registrar 1.');
+				$trail->setBodyAnon('Resubmitted to Registrar by requester.');
+				$trail->setCreated(new \DateTime());
+
+				// Persist the entity
+				$this->entityManager->persist($trail);
+				$this->entityManager->flush(); // Save changes to the database
+		}
 
 		/**
 		 * Spot-articulate

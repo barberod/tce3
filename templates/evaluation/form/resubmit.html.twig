@@ -1,31 +1,54 @@
-{% include "evaluation/fragment/resubmit-notice.html.twig" %}
+{% extends 'evaluation/page.html.twig' %}
 
-<!-- Form 06 (resubmit) -->
-<form id="form-06">
-    <div class="card border-primary mb-3">
-        <h2 class="card-header bg-primary border-primary h5">
-            Submit
-        </h2>
-        <div class="card-body">
-            <div id="limitedNoteGrp" class="mb-5">
-                <div class="mb-4">
-                    <label for="noteYesOrNo" class="form-label">Add a note?</label>
-                    <select class="form-select" id="noteYesOrNo" name="noteYesOrNo">
-                        <option value="Yes">Yes</option>
-                        <option value="No" selected>No</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="noteText" class="form-label">Note</label>
-                    <textarea class="form-control" id="noteText" name="noteText" rows="3"></textarea>
-                </div>
+{% block content %}
+    <div class="col-12">
+        <div class="row content">
+            <!-- Left side -->
+            <div id="left-side" class="col-12 col-lg-6 d-flex flex-column">
+                {% include "evaluation/fragment/details.html.twig" %}
+                {% include "evaluation/fragment/files.html.twig" %}
             </div>
-            <p class="mb-4">Use the Submit button to submit this evaluation to the Registrar's Office.</p>
-        </div>
-        <div class="card-footer border-top-none p-3">
-            <button class="btn btn-primary" type="submit">Submit</button>
-            <a class="btn btn-outline-secondary ms-2" href=".">Exit without submitting</a>
+            <!-- #/left-side -->
+
+            <!-- Right side -->
+            <div id="right-side" class="col-12 col-lg-6 d-flex flex-column">
+                <!-- Form 06 (resubmit) -->
+                {{ form_start(form) }}
+                <form id="form-06">
+                    <div class="card border-primary mb-3">
+                        <h2 class="card-header bg-primary border-primary h5">
+                            From Registrar-1 to Student
+                        </h2>
+                        <div class="card-body">
+                            <div id="reasonGrp" class="mb-5">
+                                <div class="mb-4">
+                                    {{ form_row(form.addNote) }}
+                                </div>
+                            </div>
+                            <div id="noteFieldSet" class="mb-5">
+                                <div class="mb-4">
+                                    {{ form_row(form.noteBody) }}
+                                </div>
+                            </div>
+                            <p class="mb-4">Use the Submit button to submit this evaluation to the Registrar's Office.</p>
+                        </div>
+                        <div class="card-footer border-top-none p-3">
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                            <a class="btn btn-outline-secondary ms-2" href=".">Exit without submitting</a>
+                        </div>
+                    </div>
+                </form>
+                {{ form_end(form) }}
+                <!-- /#form-06 (resubmit) -->
+
+                {% include "evaluation/fragment/notes.html.twig" %}
+                {% include "evaluation/fragment/trails.html.twig" %}
+            </div>
+            <!-- #/right-side -->
         </div>
     </div>
-</form>
-<!-- /#form-06 (resubmit) -->
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{{ asset('js/evaluation/resubmit.js') }}"></script>
+{% endblock %}

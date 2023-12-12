@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Evaluation;
 use App\Form\EvaluationAnnotateAsRequesterType;
 use App\Form\EvaluationCreateType;
+use App\Form\EvaluationResubmitType;
 use App\Form\ScratchFormType;
 use App\Repository\EvaluationRepository;
 use App\Service\EvaluationOptionsService;
@@ -183,16 +184,26 @@ class RequesterPageController extends AbstractController
 
 		#[Route('/secure/requester/evaluation/{id}/resubmit', name: 'requester_evaluation_resubmit_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'requester+resubmit', 'evaluation' )]
-		public function requesterEvaluationResubmitForm(Evaluation $evaluation): Response
+		public function requesterEvaluationResubmitForm(Request $request, Evaluation $evaluation): Response
 		{
-				return $this->render('evaluation/page.html.twig', [
+				$form = $this->createForm(EvaluationResubmitType::class);
+				$form->handleRequest($request);
+				if ($form->isSubmitted()) {
+						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+						$evaluationProcessingService->resubmitEvaluation($evaluation,
+							$form->getData());
+						return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+				}
+
+				return $this->render('evaluation/form/resubmit.html.twig', [
 					'context' => 'requester',
 					'page_title' => 'Evaluation #'.$evaluation->getID(),
 					'prepend' => 'Resubmit | Evaluation #'.$evaluation->getID(),
 					'evaluation' => $evaluation,
 					'id' => $evaluation->getID(),
 					'uuid' => $evaluation->getID(),
-					'verb' => 'resubmit'
+					'verb' => 'resubmit',
+					'form' => $form->createView(),
 				]);
 		}
 
