@@ -12,6 +12,7 @@ use App\Form\EvaluationEvaluateType;
 use App\Form\EvaluationFinalizeType;
 use App\Form\EvaluationFromCompleteToHoldType;
 use App\Form\EvaluationFromDeptToR1Type;
+use App\Form\EvaluationFromDeptToStudentType;
 use App\Form\EvaluationHoldType;
 use App\Form\EvaluationSpotArticulateType;
 use App\Repository\EvaluationRepository;
@@ -597,16 +598,25 @@ class CoordinatorPageController extends AbstractController
 
 		#[Route('/secure/coordinator/evaluation/{id}/from-dept-to-student', name: 'coordinator_evaluation_from_dept_to_student_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+from_dept_to_student', 'evaluation' )]
-		public function coordinatorEvaluationFromDeptToStudentForm(Evaluation $evaluation):	Response
+		public function coordinatorEvaluationFromDeptToStudentForm(Request $request, Evaluation $evaluation):	Response
 		{
-				return $this->render('evaluation/page.html.twig', [
+				$form = $this->createForm(EvaluationFromDeptToStudentType::class);
+				$form->handleRequest($request);
+				if ($form->isSubmitted()) {
+						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+						$evaluationProcessingService->fromDeptToStudentEvaluation($evaluation, $form->getData());
+						return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+				}
+
+				return $this->render('evaluation/form/from-dept-to-student.html.twig', [
 					'context' => 'coordinator',
 					'page_title' => 'Evaluation #'.$evaluation->getID(),
 					'prepend' => 'Send to Student | Evaluation #'.$evaluation->getID(),
 					'evaluation' => $evaluation,
 					'id' => $evaluation->getID(),
 					'uuid' => $evaluation->getID(),
-					'verb' => 'from-dept-to-student'
+					'verb' => 'from-dept-to-student',
+					'form' => $form->createView(),
 				]);
 		}
 
