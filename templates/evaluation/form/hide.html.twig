@@ -1,27 +1,50 @@
-<!-- Form 04 (hide) -->
-<form id="form-04">
-    <div class="card border-primary mb-3">
-        <h2 class="card-header bg-primary border-primary h5">
-            Hide this Evaluation
-        </h2>
-        <div class="card-body">
+{% extends 'evaluation/page.html.twig' %}
 
-            <p class="mb-4">If you hide this evaluation, you will not be able to un-hide it without the help of the application developer.</p>
-
-            <div class="mb-4">
-                <label for="hideYesOrNo" class="form-label">Are you sure you want to hide this evaluation?</label>
-                <select class="form-select" id="hideYesOrNo" name="hideYesOrNo">
-                    <option selected>- Select -</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                </select>
+{% block content %}
+    <div class="col-12">
+        <div class="row content">
+            <!-- Left side -->
+            <div id="left-side" class="col-12 col-lg-6 d-flex flex-column">
+                {% include "evaluation/fragment/details.html.twig" %}
+                {% include "evaluation/fragment/files.html.twig" %}
             </div>
+            <!-- #/left-side -->
 
-        </div>
-        <div class="card-footer border-top-none p-3">
-            <button class="btn btn-primary" type="submit">Submit</button>
-            <a class="btn btn-outline-secondary ms-2" href=".">Exit without submitting</a>
+            <!-- Right side -->
+            <div id="right-side" class="col-12 col-lg-6 d-flex flex-column">
+                <!-- Form 04 (hide) -->
+                {{ form_start(form) }}
+                <form id="form-04">
+                    <div class="card border-primary mb-3">
+                        <h2 class="card-header bg-primary border-primary h5">
+                            Hide this evaluation
+                        </h2>
+                        <div class="card-body">
+                            <div id="reasonGrp" class="mb-5">
+                                <p class="mb-4">If you hide this evaluation, you will not be able to un-hide it without the help of the application developer.</p>
+                                <div class="mb-4">
+                                    {{ form_row(form.hideYesOrNo) }}
+                                </div>
+                            </div>
+                            <p class="mb-4">Use the Submit button to move this evaluation to the Hold phase.</p>
+                        </div>
+                        <div class="card-footer border-top-none p-3">
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                            <a class="btn btn-outline-secondary ms-2" href=".">Exit without submitting</a>
+                        </div>
+                    </div>
+                </form>
+                {{ form_end(form) }}
+                <!-- /#form-04 (hide) -->
+
+                {% include "evaluation/fragment/notes.html.twig" %}
+                {% include "evaluation/fragment/trails.html.twig" %}
+            </div>
+            <!-- #/right-side -->
         </div>
     </div>
-</form>
-<!-- /#form-04 (hide) -->
+{% endblock %}
+
+{% block scripts %}
+    <!-- no scripts -->
+{% endblock %}

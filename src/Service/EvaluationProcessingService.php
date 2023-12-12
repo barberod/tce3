@@ -1205,8 +1205,47 @@ class EvaluationProcessingService
 
 		/**
 		 * Hide
+		 *
+		 * @param Evaluation $evaluation
+		 * @param array $formData
 		 */
+		public function hideEvaluation(Evaluation $evaluation, array $formData): void
+		{
+				if ($formData['hideYesOrNo'] !== 'Yes') {
+						return;
+				}
 
+				$evaluation->setStatus(0);
+				$evaluation->setUpdated(new \DateTime());
+
+				// Persist the entity
+				$this->entityManager->persist($evaluation);
+				$this->entityManager->flush(); // Save changes to the database
+
+				// Create a trail
+				$trail = new Trail();
+				$trail->setEvaluation($evaluation);
+
+				$coordinator = $this->security->getUser();
+				$coordinatorText = '';
+				if ($coordinator instanceof User) {
+						$coordinatorText .= $this->security->getUser()->attributes()['profile']['dn'];
+						$coordinatorText .= ' ('.$this->security->getUser()->attributes()['profile']['un'].')';
+				} elseif ($coordinator instanceof CasUser) {
+						$coordinatorText .= $this->security->getUser()->getAttributes()['profile']['dn'];
+						$coordinatorText .= ' ('.$this->security->getUser()->getAttributes()['profile']['un'].')';
+				} else {
+						$coordinatorText .= 'Unknown';
+				}
+
+				$trail->setBody('Hidden by '.$coordinatorText.'.');
+				$trail->setBodyAnon('Hidden by coordinator.');
+				$trail->setCreated(new \DateTime());
+
+				// Persist the entity
+				$this->entityManager->persist($trail);
+				$this->entityManager->flush(); // Save changes to the database
+		}
 
 		/**
 		 * Hold
