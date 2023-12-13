@@ -80,239 +80,254 @@
                                 </div>
                             </div>
 
-                            {% if bonus_form is defined %}
-                                {%  if bonus_form == 'id_lookup' %}
-                                    <div class="p-3">
-                                        <form class="row mb-3">
-                                            <div class="col-8 col-md-6 col-lg-4 col-xl-3">
-                                                <div class="input-group mb-3">
-                                                    <label for="idLookup" class="form-label fw-bold me-3 pt-2">GTID:</label>
-                                                    <input type="text" class="form-control" id="idLookup" placeholder="GTID" aria-label="GTID">
-                                                    <button class="btn btn-outline-primary" type="button" id="reqAdmBtn">Find</button>
+                                {% if bonus_form is defined %}
+                                    {%  if bonus_form == 'id_lookup' %}
+
+                                        {% if app.session.get('lookup_id') is defined %}
+                                            {% set id = app.session.get('lookup_id') %}
+                                        {% else %}
+                                            {% set id = '' %}
+                                        {% endif %}
+
+                                        <div class="mb-5">
+                                            <div class="row sidebar mx-0 p-3">
+                                                <div class="col-8 col-md-6 col-lg-4 col-xl-3">
+                                                    <form method="post">
+                                                        <div class="input-group">
+                                                            <label for="idLookup" class="form-label fw-bold me-3 pt-2">GTID:</label>
+                                                            <input type="text" class="form-control" id="idLookup" name="id" placeholder="GTID" aria-label="GTID" value="{{ id }}">
+                                                            <button class="btn btn-outline-primary" type="submit" id="findBtn">Find</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="col-1">
+                                                    <form method="post">
+                                                        <input type="hidden" name="reset" value="1">
+                                                        <button class="btn btn-outline-secondary" type="submit" id="resetBtn">Reset</button>
+                                                    </form>
                                                 </div>
                                             </div>
-                                        </form>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+
+                                <form class="row mb-3">
+                                    <div class="col-8 col-md-6 col-lg-4 col-xl-3">
+                                        <div class="input-group mb-3">
+                                            <label for="reqAdmSelector" class="form-label fw-bold me-3 pt-2">Req Adm:</label>
+                                            <select class="form-select" id="reqAdmSelector" aria-label="Filter by required for admission">
+                                                <option selected>-Any-</option>
+                                                <option value="yes"{% if reqadm is defined %}{% if reqadm == 'Yes' %} selected{% endif %}{% endif %}>Yes</option>
+                                                <option value="no"{% if reqadm is defined %}{% if reqadm == 'No' %} selected{% endif %}{% endif %}>No</option>
+                                            </select>
+                                            <button class="btn btn-outline-primary" type="button" id="reqAdmBtn">Filter</button>
+                                        </div>
                                     </div>
-                                {% endif %}
-                            {% endif %}
+                                </form>
 
-                            <form class="row mb-3">
-                                <div class="col-8 col-md-6 col-lg-4 col-xl-3">
-                                    <div class="input-group mb-3">
-                                        <label for="reqAdmSelector" class="form-label fw-bold me-3 pt-2">Req Adm:</label>
-                                        <select class="form-select" id="reqAdmSelector" aria-label="Filter by required for admission">
-                                            <option selected>-Any-</option>
-                                            <option value="yes"{% if reqadm is defined %}{% if reqadm == 'Yes' %} selected{% endif %}{% endif %}>Yes</option>
-                                            <option value="no"{% if reqadm is defined %}{% if reqadm == 'No' %} selected{% endif %}{% endif %}>No</option>
-                                        </select>
-                                        <button class="btn btn-outline-primary" type="button" id="reqAdmBtn">Filter</button>
-                                    </div> 
-                                </div>
-                            </form>
-
-                            {% set created_toggler = '' %}
-                            {% if direction_new is defined %}
-                                {% set created_toggler = '?orderby=created&direction=' ~ direction_new %}
-                                {% if reqadm is defined %}
-                                    {% if reqadm == 'Yes' or reqadm == 'No' %}
-                                        {% set created_toggler = created_toggler ~ '&reqadm=' ~ reqadm|lower %}
+                                {% set created_toggler = '' %}
+                                {% if direction_new is defined %}
+                                    {% set created_toggler = '?orderby=created&direction=' ~ direction_new %}
+                                    {% if reqadm is defined %}
+                                        {% if reqadm == 'Yes' or reqadm == 'No' %}
+                                            {% set created_toggler = created_toggler ~ '&reqadm=' ~ reqadm|lower %}
+                                        {% endif %}
                                     {% endif %}
                                 {% endif %}
-                            {% endif %}
 
-                            {% set updated_toggler = '' %}
-                            {% if direction_new is defined %}
-                                {% set updated_toggler = '?orderby=updated&direction=' ~ direction_new %}
-                                {% if reqadm is defined %}
-                                    {% if reqadm == 'Yes' or reqadm == 'No' %}
-                                        {% set updated_toggler = updated_toggler ~ '&reqadm=' ~ reqadm|lower %}
+                                {% set updated_toggler = '' %}
+                                {% if direction_new is defined %}
+                                    {% set updated_toggler = '?orderby=updated&direction=' ~ direction_new %}
+                                    {% if reqadm is defined %}
+                                        {% if reqadm == 'Yes' or reqadm == 'No' %}
+                                            {% set updated_toggler = updated_toggler ~ '&reqadm=' ~ reqadm|lower %}
+                                        {% endif %}
                                     {% endif %}
                                 {% endif %}
-                            {% endif %}
 
-                            {% set created_caret = '' %}
-                            {% if orderby is defined and direction is defined %}
-                                {% if orderby == 'created' %}
-                                    {% if direction == 'asc' %}
-                                        {% set created_caret = '<i class="fa-solid fa-caret-up ms-2"></i>' %}
-                                    {% elseif direction == 'desc' %}
-                                        {% set created_caret = '<i class="fa-solid fa-caret-down ms-2"></i>' %}
+                                {% set created_caret = '' %}
+                                {% if orderby is defined and direction is defined %}
+                                    {% if orderby == 'created' %}
+                                        {% if direction == 'asc' %}
+                                            {% set created_caret = '<i class="fa-solid fa-caret-up ms-2"></i>' %}
+                                        {% elseif direction == 'desc' %}
+                                            {% set created_caret = '<i class="fa-solid fa-caret-down ms-2"></i>' %}
+                                        {% endif %}
                                     {% endif %}
                                 {% endif %}
-                            {% endif %}
 
-                            {% set updated_caret = '' %}
-                            {% if orderby is defined and direction is defined %}
-                                {% if orderby == 'updated' %}
-                                    {% if direction == 'asc' %}
-                                        {% set updated_caret = '<i class="fa-solid fa-caret-up ms-2"></i>' %}
-                                    {% elseif direction == 'desc' %}
-                                        {% set updated_caret = '<i class="fa-solid fa-caret-down ms-2"></i>' %}
+                                {% set updated_caret = '' %}
+                                {% if orderby is defined and direction is defined %}
+                                    {% if orderby == 'updated' %}
+                                        {% if direction == 'asc' %}
+                                            {% set updated_caret = '<i class="fa-solid fa-caret-up ms-2"></i>' %}
+                                        {% elseif direction == 'desc' %}
+                                            {% set updated_caret = '<i class="fa-solid fa-caret-down ms-2"></i>' %}
+                                        {% endif %}
                                     {% endif %}
                                 {% endif %}
-                            {% endif %}
 
-                            <div class="row row-cols-1 mb-3">
-                                <div class="col">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped">
-                                            <thead>
-                                            <tr>
-                                                <th scope="col">Req Adm</th>
-                                                <th scope="col">Course</th>
-                                                <th scope="col">Requester</th>
-                                                <th scope="col">Assignee</th>
-                                                <th scope="col">
-                                                    <a href="{{ app.request.pathinfo }}{% if created_toggler is defined %}{{ created_toggler }}{% endif %}">Created{{ created_caret|raw }}</a>
-                                                </th>
-                                                <th scope="col">
-                                                    <a href="{{ app.request.pathinfo }}{% if updated_toggler is defined %}{{ updated_toggler }}{% endif %}">Updated{{ updated_caret|raw }}</a>
-                                                </th>
-                                                <th scope="col">Phase</th>
-                                                <th scope="col">Links</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody class="table-group-divider">
-                                                {% for evaluation in pager %}
+                                <div class="row row-cols-1 mb-3">
+                                    <div class="col">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
                                                 <tr>
-                                                    <td>
-                                                    {% if evaluation.reqAdmin == "No" %}
-                                                    <span class="text-danger me-2"><i class="fa-solid fa-circle fa-fw"></i></span>{{ evaluation.reqAdmin }}
-                                                    {% elseif evaluation.reqAdmin == "Yes" %}
-                                                    <span class="text-success me-2"><i class="fa-solid fa-circle fa-fw"></i></span>{{ evaluation.reqAdmin }}
-                                                    {% endif %}
-                                                    </td>
-                                                    <td>{{ evaluation.courseSubjCode }} {{ evaluation.courseCrseNum }} ({{ evaluation.courseCreditHrs }})<br>
-                                                        <span class="text-muted">
-                                                        {% if evaluation.institution is not empty %}
-                                                            {% set institution = evaluation.institution.name %}
-                                                        {% elseif evaluation.institutionOther|default() %}
-                                                            {% set institution = evaluation.institutionOther %}
-                                                        {% else %}
-                                                            {% set institution = 'Unknown' %}
-                                                        {% endif %}
-
-                                                        {% set maxLength = 32 %}
-                                                        {% set ellipsis = '...' %}
-                                                        {% if institution|length > maxLength %}
-                                                            {{ institution|slice(0, maxLength) ~ ellipsis }}
-                                                        {% else %}
-                                                            {{ institution }}
-                                                        {% endif %}
-                                                        </span>
-                                                    </td>
-                                                    <td>{{ evaluation.requester.displayName }}<br><span class="text-muted">{{ evaluation.requester.orgID }}</span></td>
-                                                    <td>
-                                                        {% if evaluation.assignee.username is defined %}
-                                                            {% if evaluation.assignee.username != 'admin' %}
-                                                                {% if evaluation.assignee.displayName is defined %}
-                                                                    {{ evaluation.assignee.displayName }}<br>
-                                                                {% endif %}
-                                                                    <span class="text-muted">{{ evaluation.assignee.username }}</span>
-                                                            {% endif %}
-                                                        {% endif %}
-                                                    </td>
-                                                    <td>
-                                                    {% if evaluation.created %}
-                                                    {{ evaluation.created | date('Y-m-d H:i') }}<br><span class="text-muted">{{ evaluation.created|time_diff }}</span>
-                                                    {% endif %}
-                                                    </td>
-                                                    <td>
-                                                    {% if evaluation.updated %}
-                                                    {{ evaluation.updated | date('Y-m-d H:i') }}<br><span class="text-muted">{{ evaluation.updated|time_diff }}</span>
-                                                    {% endif %}
-                                                    </td>
-                                                    <td>{{ evaluation.phase }}</td>
-                                                    <td>
-                                                        <a class="me-2" href="{{ url(evaluation_page, {'id':evaluation.id}) }}">View</a>
-                                                    </td>
+                                                    <th scope="col">Req Adm</th>
+                                                    <th scope="col">Course</th>
+                                                    <th scope="col">Requester</th>
+                                                    <th scope="col">Assignee</th>
+                                                    <th scope="col">
+                                                        <a href="{{ app.request.pathinfo }}{% if created_toggler is defined %}{{ created_toggler }}{% endif %}">Created{{ created_caret|raw }}</a>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <a href="{{ app.request.pathinfo }}{% if updated_toggler is defined %}{{ updated_toggler }}{% endif %}">Updated{{ updated_caret|raw }}</a>
+                                                    </th>
+                                                    <th scope="col">Phase</th>
+                                                    <th scope="col">Links</th>
                                                 </tr>
-                                                {% endfor %}
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody class="table-group-divider">
+                                                {% if pager is empty %}
+                                                    <tr>
+                                                        <td colspan="8" class="text-center fst-italic">No data</td>
+                                                    </tr>
+                                                {% else %}
+                                                    {% for evaluation in pager %}
+                                                    <tr>
+                                                        <td>
+                                                        {% if evaluation.reqAdmin == "No" %}
+                                                        <span class="text-danger me-2"><i class="fa-solid fa-circle fa-fw"></i></span>{{ evaluation.reqAdmin }}
+                                                        {% elseif evaluation.reqAdmin == "Yes" %}
+                                                        <span class="text-success me-2"><i class="fa-solid fa-circle fa-fw"></i></span>{{ evaluation.reqAdmin }}
+                                                        {% endif %}
+                                                        </td>
+                                                        <td>{{ evaluation.courseSubjCode }} {{ evaluation.courseCrseNum }} ({{ evaluation.courseCreditHrs }})<br>
+                                                            <span class="text-muted">
+                                                            {% if evaluation.institution is not empty %}
+                                                                {% set institution = evaluation.institution.name %}
+                                                            {% elseif evaluation.institutionOther|default() %}
+                                                                {% set institution = evaluation.institutionOther %}
+                                                            {% else %}
+                                                                {% set institution = 'Unknown' %}
+                                                            {% endif %}
+
+                                                            {% set maxLength = 32 %}
+                                                            {% set ellipsis = '...' %}
+                                                            {% if institution|length > maxLength %}
+                                                                {{ institution|slice(0, maxLength) ~ ellipsis }}
+                                                            {% else %}
+                                                                {{ institution }}
+                                                            {% endif %}
+                                                            </span>
+                                                        </td>
+                                                        <td>{{ evaluation.requester.displayName }}<br><span class="text-muted">{{ evaluation.requester.orgID }}</span></td>
+                                                        <td>
+                                                            {% if evaluation.assignee.username is defined %}
+                                                                {% if evaluation.assignee.username != 'admin' %}
+                                                                    {% if evaluation.assignee.displayName is defined %}
+                                                                        {{ evaluation.assignee.displayName }}<br>
+                                                                    {% endif %}
+                                                                        <span class="text-muted">{{ evaluation.assignee.username }}</span>
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                        {% if evaluation.created %}
+                                                        {{ evaluation.created | date('Y-m-d H:i') }}<br><span class="text-muted">{{ evaluation.created|time_diff }}</span>
+                                                        {% endif %}
+                                                        </td>
+                                                        <td>
+                                                        {% if evaluation.updated %}
+                                                        {{ evaluation.updated | date('Y-m-d H:i') }}<br><span class="text-muted">{{ evaluation.updated|time_diff }}</span>
+                                                        {% endif %}
+                                                        </td>
+                                                        <td>{{ evaluation.phase }}</td>
+                                                        <td>
+                                                            <a class="me-2" href="{{ url(evaluation_page, {'id':evaluation.id}) }}">View</a>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                {% endif %}
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            {{ pagerfanta(pager) }}
+                                {{ pagerfanta(pager) }}
 
-                            <!-- Page Navigation -->
-                            <div id="page-navigation" class="row justify-content-center mb-3" style="display: none;">
-                                <div class="col-12 col-lg-8 col-xl-10">
-                                    <nav aria-label="Page navigation">
-                                        <ul class="pagination">
+                                <!-- Page Navigation -->
+                                <div id="page-navigation" class="row justify-content-center mb-3" style="display: none;">
+                                    <div class="col-12 col-lg-8 col-xl-10">
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination">
 
-                                            <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="First">
-                                                    <span aria-hidden="true">
-                                                        <i class="fa-solid fa-backward-fast me-2"></i>First
-                                                    </span>
-                                                </a>
-                                            </li>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="First">
+                                                        <span aria-hidden="true">
+                                                            <i class="fa-solid fa-backward-fast me-2"></i>First
+                                                        </span>
+                                                    </a>
+                                                </li>
 
-                                            <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Previous">
-                                                    <span aria-hidden="true">
-                                                        <i class="fa-solid fa-caret-left me-2"></i>Previous
-                                                    </span>
-                                                </a>
-                                            </li>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Previous">
+                                                        <span aria-hidden="true">
+                                                            <i class="fa-solid fa-caret-left me-2"></i>Previous
+                                                        </span>
+                                                    </a>
+                                                </li>
 
-                                            <li class="page-item" aria-current="page">
-                                                <a class="page-link" href="#">5</a>
-                                            </li>
+                                                <li class="page-item" aria-current="page">
+                                                    <a class="page-link" href="#">5</a>
+                                                </li>
 
-                                            <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Next">
-                                                    <span aria-hidden="true">
-                                                        Next<i class="fa-solid fa-caret-right ms-2"></i>
-                                                    </span>
-                                                </a>
-                                            </li>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Next">
+                                                        <span aria-hidden="true">
+                                                            Next<i class="fa-solid fa-caret-right ms-2"></i>
+                                                        </span>
+                                                    </a>
+                                                </li>
 
-                                            <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Last">
-                                                    <span aria-hidden="true">
-                                                        Last<i class="fa-solid fa-forward-fast ms-2"></i>
-                                                    </span>
-                                                </a>
-                                            </li>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Last">
+                                                        <span aria-hidden="true">
+                                                            Last<i class="fa-solid fa-forward-fast ms-2"></i>
+                                                        </span>
+                                                    </a>
+                                                </li>
 
-                                        </ul>
-                                    </nav>
-                                </div>
-                                <div class="col-12 col-lg-4 col-xl-2">
-                                    <div class="input-group">
-                                        <select class="form-select" id="inputGoToPage" aria-label="Go to page">
-                                            <option selected>Page...</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                            <option value="7">7</option>
-                                        </select>
-                                        <button class="btn btn-outline-primary" type="button">Go</button>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                    <div class="col-12 col-lg-4 col-xl-2">
+                                        <div class="input-group">
+                                            <select class="form-select" id="inputGoToPage" aria-label="Go to page">
+                                                <option selected>Page...</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                            </select>
+                                            <button class="btn btn-outline-primary" type="button">Go</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- /#page-navigation -->
+                                <!-- /#page-navigation -->
                         </div>
+                        <!-- /#table-evaluations -->
                     </div>
-                    <!-- /#table-evaluations -->
                 </div>
             </div>
-            
         {% endif %}
     {% endif %}
 {% endblock %}
 
 {% block scripts %}
     <script type="text/javascript" src="{{ asset('js/evaluation/table.js') }}"></script>
-    {% if bonus_form is defined %}
-        {%  if bonus_form == 'id_lookup' %}
-            <script type="text/javascript" src="{{ asset('js/evaluation/id-lookup.js') }}"></script>
-        {% endif %}
-    {% endif %}
 {% endblock %}

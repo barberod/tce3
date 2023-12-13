@@ -34,6 +34,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -282,8 +283,8 @@ class CoordinatorPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/coordinator/evaluation/requester', name: 'coordinator_evaluation_table_requester', methods: ['GET'])]
-		public function coordinatorEvaluationTableRequester(EvaluationRepository $evaluationRepository): Response
+		#[Route('/secure/coordinator/evaluation/requester', name: 'coordinator_evaluation_table_requester', methods: ['GET', 'POST'])]
+		public function coordinatorEvaluationTableRequester(EvaluationRepository $evaluationRepository, SessionInterface $session): Response
 		{
 				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
 				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
@@ -291,8 +292,23 @@ class CoordinatorPageController extends AbstractController
 				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
 				$reqAdm = (isset($_GET['reqadm']) && (in_array($_GET['reqadm'], ['yes', 'no']))) ? ucfirst($_GET['reqadm']) : null;
 
-				$id = (isset($_GET['id']) && (is_numeric($_GET['id'])) && ($_GET['id'] > 900000000) && ($_GET['id'] < 999999999)) ? $_GET['id'] : null;
-				$requester = $this->entityManager->getRepository(User::class)->findOneBy(['orgID' => $id]);
+				$id = (isset($_POST['id']) && (is_numeric($_POST['id'])) && ($_POST['id'] > 900000000) && ($_POST['id'] < 999999999)) ? $_POST['id'] : null;
+				if (!is_null($id)) {
+						$session->set('lookup_id', $id);
+				} else {
+						$id = $session->get('lookup_id');
+				}
+
+				$reset = isset($_POST['reset']) && ($_POST['reset'] == 1);
+				if ($reset) {
+						$session->remove('lookup_id');
+						$id = null;
+				}
+
+				$requester = null;
+				if (!is_null($id)) {
+						$requester = $this->entityManager->getRepository(User::class)->findOneBy(['orgID' => $id]);
+				}
 
 				$requesterInfo = null;
 				if (!is_null($requester)) {
@@ -316,12 +332,13 @@ class CoordinatorPageController extends AbstractController
 
 				return $this->render('evaluation/table.html.twig', [
 					'context' => 'coordinator',
-					'page_title' => 'Evaluations',
-					'prepend' => 'Evaluations',
+					'page_title' => 'GTID Lookup',
+					'prepend' => 'GTID Lookup',
 					'pager' => $pagerfanta,
 					'orderby' => $orderBy,
 					'direction' => $direction,
 					'direction_new' => $newDirection,
+					'reqadm' => $reqAdm,
 					'requester_info' => $requesterInfo,
 					'bonus_form' => 'id_lookup',
 				]);
