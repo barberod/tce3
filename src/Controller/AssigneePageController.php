@@ -3,11 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Evaluation;
+use App\Entity\User;
 use App\Form\EvaluationAssignType;
 use App\Form\EvaluationEvaluateType;
 use App\Repository\EvaluationRepository;
+use App\Service\EvaluationFormDefaultsService;
 use App\Service\EvaluationOptionsService;
 use App\Service\EvaluationProcessingService;
+use App\Service\LookupService;
 use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
@@ -15,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -134,6 +138,67 @@ class AssigneePageController extends AbstractController
 					'direction_new' => $newDirection,
 					'reqadm' => $reqAdm,
 					'assignee_flag' => 'History',
+				]);
+		}
+
+		#[Route('/secure/assignee/evaluation/requester', name: 'assignee_evaluation_table_requester', methods: ['GET', 'POST'])]
+		public function assigneeEvaluationTableRequester(EvaluationRepository $evaluationRepository, SessionInterface $session): Response
+		{
+				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
+				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
+				$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
+				$reqAdm = (isset($_GET['reqadm']) && (in_array($_GET['reqadm'], ['yes', 'no']))) ? ucfirst($_GET['reqadm']) : null;
+
+				$id = (isset($_POST['id']) && (is_numeric($_POST['id'])) && ($_POST['id'] > 900000000) && ($_POST['id'] < 999999999)) ? $_POST['id'] : null;
+				if (!is_null($id)) {
+						$session->set('lookup_id', $id);
+				} else {
+						$id = $session->get('lookup_id');
+				}
+
+				$reset = isset($_POST['reset']) && ($_POST['reset'] == 1);
+				if ($reset) {
+						$session->remove('lookup_id');
+						$id = null;
+				}
+
+				$requester = null;
+				if (!is_null($id)) {
+						$requester = $this->entityManager->getRepository(User::class)->findOneBy(['orgID' => $id]);
+				}
+
+				$requesterInfo = null;
+				if (!is_null($requester)) {
+						$lookup = new LookupService($this->entityManager);
+						$requesterAttributes = $lookup->getRequesterAttributes($requester->getOrgID());
+						$formDefaultsService = new EvaluationFormDefaultsService($this->entityManager);
+						$requesterInfo = $formDefaultsService->styleRequesterAttributesAsText($requesterAttributes);
+
+						$queryBuilder = $evaluationRepository->getQB(
+							orderBy: $orderBy,
+							direction: $direction,
+							reqAdmin: $reqAdm,
+							requester: $requester
+						);
+				} else {
+						$queryBuilder = $evaluationRepository->getQB(bypass: true);
+				}
+
+				$adapter = new QueryAdapter($queryBuilder);
+				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
+
+				return $this->render('evaluation/table.html.twig', [
+					'context' => 'assignee',
+					'page_title' => 'GTID Lookup',
+					'prepend' => 'GTID Lookup',
+					'pager' => $pagerfanta,
+					'orderby' => $orderBy,
+					'direction' => $direction,
+					'direction_new' => $newDirection,
+					'reqadm' => $reqAdm,
+					'requester_info' => $requesterInfo,
+					'bonus_form' => 'id_lookup',
 				]);
 		}
 
