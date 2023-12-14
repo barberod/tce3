@@ -8,6 +8,8 @@
     "require": {
         "php": ">=8.1",
         "ext-ctype": "*",
+        "ext-fileinfo": "*",
+        "ext-gd": "*",
         "ext-iconv": "*",
         "babdev/pagerfanta-bundle": "^4.2",
         "doctrine/doctrine-bundle": "^2.10",

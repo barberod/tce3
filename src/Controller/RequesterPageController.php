@@ -8,6 +8,7 @@ use App\Form\EvaluationCreateType;
 use App\Form\EvaluationResubmitType;
 use App\Form\ScratchFormType;
 use App\Repository\EvaluationRepository;
+use App\Service\EvaluationFilesService;
 use App\Service\EvaluationOptionsService;
 use App\Service\EvaluationProcessingService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,8 +16,10 @@ use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -25,13 +28,16 @@ class RequesterPageController extends AbstractController
 {
 		private EntityManagerInterface $entityManager;
 		private Security $security;
+		private EvaluationFilesService $filesService;
 
 		public function __construct(
 			EntityManagerInterface $entityManager,
 			Security $security,
+			EvaluationFilesService $filesService
 		) {
 				$this->entityManager = $entityManager;
 				$this->security = $security;
+				$this->filesService = $filesService;
 		}
 
 		#[Route('/secure/requester', name: 'requester_home')]
@@ -235,5 +241,27 @@ class RequesterPageController extends AbstractController
 					'page_title' => 'Institutions',
 					'prepend' => 'Institutions'
 				]);
+		}
+
+		#[Route('/secure/requester/file/{id}/{subfolder}/{filename}', name: 'requester_file_download', methods: ['GET'])]
+		#[IsGranted('requester+read', 'evaluation')]
+		public function downloadFile(Evaluation $evaluation, string $subfolder, string $filename): Response
+		{
+				$filePath = $this->filesService->getFilePath($evaluation, $subfolder, $filename);
+				if (!file_exists($filePath)) {
+						throw $this->createNotFoundException('The file does not exist.');
+				}
+				$fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
+				$response = new BinaryFileResponse($filePath);
+
+				// Set content disposition based on file extension
+				if (in_array($fileExtension, ['pdf', 'png', 'jpg', 'jpeg', 'gif'], true)) {
+						$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $filename);
+				} else {
+						$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
+				}
+
+				$response->headers->set('Content-Type', $this->filesService->getMimeType($filePath));
+				return $response;
 		}
 }

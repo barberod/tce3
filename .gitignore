@@ -12,6 +12,9 @@
 # Exclude data for uploads and from backups
 /data/
 
+# Exlude uploaded files
+/files/
+
 # Exclude lock file
 composer.lock
 symfony.lock
