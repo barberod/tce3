@@ -79,9 +79,62 @@
                     ({{ evaluation.courseCreditBasis }} Basis)<br>
                     {{ evaluation.courseCreditHrs }} credit hours
                 </div>
-                <div class="mt-3">
-                    <a href="#" target="_blank"><i class="fa-regular fa-file fa-fw me-2"></i>Syllabus</a><br>
-                    <a href="#" target="_blank"><i class="fa-regular fa-file fa-fw me-2"></i>Description</a>
+                <div>
+                    {% if files.course_syllabus is defined %}
+                        {% set icon = 'fa-file' %}
+                        {% set target = '' %}
+                        {% if files.course_syllabus ends with 'pdf' %}
+                            {% set icon = 'fa-file-pdf' %}
+                            {% set target = ' target="_blank"' %}
+                        {% elseif files.course_syllabus ends with 'docx' or files.course_syllabus ends with 'doc' %}
+                            {% set icon = 'fa-file-word' %}
+                        {% elseif files.course_syllabus ends with 'xlsx' or files.course_syllabus ends with 'xls' %}
+                            {% set icon = 'fa-file-excel' %}
+                        {% elseif files.course_syllabus ends with 'pptx' or files.course_syllabus ends with 'ppt' %}
+                            {% set icon = 'fa-file-powerpoint' %}
+                        {% elseif files.course_syllabus ends with 'png' or files.course_syllabus ends with 'jpg' or files.course_syllabus ends with 'jpeg' or files.course_syllabus ends with 'gif' %}
+                            {% set icon = 'fa-file-image' %}
+                            {% set target = ' target="_blank"' %}
+                        {% elseif files.course_syllabus ends with 'html' or files.course_syllabus ends with 'xml' %}
+                            {% set icon = 'fa-file-code' %}
+                        {% elseif files.course_syllabus ends with 'txt' or files.course_syllabus ends with 'csv' %}
+                            {% set icon = 'fa-file-lines' %}
+                        {% endif %}
+
+                        <div class="mt-3">
+                            <a href="{{ url( context ~ '_file_download', { 'id':id|raw, 'subfolder':'course-syllabus', 'filename':files.course_syllabus|raw }) }}"{{ target }}>
+                                <i class="fa-regular {{ icon }} fa-fw me-2"></i>Course Syllabus
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    {% if files.course_document is defined %}
+                        {% set icon = 'fa-file' %}
+                        {% set target = '' %}
+                        {% if files.course_document ends with 'pdf' %}
+                            {% set icon = 'fa-file-pdf' %}
+                            {% set target = ' target="_blank"' %}
+                        {% elseif files.course_document ends with 'docx' or files.course_document ends with 'doc' %}
+                            {% set icon = 'fa-file-word' %}
+                        {% elseif files.course_document ends with 'xlsx' or files.course_document ends with 'xls' %}
+                            {% set icon = 'fa-file-excel' %}
+                        {% elseif files.course_document ends with 'pptx' or files.course_document ends with 'ppt' %}
+                            {% set icon = 'fa-file-powerpoint' %}
+                        {% elseif files.course_document ends with 'png' or files.course_document ends with 'jpg' or files.course_document ends with 'jpeg' or files.course_document ends with 'gif' %}
+                            {% set icon = 'fa-file-image' %}
+                            {% set target = ' target="_blank"' %}
+                        {% elseif files.course_document ends with 'html' or files.course_document ends with 'xml' %}
+                            {% set icon = 'fa-file-code' %}
+                        {% elseif files.course_document ends with 'txt' or files.course_document ends with 'csv' %}
+                            {% set icon = 'fa-file-lines' %}
+                        {% endif %}
+
+                        <div>
+                            <a href="{{ url( context ~ '_file_download', { 'id':id|raw, 'subfolder':'course-syllabus', 'filename':files.course_document|raw }) }}"{{ target }}>
+                                <i class="fa-regular {{ icon }} fa-fw me-2"></i>Course Document
+                            </a>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
@@ -95,9 +148,62 @@
                     ({{ evaluation.labCreditBasis }} Basis)<br>
                     {{ evaluation.labCreditHrs }} credit hours
                 </div>
-                <div class="mt-3">
-                    <a href="#" target="_blank"><i class="fa-regular fa-file fa-fw me-2"></i>Syllabus</a><br>
-                    <a href="#" target="_blank"><i class="fa-regular fa-file fa-fw me-2"></i>Description</a>
+                <div>
+                    {% if files.lab_syllabus is defined %}
+                        {% set icon = 'fa-file' %}
+                        {% set target = '' %}
+                        {% if files.lab_syllabus ends with 'pdf' %}
+                            {% set icon = 'fa-file-pdf' %}
+                            {% set target = ' target="_blank"' %}
+                        {% elseif files.lab_syllabus ends with 'docx' or files.lab_syllabus ends with 'doc' %}
+                            {% set icon = 'fa-file-word' %}
+                        {% elseif files.lab_syllabus ends with 'xlsx' or files.lab_syllabus ends with 'xls' %}
+                            {% set icon = 'fa-file-excel' %}
+                        {% elseif files.lab_syllabus ends with 'pptx' or files.lab_syllabus ends with 'ppt' %}
+                            {% set icon = 'fa-file-powerpoint' %}
+                        {% elseif files.lab_syllabus ends with 'png' or files.lab_syllabus ends with 'jpg' or files.lab_syllabus ends with 'jpeg' or files.lab_syllabus ends with 'gif' %}
+                            {% set icon = 'fa-file-image' %}
+                            {% set target = ' target="_blank"' %}
+                        {% elseif files.lab_syllabus ends with 'html' or files.lab_syllabus ends with 'xml' %}
+                            {% set icon = 'fa-file-code' %}
+                        {% elseif files.lab_syllabus ends with 'txt' or files.lab_syllabus ends with 'csv' %}
+                            {% set icon = 'fa-file-lines' %}
+                        {% endif %}
+
+                        <div class="mt-3">
+                            <a href="{{ url( context ~ '_file_download', { 'id':id|raw, 'subfolder':'course-syllabus', 'filename':files.lab_syllabus|raw }) }}"{{ target }}>
+                                <i class="fa-regular {{ icon }} fa-fw me-2"></i>Course Syllabus
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    {% if files.lab_document is defined %}
+                        {% set icon = 'fa-file' %}
+                        {% set target = '' %}
+                        {% if files.lab_document ends with 'pdf' %}
+                            {% set icon = 'fa-file-pdf' %}
+                            {% set target = ' target="_blank"' %}
+                        {% elseif files.lab_document ends with 'docx' or files.lab_document ends with 'doc' %}
+                            {% set icon = 'fa-file-word' %}
+                        {% elseif files.lab_document ends with 'xlsx' or files.lab_document ends with 'xls' %}
+                            {% set icon = 'fa-file-excel' %}
+                        {% elseif files.lab_document ends with 'pptx' or files.lab_document ends with 'ppt' %}
+                            {% set icon = 'fa-file-powerpoint' %}
+                        {% elseif files.lab_document ends with 'png' or files.lab_document ends with 'jpg' or files.lab_document ends with 'jpeg' or files.lab_document ends with 'gif' %}
+                            {% set icon = 'fa-file-image' %}
+                            {% set target = ' target="_blank"' %}
+                        {% elseif files.lab_document ends with 'html' or files.lab_document ends with 'xml' %}
+                            {% set icon = 'fa-file-code' %}
+                        {% elseif files.lab_document ends with 'txt' or files.lab_document ends with 'csv' %}
+                            {% set icon = 'fa-file-lines' %}
+                        {% endif %}
+
+                        <div>
+                            <a href="{{ url( context ~ '_file_download', { 'id':id|raw, 'subfolder':'course-syllabus', 'filename':files.lab_document|raw }) }}"{{ target }}>
+                                <i class="fa-regular {{ icon }} fa-fw me-2"></i>Course Document
+                            </a>
+                        </div>
+                    {% endif %}
                 </div>
             {% endif %}
             </div>

@@ -1,23 +1,53 @@
-<div id="evaluation-files" class="card mb-3" style="display: none;">
-    <h2 class="card-header h5">
-        Supplemental Files
-    </h2>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-12 d-flex flex-column mb-4">
-                <label for="supplementalFiles" class="form-label">Files</label>
-                <div class="mb-0" id="supplementalFiles">
-                    <div><a href="#" target="_blank"><i class="fa-regular fa-file-pdf fa-fw me-2"></i>Some file if pdf</a></div>
-                    <div><a href="#" target="_blank"><i class="fa-regular fa-file-word fa-fw me-2"></i>Some file if docx or doc</a></div>
-                    <div><a href="#" target="_blank"><i class="fa-regular fa-file-excel fa-fw me-2"></i>Some file if xls or xlsx</a></div>
-                    <div><a href="#" target="_blank"><i class="fa-regular fa-file-powerpoint fa-fw me-2"></i>Some file if ppt or pptx</a></div>
-                    <div><a href="#" target="_blank"><i class="fa-regular fa-file-image fa-fw me-2"></i>Some file if png, jpg, jpeg, or gif</a></div>
-                    <div><a href="#" target="_blank"><i class="fa-regular fa-file-code fa-fw me-2"></i>Some file if html or xml</a></div>
-                    <div><a href="#" target="_blank"><i class="fa-regular fa-file-lines fa-fw me-2"></i>Some file if txt or csv</a></div>
-                    <div><a href="#" target="_blank"><i class="fa-regular fa-file fa-fw me-2"></i>Some file otherwise</a></div>
+{% if id is defined and context is defined and files is defined %}
+    {% if files.attachments|length > 0 %}
+        <div id="attached-files" class="card mb-3">
+            <h2 class="card-header h5">
+                Attached Files
+            </h2>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 d-flex flex-column mb-4">
+                        <label for="supplementalFiles" class="form-label">Files</label>
+                        <div class="mb-0" id="supplementalFiles">
+                            {% for attachment in files.attachments  %}
+
+                                {% set icon = 'fa-file' %}
+                                {% set target = '' %}
+                                {% if attachment ends with 'pdf' %}
+                                    {% set icon = 'fa-file-pdf' %}
+                                    {% set target = ' target="_blank"' %}
+                                {% elseif attachment ends with 'docx' or attachment ends with 'doc' %}
+                                    {% set icon = 'fa-file-word' %}
+                                {% elseif attachment ends with 'xlsx' or attachment ends with 'xls' %}
+                                    {% set icon = 'fa-file-excel' %}
+                                {% elseif attachment ends with 'pptx' or attachment ends with 'ppt' %}
+                                    {% set icon = 'fa-file-powerpoint' %}
+                                {% elseif attachment ends with 'png' or attachment ends with 'jpg' or attachment ends with 'jpeg' or attachment ends with 'gif' %}
+                                    {% set icon = 'fa-file-image' %}
+                                    {% set target = ' target="_blank"' %}
+                                {% elseif attachment ends with 'html' or attachment ends with 'xml' %}
+                                    {% set icon = 'fa-file-code' %}
+                                {% elseif attachment ends with 'txt' or attachment ends with 'csv' %}
+                                    {% set icon = 'fa-file-lines' %}
+                                {% endif %}
+
+                                {% set text = 'Attachment' %}
+                                {% if loop.index > 1 %}
+                                    {% set text = 'Attachment (' ~ loop.index ~ ')' %}
+                                {% endif %}
+
+                                <div>
+                                    <a href="{{ url( context ~ '_file_download', { 'id':id|raw, 'subfolder':'attachments', 'filename':attachment|raw }) }}"{{ target }}>
+                                        <i class="fa-regular {{ icon }} fa-fw me-2"></i>{{ text }}
+                                    </a>
+                                </div>
+
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<!-- #/evaluation-files -->
+        <!-- #/attached-files -->
+    {% endif %}
+{% endif %}

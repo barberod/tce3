@@ -366,6 +366,7 @@ class CoordinatorPageController extends AbstractController
 					'id' => $evaluation->getID(),
 					'uuid' => $evaluation->getID(),
 					'options' => $optionsService->getOptions('coordinator', $evaluation),
+					'files' => $this->filesService->getFileLocations($evaluation),
 				]);
 		}
 
