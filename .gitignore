@@ -28,6 +28,27 @@
 /data/files-prep/csv/LabDocument/*.csv
 /data/files-prep/csv/LabSyllabus/*.csv
 
+/data/files-prep/in-order/files/attachments/*
+!/data/files-prep/in-order/files/attachments/.gitkeep
+/data/files-prep/in-order/files/course_document/*
+!/data/files-prep/in-order/files/course_document/.gitkeep
+/data/files-prep/in-order/files/course_syllabus/*
+!/data/files-prep/in-order/files/course_syllabus/.gitkeep
+/data/files-prep/in-order/files/lab_document/*
+!/data/files-prep/in-order/files/lab_document/.gitkeep
+/data/files-prep/in-order/files/lab_syallbus/*
+!/data/files-prep/in-order/files/lab_syallbus/.gitkeep
+
+/data/files-prep/out-of-order/documents/*
+!/data/files-prep/out-of-order/documents/.gitkeep
+/data/files-prep/out-of-order/lab_documents/*
+!/data/files-prep/out-of-order/lab_documents/.gitkeep
+/data/files-prep/out-of-order/lab_syllabi/*
+!/data/files-prep/out-of-order/lab_syllabi/.gitkeep
+/data/files-prep/out-of-order/supplemental/*
+!/data/files-prep/out-of-order/supplemental/.gitkeep
+/data/files-prep/out-of-order/syllabi/*
+!/data/files-prep/out-of-order/syllabi/.gitkeep
 
 # Exlude uploaded files
 /files/
