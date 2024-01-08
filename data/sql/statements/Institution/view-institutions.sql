@@ -1,0 +1,1 @@
+SELECT * FROM `tce3_db`.`institution` LIMIT 3000;

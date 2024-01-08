@@ -1,0 +1,1 @@
+SELECT * FROM `tce3_db`.`course` LIMIT 3000;

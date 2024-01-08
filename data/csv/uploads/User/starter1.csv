@@ -1,0 +1,12 @@
+"username","orgID","displayName","email","category",status,frozen,"roles","d7uid"
+"admin","100000000","Admin","admin@example.edu","faculty",1,1,"ROLE_ADMIN,manager",0
+"burnhamm","100000001","Michael Burnham","michael.burnham@example.edu","staff",1,1,"ROLE_ADMIN,maanger",0
+"janewayk","100000002","Kathryn Janeway","kathryn.janeway@example.edu","faculty",1,1,"ROLE_FACULTY,facstaff",0
+"uhuran","100000003","Nyota Uhura","nyota.uhura@example.edu","staff",1,1,"ROLE_STAFF,ro",0
+"crusherb","100000004","Beverly Crusher","beverly.crusher@example.edu","student",1,1,"ROLE_STUDENT,student",0
+"daxj","100000005","Jadzia Dax","jadzia.dax@example.edu","applicant",1,1,"ROLE_GSAPP",0
+"satoh","100000006","Hoshi Sato","hoshi.sato@example.edu","applicant",1,1,"ROLE_UGAPP,student",0
+"hansena","100000007","Annika Hansen","annika.hansen@example.edu","member",1,1,"ROLE_USER,admissions",0
+"marinerb","100000008","Beckett Mariner","beckett.mariner@example.edu","faculty",1,1,"ROLE_FACULTY,ROLE_STAFF",0
+"ortegase","100000009","Erica Ortegas","eria.ortegas@example.edu","student",1,1,"ROLE_STUDENT,ROLE_GSAPP",0
+"kes","100000010","Kes","kes@example.edu","member",0,1,"ROLE_STAFF",0

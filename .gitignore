@@ -7,10 +7,19 @@
 /public/bundles/
 /var/
 /vendor/
-###< symfony/framework-bundle ###
 
-# Exclude data for uploads and from backups
-/data/
+###< symfony/framework-bundle ###
+/data/csv/uploads/Affiliation/*.csv
+/data/csv/uploads/Course/*.csv
+/data/csv/uploads/Department/*.csv
+/data/csv/uploads/Evaluation/*.csv
+/data/csv/uploads/Institution/*.csv
+/data/csv/uploads/Note/*.csv
+/data/csv/uploads/Syllabus/*.csv
+/data/csv/uploads/Trail/*.csv
+/data/csv/uploads/User/*.csv
+!/data/csv/uploads/User/starter1.csv
+/data/sql/backups/*.sql
 
 # Exlude uploaded files
 /files/

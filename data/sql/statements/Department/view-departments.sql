@@ -1,0 +1,1 @@
+SELECT * FROM `tce3_db`.`department` LIMIT 3000;

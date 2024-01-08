@@ -1,0 +1,1 @@
+TRUNCATE `tce3_db`.`department`;
