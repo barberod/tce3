@@ -697,6 +697,9 @@ class DataLoadCommand extends Command
             $evaluation->setUpdated($dt2);
         }
 
+        $evaluation->setCourseTitle($row[60]);
+        $evaluation->setLabTitle($row[61]);
+
         $this->entityManager->persist($evaluation);
         $this->entityManager->flush();
 

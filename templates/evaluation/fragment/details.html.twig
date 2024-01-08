@@ -74,7 +74,7 @@
                 <label for="recordInput8" class="form-label mb-0">Evaluation Course</label>
                 <div class="font-monospace" id="recordInput8">
                     {{ evaluation.courseSubjCode }} {{ evaluation.courseCrseNum }}<br>
-                    [Course Title]<br>
+                    {{ evaluation.courseTitle }}<br>
                     {{ evaluation.courseTerm }}<br>
                     ({{ evaluation.courseCreditBasis }} Basis)<br>
                     {{ evaluation.courseCreditHrs }} credit hours
@@ -143,7 +143,7 @@
                 <label for="recordInput9" class="form-label mb-0">Evaluation Lab</label>
                 <div class="font-monospace" id="recordInput9">
                     {{ evaluation.labSubjCode }} {{ evaluation.labCrseNum }}<br>
-                    [Course Title]<br>
+                    {{ evaluation.labTitle }}<br>
                     {{ evaluation.labTerm }}<br>
                     ({{ evaluation.labCreditBasis }} Basis)<br>
                     {{ evaluation.labCreditHrs }} credit hours

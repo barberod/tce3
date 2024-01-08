@@ -41,6 +41,9 @@ class Evaluation
     #[ORM\Column(length: 12, nullable: true)]
     private ?string $courseCrseNum = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $courseTitle = null;
+
     #[ORM\Column(length: 24, nullable: true)]
     private ?string $courseTerm = null;
 
@@ -55,6 +58,9 @@ class Evaluation
 
     #[ORM\Column(length: 12, nullable: true)]
     private ?string $labCrseNum = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $labTitle = null;
 
     #[ORM\Column(length: 24, nullable: true)]
     private ?string $labTerm = null;
@@ -313,6 +319,18 @@ class Evaluation
         return $this;
     }
 
+    public function getCourseTitle(): ?string
+    {
+        return $this->courseTitle;
+    }
+
+    public function setCourseTitle(?string $courseTitle): static
+    {
+        $this->courseTitle = $courseTitle;
+
+        return $this;
+    }
+
     public function getCourseTerm(): ?string
     {
         return $this->courseTerm;
@@ -369,6 +387,18 @@ class Evaluation
     public function setLabCrseNum(?string $labCrseNum): static
     {
         $this->labCrseNum = $labCrseNum;
+
+        return $this;
+    }
+
+    public function getLabTitle(): ?string
+    {
+        return $this->labTitle;
+    }
+
+    public function setLabTitle(?string $labTitle): static
+    {
+        $this->labTitle = $labTitle;
 
         return $this;
     }

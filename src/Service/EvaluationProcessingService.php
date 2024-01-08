@@ -74,6 +74,7 @@ class EvaluationProcessingService
 
 				$evaluation->setCourseSubjCode($formData['coursePrefix']);
 				$evaluation->setCourseCrseNum($formData['courseNumber']);
+				$evaluation->setCourseTitle($formData['courseTitle']);
 				$evaluation->setCourseTerm($formData['courseSemester']);
 				$evaluation->setCourseCreditBasis($formData['courseCreditBasis']);
 				$evaluation->setCourseCreditHrs($formData['courseCreditHours']);
@@ -81,12 +82,14 @@ class EvaluationProcessingService
 				if ($formData['hasLab'] == 'Yes') {
 					$evaluation->setLabSubjCode($formData['labPrefix']);
 					$evaluation->setLabCrseNum($formData['labNumber']);
+					$evaluation->setLabTitle($formData['labTitle']);
 					$evaluation->setLabTerm($formData['labSemester']);
 					$evaluation->setLabCreditBasis($formData['labCreditBasis']);
 					$evaluation->setLabCreditHrs($formData['labCreditHours']);
 				} else {
 					$evaluation->setLabSubjCode('');
 					$evaluation->setLabCrseNum('');
+					$evaluation->setLabTitle('');
 					$evaluation->setLabTerm('');
 					$evaluation->setLabCreditBasis('');
 					$evaluation->setLabCreditHrs('');
@@ -834,7 +837,6 @@ class EvaluationProcessingService
 				} else {
 						$coordinatorText .= 'Unknown';
 				}
-
 
 				$trail->setBody('Sent back to Registrar by '.$coordinatorText.'. Phase set to Registrar 1.');
 				$trail->setBodyAnon('Sent back to Registrar by department.');
