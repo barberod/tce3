@@ -1,7 +1,7 @@
 <a id="top"></a>
 # Transfer Credit Evaluation v3 (tce3)
 
-This project is Transfer Credit Evaluation, version 3.
+This project is Transfer Credit Evaluation, version 3..
 
 ## About
 
