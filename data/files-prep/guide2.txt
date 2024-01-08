@@ -6,13 +6,3 @@ Order:
 3.  LabSyllabus         x
 4.  LabDocument         x
 5.  AttachedFile        x
-
-Syllabus:
-syllabi-info-01.csv     x
-syllabi-info-02.csv     x
-syllabi-info-03.csv     x
-syllabi-info-04.csv     x
-syllabi-info-05.csv     x
-syllabi-info-06.csv     x
-syllabi-info-07.csv     x
-

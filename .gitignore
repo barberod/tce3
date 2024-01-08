@@ -19,7 +19,15 @@
 /data/csv/uploads/Trail/*.csv
 /data/csv/uploads/User/*.csv
 !/data/csv/uploads/User/starter1.csv
+
 /data/sql/backups/*.sql
+
+/data/files-prep/csv/AttachedFile/*.csv
+/data/files-prep/csv/Document/*.csv
+/data/files-prep/csv/Syllabus/*.csv
+/data/files-prep/csv/LabDocument/*.csv
+/data/files-prep/csv/LabSyllabus/*.csv
+
 
 # Exlude uploaded files
 /files/
