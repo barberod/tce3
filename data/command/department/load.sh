@@ -1,0 +1,1 @@
+for i in `cat data/csv/uploads/Department/_department-file-list.txt`; do php bin/console tce3:data-load Department "${i}"; done

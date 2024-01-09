@@ -1,0 +1,1 @@
+for i in `cat data/csv/uploads/Note/_note-file-list.txt`; do php bin/console tce3:data-load Note "${i}"; done

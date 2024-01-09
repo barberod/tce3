@@ -1,0 +1,1 @@
+for i in `cat data/csv/uploads/Institution/_institution-file-list.txt`; do php bin/console tce3:data-unload Institution "${i}"; done

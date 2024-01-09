@@ -1,0 +1,1 @@
+for i in `cat data/csv/uploads/Affiliation/_affiliation-file-list.txt`; do php bin/console tce3:data-load Affiliation "${i}"; done

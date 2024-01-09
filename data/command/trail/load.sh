@@ -1,0 +1,1 @@
+for i in `cat data/csv/uploads/Trail/_trail-file-list.txt`; do php bin/console tce3:data-load Trail "${i}"; done
