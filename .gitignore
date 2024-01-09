@@ -50,6 +50,10 @@
 /data/files-prep/out-of-order/syllabi/*
 !/data/files-prep/out-of-order/syllabi/.gitkeep
 
+/data/files-prep/out-of-order/*.zip
+/data/files-prep/inorder/files/*
+!/data/files-prep/inorder/files/.gitkeep
+
 # Exlude uploaded files
 /files/
 
