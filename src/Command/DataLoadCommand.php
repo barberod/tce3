@@ -86,10 +86,10 @@ class DataLoadCommand extends Command
             return $this->loadNotes($io, $targetEntity, $fileToLoad);
         }
 
-				if ($targetEntity === 'Affiliation') {
-						$io->title("Loading affiliations");
-						return $this->loadAffiliations($io, $targetEntity, $fileToLoad);
-				}
+        if ($targetEntity === 'Affiliation') {
+            $io->title("Loading affiliations");
+            return $this->loadAffiliations($io, $targetEntity, $fileToLoad);
+        }
 
         $io->warning('Invalid.');
         return Command::INVALID;
@@ -474,7 +474,7 @@ class DataLoadCommand extends Command
      * Evaluation
      */
     protected function loadEvaluations(SymfonyStyle $io, string $targetEntity, string $fileToLoad) {
-        if ($this->runChecks($io, $targetEntity, $fileToLoad, 60, 2) === 0) {
+        if ($this->runChecks($io, $targetEntity, $fileToLoad, 62, 2) === 0) {
             $this->parseEvaluationFileAndLoadEvaluations($io, $fileToLoad);
         } else {
             $io->warning('Evaluations from '.$fileToLoad.' have NOT been loaded.');

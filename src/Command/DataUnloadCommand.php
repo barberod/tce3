@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\Affiliation;
 use App\Entity\Course;
 use App\Entity\Department;
 use App\Entity\Evaluation;
@@ -27,7 +28,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class DataUnloadCommand extends Command
 {
-    private $unloadableEntities = ['User','Course','Institution','Department','Evaluation','Trail','Note'];
+    private $unloadableEntities = ['User','Course','Institution','Department','Evaluation','Trail','Note','Affiliation'];
 
     public function __construct(
         private readonly LoggerInterface $logger,
@@ -82,7 +83,12 @@ class DataUnloadCommand extends Command
 
         if ($targetEntity === 'Note') {
             $io->title("Unloading notes");
-            return $this->unloadTrails($io, $targetEntity, $fileToUnload);
+            return $this->unloadNotes($io, $targetEntity, $fileToUnload);
+        }
+
+        if ($targetEntity === 'Affiliation') {
+            $io->title("Unloading affiliations");
+            return $this->unloadAffiliations($io, $targetEntity, $fileToUnload);
         }
 
         $io->warning('Invalid.');
@@ -145,6 +151,11 @@ class DataUnloadCommand extends Command
         }
         if ($targetEntity === 'Note') {
             if ($this->entityManager->getRepository(Note::class)->findBy(['loadedFrom'=>$fileToUnload], null, 1)) {
+                return true;
+            }
+        }
+        if ($targetEntity === 'Affiliation') {
+            if ($this->entityManager->getRepository(Affiliation::class)->findBy(['loadedFrom'=>$fileToUnload], null, 1)) {
                 return true;
             }
         }
@@ -408,6 +419,42 @@ class DataUnloadCommand extends Command
             ));
 
             $this->entityManager->remove($note);
+            $this->entityManager->flush();
+
+            $i++;
+        }
+        $io->newLine();
+    }
+
+    /*
+     * Affiliation
+     */
+    protected function unloadAffiliations(SymfonyStyle $io, string $targetEntity, string $fileToUnload): int {
+        if ($this->runChecks($io, $targetEntity, $fileToUnload, 3, 2) === 0) {
+            $this->deleteAffiliationsFromAffiliationTable($io, $fileToUnload);
+        } else {
+            $io->warning('Affiliations from '.$fileToUnload.' have NOT been unloaded.');
+            return Command::FAILURE;
+        }
+        $io->success('Affiliations from '.$fileToUnload.' have been unloaded.');
+        return Command::SUCCESS;
+    }
+
+    protected function deleteAffiliationsFromAffiliationTable(SymfonyStyle $io, string $fileToUnload) {
+        $io->section("Deleting affiliations from database");
+        $affiliations = $this->entityManager->getRepository(Affiliation::class)->findBy(['loadedFrom'=>$fileToUnload]);
+        $total = count($affiliations);
+        $i = 1;
+        foreach ($affiliations as $affiliation) {
+            $io->text(
+                sprintf("%04d/%04d\t%16s\t%32s",
+                $i,
+                $total,
+                $affiliation->getFacstaff()->getUsername(),
+                $affiliation->getDepartment()->getName()
+            ));
+
+            $this->entityManager->remove($affiliation);
             $this->entityManager->flush();
 
             $i++;
