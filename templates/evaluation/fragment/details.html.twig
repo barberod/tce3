@@ -80,7 +80,7 @@
                     {{ evaluation.courseCreditHrs }} credit hours
                 </div>
                 <div>
-                    {% if files.course_syllabus is defined %}
+                    {% if files.course_syllabus is defined and files.course_syllabus is not null %}
                         {% set icon = 'fa-file' %}
                         {% set target = '' %}
                         {% if files.course_syllabus ends with 'pdf' %}
@@ -102,13 +102,13 @@
                         {% endif %}
 
                         <div class="mt-3">
-                            <a href="{{ url( context ~ '_file_download', { 'id':id|raw, 'subfolder':'course-syllabus', 'filename':files.course_syllabus|raw }) }}"{{ target }}>
+                            <a href="{{ url( context ~ '_file_download', { 'id':id|raw, 'subfolder':'course_syllabus', 'filename':files.course_syllabus|raw }) }}"{{ target }}>
                                 <i class="fa-regular {{ icon }} fa-fw me-2"></i>Course Syllabus
                             </a>
                         </div>
                     {% endif %}
 
-                    {% if files.course_document is defined %}
+                    {% if files.course_document is defined and files.course_document is not null %}
                         {% set icon = 'fa-file' %}
                         {% set target = '' %}
                         {% if files.course_document ends with 'pdf' %}
@@ -130,7 +130,7 @@
                         {% endif %}
 
                         <div>
-                            <a href="{{ url( context ~ '_file_download', { 'id':id|raw, 'subfolder':'course-syllabus', 'filename':files.course_document|raw }) }}"{{ target }}>
+                            <a href="{{ url( context ~ '_file_download', { 'id':id|raw, 'subfolder':'course_syllabus', 'filename':files.course_document|raw }) }}"{{ target }}>
                                 <i class="fa-regular {{ icon }} fa-fw me-2"></i>Course Document
                             </a>
                         </div>
@@ -149,7 +149,7 @@
                     {{ evaluation.labCreditHrs }} credit hours
                 </div>
                 <div>
-                    {% if files.lab_syllabus is defined %}
+                    {% if files.lab_syllabus is defined and files.lab_syllabus is not null %}
                         {% set icon = 'fa-file' %}
                         {% set target = '' %}
                         {% if files.lab_syllabus ends with 'pdf' %}
@@ -171,13 +171,13 @@
                         {% endif %}
 
                         <div class="mt-3">
-                            <a href="{{ url( context ~ '_file_download', { 'id':id|raw, 'subfolder':'course-syllabus', 'filename':files.lab_syllabus|raw }) }}"{{ target }}>
+                            <a href="{{ url( context ~ '_file_download', { 'id':id|raw, 'subfolder':'course_syllabus', 'filename':files.lab_syllabus|raw }) }}"{{ target }}>
                                 <i class="fa-regular {{ icon }} fa-fw me-2"></i>Course Syllabus
                             </a>
                         </div>
                     {% endif %}
 
-                    {% if files.lab_document is defined %}
+                    {% if files.lab_document is defined and files.lab_document is not null %}
                         {% set icon = 'fa-file' %}
                         {% set target = '' %}
                         {% if files.lab_document ends with 'pdf' %}
@@ -199,7 +199,7 @@
                         {% endif %}
 
                         <div>
-                            <a href="{{ url( context ~ '_file_download', { 'id':id|raw, 'subfolder':'course-syllabus', 'filename':files.lab_document|raw }) }}"{{ target }}>
+                            <a href="{{ url( context ~ '_file_download', { 'id':id|raw, 'subfolder':'course_syllabus', 'filename':files.lab_document|raw }) }}"{{ target }}>
                                 <i class="fa-regular {{ icon }} fa-fw me-2"></i>Course Document
                             </a>
                         </div>

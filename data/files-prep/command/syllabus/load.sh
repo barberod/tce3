@@ -1,0 +1,1 @@
+for i in `cat data/files-prep/csv/Syllabus/_syllabi-file-list.txt`; do php bin/console tce3:files-load Syllabus "${i}"; done

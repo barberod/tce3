@@ -1,4 +1,6 @@
-# Drop the database
+# Load the tce3 app with data and files from tce2
+
+## Drop the database
 
 ```bash
 mysql -u someoneexisting -p
@@ -8,7 +10,7 @@ mysql -u someoneexisting -p
 DROP DATABASE tce3_db;
 ```
 
-# Create the database
+## Create the database
 
 ```bash
 mysql -u someoneexisting -p
@@ -18,14 +20,14 @@ mysql -u someoneexisting -p
 CREATE DATABASE tce3_db;
 ```
 
-# Set up the database
+## Set up the database
 
 ```bash
 # ~/projects/tce3
 php bin/console tce3:database-setup Risk-Accepted
 ```
 
-# Instructions for loading data
+## Instructions for loading data
 
 The slash at the end is necessary.
 
@@ -34,7 +36,7 @@ The slash at the end is necessary.
 export TCE2=https://something.registrar.gatech.edu/something/
 ```
 
-users
+### users
 
 ```bash
 # ~/projects/tce3
@@ -49,7 +51,7 @@ sudo chmod +x ./data/command/user/load.sh
 ./data/command/user/load.sh
 ```
 
-course 
+### course 
 
 ```bash
 # ~/projects/tce3
@@ -64,7 +66,7 @@ sudo chmod +x ./data/command/course/load.sh
 ./data/command/course/load.sh
 ```
 
-institution
+### institution
 
 ```bash
 # ~/projects/tce3
@@ -79,7 +81,7 @@ sudo chmod +x ./data/command/institution/load.sh
 ./data/command/institution/load.sh
 ```
 
-department
+### department
 
 ```bash
 # ~/projects/tce3
@@ -94,7 +96,7 @@ sudo chmod +x ./data/command/department/load.sh
 ./data/command/department/load.sh
 ```
 
-evaluation
+### evaluation
 
 ```bash
 # ~/projects/tce3
@@ -109,7 +111,7 @@ sudo chmod +x ./data/command/evaluation/load.sh
 ./data/command/evaluation/load.sh
 ```
 
-trail
+### trail
 
 ```bash
 # ~/projects/tce3
@@ -124,7 +126,7 @@ sudo chmod +x ./data/command/trail/load.sh
 ./data/command/trail/load.sh
 ```
 
-note
+### note
 
 ```bash
 # ~/projects/tce3
@@ -139,7 +141,7 @@ sudo chmod +x ./data/command/note/load.sh
 ./data/command/note/load.sh
 ```
 
-affiliation
+### affiliation
 
 ```bash
 # ~/projects/tce3
@@ -154,39 +156,120 @@ sudo chmod +x ./data/command/affiliation/load.sh
 ./data/command/affiliation/load.sh
 ```
 
-syllabus
+## Instructions for loading files
+
+_Nota bene:_
+
+Be sure you've moved the files folders to `data/files-prep/out-of-order`.
+
+### zipping the file directories in tce2
+
+#### zip the documents
+
+```bash
+# /var/www/tce2.registrar.gatech.edu/tce2/sites/default/files/private
+sudo zip -r documents.zip documents
+```
+
+#### zip the lab documents
+
+```bash
+# /var/www/tce2.registrar.gatech.edu/tce2/sites/default/files/private
+sudo zip -r lab_documents.zip lab_documents
+```
+
+#### zip the lab syllabi
+
+```bash
+# /var/www/tce2.registrar.gatech.edu/tce2/sites/default/files/private
+sudo zip -r lab_syllabi.zip lab_syllabi
+```
+
+#### zip the supplemental files (aka attached files)
+
+```bash
+# /var/www/tce2.registrar.gatech.edu/tce2/sites/default/files/private
+sudo zip -r supplemental.zip supplemental
+```
+
+#### zip the syllabi
+
+```bash
+# /var/www/tce2.registrar.gatech.edu/tce2/sites/default/files/private
+sudo zip -r syllabi.zip syllabi
+```
+
+### syllabus
 
 ```bash
 # ~/projects/tce3
 ./data/files-prep/command/syllabus/download.sh
 ```
 
-document
+```bash
+sudo chmod +x ./data/files-prep/command/syllabus/load.sh
+```
+
+```bash
+./data/files-prep/command/syllabus/load.sh
+```
+
+### document
 
 ```bash
 # ~/projects/tce3
 ./data/files-prep/command/document/download.sh
 ```
 
-lab-syllabus
+```bash
+sudo chmod +x ./data/files-prep/command/document/load.sh
+```
+
+```bash
+./data/files-prep/command/document/load.sh
+```
+
+### lab-syllabus
 
 ```bash
 # ~/projects/tce3
 ./data/files-prep/command/lab-syllabus/download.sh
 ```
 
-lab-document
+```bash
+sudo chmod +x ./data/files-prep/command/lab-syllabus/load.sh
+```
+
+```bash
+./data/files-prep/command/lab-syllabus/load.sh
+```
+
+### lab-document
 
 ```bash
 # ~/projects/tce3
 ./data/files-prep/command/lab-document/download.sh
 ```
 
-attached-file
+```bash
+sudo chmod +x ./data/files-prep/command/lab-document/load.sh
+```
+
+```bash
+./data/files-prep/command/lab-document/load.sh
+```
+
+### attached-file
 
 ```bash
 # ~/projects/tce3
 ./data/files-prep/command/attached-file/download.sh
 ```
 
+```bash
+sudo chmod +x ./data/files-prep/command/attached-file/load.sh
+```
 
+```bash
+./data/files-prep/command/attached-file/load.sh
+```

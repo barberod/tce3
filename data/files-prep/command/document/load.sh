@@ -1,0 +1,1 @@
+for i in `cat data/files-prep/csv/Document/_course-documents-file-list.txt`; do php bin/console tce3:files-load Document "${i}"; done

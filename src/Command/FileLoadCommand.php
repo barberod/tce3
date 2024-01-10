@@ -199,19 +199,30 @@ class FileLoadCommand extends Command
                 $parts = explode("files/syllabi/", trim($row[1]));
 
                 // Create eval dir if not exists
+                /*
                 if (!file_exists("data/files-prep/in-order/files/{$eval->getID()}")) {
                     mkdir("data/files-prep/in-order/files/{$eval->getID()}", 0777, true);
                 }
+                */
+                if (!file_exists("files/{$eval->getID()}")) {
+                    mkdir("files/{$eval->getID()}", 0777, true);
+                }
 
                 // Create syllabus dir inside eval dir if not exists
+                /*
                 if (!file_exists("data/files-prep/in-order/files/{$eval->getID()}/course_syllabus")) {
                     mkdir("data/files-prep/in-order/files/{$eval->getID()}/course_syllabus", 0777, true);
+                }
+                */
+                if (!file_exists("files/{$eval->getID()}/course_syllabus")) {
+                    mkdir("files/{$eval->getID()}/course_syllabus", 0777, true);
                 }
 
                 // Copy from out-of-order to in-order
                 if (file_exists("data/files-prep/out-of-order/syllabi/{$parts[1]}")) {
                     $source = "data/files-prep/out-of-order/syllabi/{$parts[1]}";
-                    $target = "data/files-prep/in-order/files/{$eval->getID()}/course_syllabus/{$parts[1]}";
+                    // $target = "data/files-prep/in-order/files/{$eval->getID()}/course_syllabus/{$parts[1]}";
+                    $target = "files/{$eval->getID()}/course_syllabus/{$parts[1]}";
                     copy($source, $target);
                 } else {
                     $io->text(
@@ -225,6 +236,7 @@ class FileLoadCommand extends Command
                 }
 
                 // Verify the move
+                // if (file_exists("data/files-prep/in-order/files/{$eval->getID()}/course_syllabus/{$parts[1]}")) {
                 if (file_exists("data/files-prep/in-order/files/{$eval->getID()}/course_syllabus/{$parts[1]}")) {
                     $io->text(
                         sprintf("%04d/%04d\t%8s\t%64s", 
@@ -295,19 +307,19 @@ class FileLoadCommand extends Command
                 $parts = explode("files/documents/", trim($row[1]));
 
                 // Create eval dir if not exists
-                if (!file_exists("data/files-prep/in-order/files/{$eval->getID()}")) {
-                    mkdir("data/files-prep/in-order/files/{$eval->getID()}", 0777, true);
+                if (!file_exists("files/{$eval->getID()}")) {
+                    mkdir("files/{$eval->getID()}", 0777, true);
                 }
 
                 // Create course_document dir inside eval dir if not exists
-                if (!file_exists("data/files-prep/in-order/files/{$eval->getID()}/course_document")) {
-                    mkdir("data/files-prep/in-order/files/{$eval->getID()}/course_document", 0777, true);
+                if (!file_exists("files/{$eval->getID()}/course_document")) {
+                    mkdir("files/{$eval->getID()}/course_document", 0777, true);
                 }
 
                 // Copy from out-of-order to in-order
                 if (file_exists("data/files-prep/out-of-order/documents/{$parts[1]}")) {
                     $source = "data/files-prep/out-of-order/documents/{$parts[1]}";
-                    $target = "data/files-prep/in-order/files/{$eval->getID()}/course_document/{$parts[1]}";
+                    $target = "files/{$eval->getID()}/course_document/{$parts[1]}";
                     copy($source, $target);
                 } else {
                     $io->text(
@@ -321,7 +333,7 @@ class FileLoadCommand extends Command
                 }
 
                 // Verify the move
-                if (file_exists("data/files-prep/in-order/files/{$eval->getID()}/course_document/{$parts[1]}")) {
+                if (file_exists("files/{$eval->getID()}/course_document/{$parts[1]}")) {
                     $io->text(
                         sprintf("%04d/%04d\t%8s\t%64s", 
                         $current, 
@@ -391,19 +403,19 @@ class FileLoadCommand extends Command
                 $parts = explode("files/lab_syllabi/", trim($row[1]));
 
                 // Create eval dir if not exists
-                if (!file_exists("data/files-prep/in-order/files/{$eval->getID()}")) {
-                    mkdir("data/files-prep/in-order/files/{$eval->getID()}", 0777, true);
+                if (!file_exists("files/{$eval->getID()}")) {
+                    mkdir("files/{$eval->getID()}", 0777, true);
                 }
 
                 // Create lab syllabus dir inside eval dir if not exists
-                if (!file_exists("data/files-prep/in-order/files/{$eval->getID()}/lab_syllabus")) {
-                    mkdir("data/files-prep/in-order/files/{$eval->getID()}/lab_syllabus", 0777, true);
+                if (!file_exists("files/{$eval->getID()}/lab_syllabus")) {
+                    mkdir("files/{$eval->getID()}/lab_syllabus", 0777, true);
                 }
 
                 // Copy from out-of-order to in-order
                 if (file_exists("data/files-prep/out-of-order/lab_syllabi/{$parts[1]}")) {
                     $source = "data/files-prep/out-of-order/lab_syllabi/{$parts[1]}";
-                    $target = "data/files-prep/in-order/files/{$eval->getID()}/lab_syllabus/{$parts[1]}";
+                    $target = "files/{$eval->getID()}/lab_syllabus/{$parts[1]}";
                     copy($source, $target);
                 } else {
                     $io->text(
@@ -417,7 +429,7 @@ class FileLoadCommand extends Command
                 }
 
                 // Verify the move
-                if (file_exists("data/files-prep/in-order/files/{$eval->getID()}/lab_syllabus/{$parts[1]}")) {
+                if (file_exists("files/{$eval->getID()}/lab_syllabus/{$parts[1]}")) {
                     $io->text(
                         sprintf("%04d/%04d\t%8s\t%64s", 
                         $current, 
@@ -487,19 +499,19 @@ class FileLoadCommand extends Command
                 $parts = explode("files/lab_documents/", trim($row[1]));
 
                 // Create eval dir if not exists
-                if (!file_exists("data/files-prep/in-order/files/{$eval->getID()}")) {
-                    mkdir("data/files-prep/in-order/files/{$eval->getID()}", 0777, true);
+                if (!file_exists("files/{$eval->getID()}")) {
+                    mkdir("files/{$eval->getID()}", 0777, true);
                 }
 
                 // Create lab_document dir inside eval dir if not exists
-                if (!file_exists("data/files-prep/in-order/files/{$eval->getID()}/lab_document")) {
-                    mkdir("data/files-prep/in-order/files/{$eval->getID()}/lab_document", 0777, true);
+                if (!file_exists("files/{$eval->getID()}/lab_document")) {
+                    mkdir("files/{$eval->getID()}/lab_document", 0777, true);
                 }
 
                 // Copy from out-of-order to in-order
                 if (file_exists("data/files-prep/out-of-order/lab_documents/{$parts[1]}")) {
                     $source = "data/files-prep/out-of-order/lab_documents/{$parts[1]}";
-                    $target = "data/files-prep/in-order/files/{$eval->getID()}/lab_document/{$parts[1]}";
+                    $target = "files/{$eval->getID()}/lab_document/{$parts[1]}";
                     copy($source, $target);
                 } else {
                     $io->text(
@@ -513,7 +525,7 @@ class FileLoadCommand extends Command
                 }
 
                 // Verify the move
-                if (file_exists("data/files-prep/in-order/files/{$eval->getID()}/lab_document/{$parts[1]}")) {
+                if (file_exists("files/{$eval->getID()}/lab_document/{$parts[1]}")) {
                     $io->text(
                         sprintf("%04d/%04d\t%8s\t%64s", 
                         $current, 
@@ -583,19 +595,19 @@ class FileLoadCommand extends Command
                 $parts = explode("files/supplemental/", trim($row[1]));
 
                 // Create eval dir if not exists
-                if (!file_exists("data/files-prep/in-order/files/{$eval->getID()}")) {
-                    mkdir("data/files-prep/in-order/files/{$eval->getID()}", 0777, true);
+                if (!file_exists("files/{$eval->getID()}")) {
+                    mkdir("files/{$eval->getID()}", 0777, true);
                 }
 
                 // Create attachments dir inside eval dir if not exists
-                if (!file_exists("data/files-prep/in-order/files/{$eval->getID()}/attachments")) {
-                    mkdir("data/files-prep/in-order/files/{$eval->getID()}/attachments", 0777, true);
+                if (!file_exists("files/{$eval->getID()}/attachments")) {
+                    mkdir("files/{$eval->getID()}/attachments", 0777, true);
                 }
 
                 // Copy from out-of-order to in-order
                 if (file_exists("data/files-prep/out-of-order/supplemental/{$parts[1]}")) {
                     $source = "data/files-prep/out-of-order/supplemental/{$parts[1]}";
-                    $target = "data/files-prep/in-order/files/{$eval->getID()}/attachments/{$parts[1]}";
+                    $target = "files/{$eval->getID()}/attachments/{$parts[1]}";
                     copy($source, $target);
                 } else {
                     $io->text(
@@ -609,7 +621,7 @@ class FileLoadCommand extends Command
                 }
 
                 // Verify the move
-                if (file_exists("data/files-prep/in-order/files/{$eval->getID()}/attachments/{$parts[1]}")) {
+                if (file_exists("files/{$eval->getID()}/attachments/{$parts[1]}")) {
                     $io->text(
                         sprintf("%04d/%04d\t%8s\t%64s", 
                         $current, 

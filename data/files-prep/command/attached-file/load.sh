@@ -1,0 +1,1 @@
+for i in `cat data/files-prep/csv/AttachedFile/_attached-files-file-list.txt`; do php bin/console tce3:files-load AttachedFile "${i}"; done

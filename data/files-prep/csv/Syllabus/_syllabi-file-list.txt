@@ -5,3 +5,4 @@ syllabi-info-04.csv
 syllabi-info-05.csv
 syllabi-info-06.csv
 syllabi-info-07.csv
+syllabi-info-08.csv

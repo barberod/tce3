@@ -41,21 +41,21 @@ class EvaluationFilesService
 
 		public function getCourseSyllabusLocation(Evaluation $evaluation): ?string
 		{
-				$directoryPath = $this->filesDirectory . '/' . $evaluation->getId() . '/course-syllabus';
+				$directoryPath = $this->filesDirectory . '/' . $evaluation->getId() . '/course_syllabus';
 				if (is_dir($directoryPath)) {
-						$files = glob($directoryPath . '/*');
-						if ($files !== false && count($files) > 0) {
-								foreach ($files as $file) {
-										return basename($file);
-								}
+					$files = glob($directoryPath . '/*');
+					if ($files !== false && count($files) > 0) {
+						foreach ($files as $file) {
+								return basename($file);
 						}
+					}
 				}
 				return null;
 		}
 
 		public function getCourseDocumentLocation(Evaluation $evaluation): ?string
 		{
-				$directoryPath = $this->filesDirectory . '/' . $evaluation->getId() . '/course-document';
+				$directoryPath = $this->filesDirectory . '/' . $evaluation->getId() . '/course_document';
 				if (is_dir($directoryPath)) {
 						$files = glob($directoryPath . '/*');
 						if ($files !== false && count($files) > 0) {
@@ -69,7 +69,7 @@ class EvaluationFilesService
 
 		public function getLabSyllabusLocation(Evaluation $evaluation): ?string
 		{
-				$directoryPath = $this->filesDirectory . '/' . $evaluation->getId() . '/lab-syllabus';
+				$directoryPath = $this->filesDirectory . '/' . $evaluation->getId() . '/lab_syllabus';
 				if (is_dir($directoryPath)) {
 						$files = glob($directoryPath . '/*');
 						if ($files !== false && count($files) > 0) {
@@ -83,7 +83,7 @@ class EvaluationFilesService
 
 		public function getLabDocumentLocation(Evaluation $evaluation): ?string
 		{
-				$directoryPath = $this->filesDirectory . '/' . $evaluation->getId() . '/lab-document';
+				$directoryPath = $this->filesDirectory . '/' . $evaluation->getId() . '/lab_document';
 				if (is_dir($directoryPath)) {
 						$files = glob($directoryPath . '/*');
 						if ($files !== false && count($files) > 0) {
