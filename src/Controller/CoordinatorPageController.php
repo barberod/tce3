@@ -23,6 +23,7 @@ use App\Form\EvaluationLookUpRequesterType;
 use App\Form\EvaluationReassignType;
 use App\Form\EvaluationResubmitType;
 use App\Form\EvaluationSpotArticulateType;
+use App\Form\EvaluationUpdateType;
 use App\Repository\EvaluationRepository;
 use App\Service\EvaluationFilesService;
 use App\Service\EvaluationFormDefaultsService;
@@ -373,16 +374,26 @@ class CoordinatorPageController extends AbstractController
 
 		#[Route('/secure/coordinator/evaluation/{id}/update', name: 'coordinator_evaluation_update_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+update', 'evaluation' )]
-		public function coordinatorEvaluationUpdateForm(Evaluation $evaluation): Response
+		public function coordinatorEvaluationUpdateForm(Request $request,
+			Evaluation $evaluation): Response
 		{
-				return $this->render('evaluation/page.html.twig', [
+				$form = $this->createForm(EvaluationUpdateType::class);
+				$form->handleRequest($request);
+				if ($form->isSubmitted()) {
+						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+						$evaluationProcessingService->updateEvaluation($evaluation,$form->getData());
+						return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+				}
+
+				return $this->render('evaluation/form/update.html.twig', [
 					'context' => 'coordinator',
 					'page_title' => 'Evaluation #'.$evaluation->getID(),
 					'prepend' => 'Edit Details | Evaluation #'.$evaluation->getID(),
 					'evaluation' => $evaluation,
 					'id' => $evaluation->getID(),
 					'uuid' => $evaluation->getID(),
-					'verb' => 'update'
+					'verb' => 'update',
+					'form' => $form->createView(),
 				]);
 		}
 

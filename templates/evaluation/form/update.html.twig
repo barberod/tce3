@@ -1,0 +1,110 @@
+{% extends 'page/page.html.twig' %}
+
+{% block breadcrumbs %}
+    <div class="col-12 px-3">
+        <nav class="row" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url('homepage') }}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ url('requester_home') }}">Requester</a></li>
+                <li class="breadcrumb-item"><a href="{{ url('requester_evaluation_table') }}">Evaluations</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Update Evaluation</li>
+            </ol>
+        </nav>
+    </div>
+{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+    <div class="col-12">
+        <div class="row content">
+            <div class="col-12">
+                <div class="card border-primary mb-3">
+                    <h2 class="card-header bg-primary border-primary h5">Basic Information</h2>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 col-lg-5">
+                                {% if app.user %}
+                                <div class="mb-3">
+                                    <label for="requesterUn" class="form-label">Requester</label>
+                                    <input id="requesterUn" disabled="disabled" class="form-control" value="{{ app.user.username }}" />
+                                </div>
+                                {% endif %}
+                                {{ form_row(form.created) }}
+                            </div>
+                            <div class="col-12 col-lg-5 offset-lg-1">
+                                {{ form_row(form.requiredForAdmission) }}
+                                {{ form_row(form.hasLab) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card border-primary mb-3">
+                    <h2 class="card-header bg-primary border-primary h5">About the Institution</h2>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 col-lg-5">
+                                {{ form_row(form.locatedUsa) }}
+                                {{ form_row(form.state) }}
+                                {{ form_row(form.institution) }}
+                                {{ form_row(form.institutionListed) }}
+                                {{ form_row(form.country) }}
+                                {{ form_row(form.institutionName) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card border-primary mb-3">
+                    <h2 class="card-header bg-primary border-primary h5">About the Course</h2>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 col-lg-5">
+                                {{ form_row(form.courseSubjCode) }}
+                                {{ form_row(form.courseCrseNum) }}
+                                {{ form_row(form.courseTitle) }}
+                                {{ form_row(form.courseTerm) }}
+                                {{ form_row(form.courseCreditBasis) }}
+                                {{ form_row(form.courseCreditHours) }}
+                                {{ form_row(form.courseSyllabus) }}
+                                {{ form_row(form.courseDocument) }}
+                            </div>
+                            <div id="labFieldSet" class="col-12 col-lg-5 offset-lg-1">
+                                {{ form_row(form.labPrefix) }}
+                                {{ form_row(form.labNumber) }}
+                                {{ form_row(form.labTitle) }}
+                                {{ form_row(form.labSemester) }}
+                                {{ form_row(form.labCreditBasis) }}
+                                {{ form_row(form.labCreditHours) }}
+                                {{ form_row(form.labSyllabus) }}
+                                {{ form_row(form.labDocument) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card border-primary mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="mb-0">Click the "Submit" button to record changes.</p>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <button class="btn btn-primary btn-lg" type="submit">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{{ asset('js/evaluation/update.js') }}"></script>
+{% endblock %}
+

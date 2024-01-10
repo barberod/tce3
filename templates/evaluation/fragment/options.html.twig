@@ -119,6 +119,12 @@
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Edit Details
             </a>
 
+            {% if options.update %}
+                <a href="{{ url( context ~ '_evaluation_update_form', { 'id':id|raw }) }}" id="option-01" class="list-group-item list-group-item-action">
+                    <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Edit Details
+                </a>
+            {% endif %}
+
             {% if options.annotate %}
                 <a href="{{ url( context ~ '_evaluation_annotate_form', { 'id':id|raw }) }}" id="option-02" class="list-group-item list-group-item-action">
                     <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Write a Note
