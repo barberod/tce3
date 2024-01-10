@@ -143,8 +143,8 @@ class LookupService
             return true;
         }
         if (
-            (in_array("vm61", $entry->getAttribute('gtprimarygtaccountusername'))) || 
-            (in_array("ms366", $entry->getAttribute('gtprimarygtaccountusername')))
+            (in_array("vm61", $entry->getAttribute('gtPrimaryGTAccountUsername'))) || 
+            (in_array("ms366", $entry->getAttribute('gtPrimaryGTAccountUsername')))
         ) {
             return true;
         }
