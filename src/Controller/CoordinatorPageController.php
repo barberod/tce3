@@ -19,6 +19,7 @@ use App\Form\EvaluationFromR2ToStudentType;
 use App\Form\EvaluationFromStudentToR1Type;
 use App\Form\EvaluationHideType;
 use App\Form\EvaluationHoldType;
+use App\Form\EvaluationLookUpRequesterType;
 use App\Form\EvaluationReassignType;
 use App\Form\EvaluationResubmitType;
 use App\Form\EvaluationSpotArticulateType;
@@ -884,6 +885,31 @@ class CoordinatorPageController extends AbstractController
 					'id' => $evaluation->getID(),
 					'uuid' => $evaluation->getID(),
 					'verb' => 'spot-articulate',
+					'form' => $form->createView(),
+				]);
+		}
+
+		#[Route('/secure/coordinator/evaluation/{id}/look-up-requester', name: 'coordinator_evaluation_look_up_requester_form', methods: ['GET', 'POST'])]
+		#[IsGranted( 'coordinator+look_up_requester', 'evaluation' )]
+		public function coordinatorEvaluationLookUpRequesterForm(Request $request,
+			Evaluation $evaluation): Response
+		{
+				$form = $this->createForm(EvaluationLookUpRequesterType::class);
+				$form->handleRequest($request);
+				if ($form->isSubmitted()) {
+						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+						$evaluationProcessingService->lookUpRequesterEvaluation($evaluation, $form->getData());
+						return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+				}
+
+				return $this->render('evaluation/form/look-up-requester.html.twig', [
+					'context' => 'coordinator',
+					'page_title' => 'Evaluation #'.$evaluation->getID(),
+					'prepend' => 'Refresh Requester Information | Evaluation #'.$evaluation->getID(),
+					'evaluation' => $evaluation,
+					'id' => $evaluation->getID(),
+					'uuid' => $evaluation->getID(),
+					'verb' => 'look-up-requester',
 					'form' => $form->createView(),
 				]);
 		}

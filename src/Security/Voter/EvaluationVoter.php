@@ -43,6 +43,7 @@ class EvaluationVoter extends Voter
 		public const REASSIGN = 'reassign';
 		public const RESUBMIT = 'resubmit';
 		public const SPOT_ARTICULATE = 'spot_articulate';
+		public const LOOK_UP_REQUESTER = 'look_up_requester';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
@@ -80,7 +81,8 @@ class EvaluationVoter extends Voter
 						self::PASS,
 						self::REASSIGN,
 						self::RESUBMIT,
-						self::SPOT_ARTICULATE
+						self::SPOT_ARTICULATE,
+						self::LOOK_UP_REQUESTER
 				];
 
 				$attributes = explode('+', $attribute);
@@ -129,6 +131,7 @@ class EvaluationVoter extends Voter
 						self::REASSIGN => $this->canReassign($subject, $user, $attributes[0]),
 						self::RESUBMIT => $this->canResubmit($subject, $user, $attributes[0]),
 						self::SPOT_ARTICULATE => $this->canSpotArticulate($subject, $user, $attributes[0]),
+						self::LOOK_UP_REQUESTER => $this->canLookUpRequester($subject, $user, $attributes[0]),
 						default => false,
 				};
 		}
@@ -356,6 +359,14 @@ class EvaluationVoter extends Voter
 				}
 				return false;
 		}
+
+		private function canLookUpRequester(Evaluation $evaluation, UserInterface $user, string $context): bool {
+			// Admin, Manager, Coordinator can spot articulate any evaluation with phase "R1"
+			if (in_array($context, [self::ADMIN, self::MANAGER, self::COORDINATOR])) {
+				return true;
+			}
+			return false;
+	}
 
 }
 

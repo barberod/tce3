@@ -1666,4 +1666,44 @@ class EvaluationProcessingService
 				$this->entityManager->persist($trail);
 				$this->entityManager->flush(); // Save changes to the database
 		}
+
+	/**
+	 * Look Up Requester
+	 */
+	public function lookUpRequesterEvaluation(Evaluation $evaluation, array $formData): void
+	{
+		// Re-process requester
+		$lookupService = new LookupService($this->entityManager);
+		$lookupService->processUser($evaluation->getRequester()->getUserIdentifier());
+
+		$evaluation->setUpdated(new \DateTime());
+		
+		// Persist the entity
+		$this->entityManager->persist($evaluation);
+		$this->entityManager->flush(); // Save changes to the database
+
+		// Create a trail
+		$trail = new Trail();
+		$trail->setEvaluation($evaluation);
+
+		$coordinator = $this->security->getUser();
+		$coordinatorText = '';
+		if ($coordinator instanceof User) {
+			$coordinatorText .= $this->security->getUser()->attributes()['profile']['dn'];
+			$coordinatorText .= ' ('.$this->security->getUser()->attributes()['profile']['un'].')';
+		} elseif ($coordinator instanceof CasUser) {
+			$coordinatorText .= $this->security->getUser()->getAttributes()['profile']['dn'];
+			$coordinatorText .= ' ('.$this->security->getUser()->getAttributes()['profile']['un'].')';
+		} else {
+			$coordinatorText .= 'Unknown';
+		}
+
+		$trail->setBody('Requester\'s information refreshed in web app by '.$coordinatorText);
+		$trail->setBodyAnon('Requester\'s information refreshed in web app by coordinator.');
+		$trail->setCreated(new \DateTime());
+
+		// Persist the entity
+		$this->entityManager->persist($trail);
+		$this->entityManager->flush(); // Save changes to the database
+	}
 }

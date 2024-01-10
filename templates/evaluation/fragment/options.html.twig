@@ -109,6 +109,12 @@
             {% endif %}
 
             <!-- Any Phase -->
+            {% if options.look_up_requester %}
+                <a href="{{ url( context ~ '_evaluation_look_up_requester_form', { 'id':id|raw }) }}" id="option-1x" class="list-group-item list-group-item-action">
+                    <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Refresh Requester Info
+                </a>
+            {% endif %}
+
             <a href="#" id="option-01" class="list-group-item list-group-item-action" style="display:none;">
                 <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Edit Details
             </a>

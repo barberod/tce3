@@ -42,6 +42,7 @@ class EvaluationOptionsService
 				$verbs[] = 'reassign';
 				$verbs[] = 'resubmit';
 				$verbs[] = 'spot_articulate';
+				$verbs[] = 'look_up_requester';
 				return $verbs;
 		}
 

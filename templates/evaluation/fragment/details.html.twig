@@ -31,8 +31,8 @@
                     {{ evaluation.requester.displayName }}<br>
                     {{ evaluation.requester.orgID }}<br>
                     {{ evaluation.requester.email }}<br>
-                    {% if evaluation.requesterType is defined %}
-                        {{ evaluation.requesterType }}
+                    {% if evaluation.requesterType is defined and evaluation.requesterType is not null and evaluation.requesterType is not empty %}
+                        <span class="text-muted">{{ evaluation.requesterType }}</span>
                     {% elseif evaluation.requester.category is defined %}
                         <span class="text-muted">{{ evaluation.requester.category }}</span>
                     {% endif %}

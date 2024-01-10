@@ -96,7 +96,8 @@ class LookupService
         $userData['org_id'] = $this->getIndexZero($entry->getAttribute('gtGTID'));
         $userData['display_name'] = $this->getIndexZero($entry->getAttribute('displayName'));
         $userData['email'] = $this->getIndexZero($entry->getAttribute('gtPrimaryEmailAddress'));
-        $userData['category'] = $this->getIndexZero($entry->getAttribute('eduPersonPrimaryAffiliation'));
+        // $userData['category'] = $this->getIndexZero($entry->getAttribute('eduPersonPrimaryAffiliation'));
+        $userData['category'] = $this->getRequesterType($this->getRequesterAttributes($userData['org_id']));
         $userData['status'] = 1;
         $userData['frozen'] = 0;
         $userData['loaded_from'] = 'ldap-'.$this->generateRandomString(5);
@@ -261,7 +262,7 @@ class LookupService
 						return 'Graduate Applicant';
 				}
 				if ($this->isFullTimeEmployee($requesterAttributes['Attr'])) {
-						return 'Employee';
+						return 'Faculty/Staff';
 				}
 				return 'Unknown';
 		}
