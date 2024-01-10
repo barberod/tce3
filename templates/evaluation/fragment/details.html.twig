@@ -130,7 +130,7 @@
                         {% endif %}
 
                         <div>
-                            <a href="{{ url( context ~ '_file_download', { 'id':id|raw, 'subfolder':'course_syllabus', 'filename':files.course_document|raw }) }}"{{ target }}>
+                            <a href="{{ url( context ~ '_file_download', { 'id':id|raw, 'subfolder':'course_document', 'filename':files.course_document|raw }) }}"{{ target }}>
                                 <i class="fa-regular {{ icon }} fa-fw me-2"></i>Course Document
                             </a>
                         </div>
@@ -171,8 +171,8 @@
                         {% endif %}
 
                         <div class="mt-3">
-                            <a href="{{ url( context ~ '_file_download', { 'id':id|raw, 'subfolder':'course_syllabus', 'filename':files.lab_syllabus|raw }) }}"{{ target }}>
-                                <i class="fa-regular {{ icon }} fa-fw me-2"></i>Course Syllabus
+                            <a href="{{ url( context ~ '_file_download', { 'id':id|raw, 'subfolder':'lab_syllabus', 'filename':files.lab_syllabus|raw }) }}"{{ target }}>
+                                <i class="fa-regular {{ icon }} fa-fw me-2"></i>Lab Syllabus
                             </a>
                         </div>
                     {% endif %}
@@ -199,8 +199,8 @@
                         {% endif %}
 
                         <div>
-                            <a href="{{ url( context ~ '_file_download', { 'id':id|raw, 'subfolder':'course_syllabus', 'filename':files.lab_document|raw }) }}"{{ target }}>
-                                <i class="fa-regular {{ icon }} fa-fw me-2"></i>Course Document
+                            <a href="{{ url( context ~ '_file_download', { 'id':id|raw, 'subfolder':'lab_document', 'filename':files.lab_document|raw }) }}"{{ target }}>
+                                <i class="fa-regular {{ icon }} fa-fw me-2"></i>Lab Document
                             </a>
                         </div>
                     {% endif %}

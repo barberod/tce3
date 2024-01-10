@@ -273,3 +273,22 @@ sudo chmod +x ./data/files-prep/command/attached-file/load.sh
 ```bash
 ./data/files-prep/command/attached-file/load.sh
 ```
+
+## Zip up the project minus the unorganized files
+
+```bash
+# ~/projects
+zip -r tce3.zip tce3 -x 'tce3/data/*'
+```
+
+## Generate a MySQL backup file
+
+```bash
+# ~/projects
+export DBUN=someusername
+export DBPW=somepassword
+export DBDB=someschema
+export DBTS=sometimestamp
+
+mysqldump --no-tablespaces -u $DBUN -p$DBPW $DBDB > ~/projects/tce3/$DBDB$DBTS.sql
+```
