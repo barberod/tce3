@@ -8,22 +8,23 @@ use App\Entity\Institution;
 use App\Entity\Note;
 use App\Entity\Trail;
 use App\Entity\User;
+use App\Service\EvaluationFilesService;
 use Doctrine\ORM\EntityManagerInterface;
 use EcPhp\CasBundle\Security\Core\User\CasUser;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class EvaluationProcessingService
 {
-		private EntityManagerInterface $entityManager;
-		private Security $security;
+	private EntityManagerInterface $entityManager;
+	private Security $security;
 
-		public function __construct(
-			EntityManagerInterface $entityManager,
-			Security $security
-		) {
-				$this->entityManager = $entityManager;
-				$this->security = $security;
-		}
+	public function __construct(
+		EntityManagerInterface $entityManager,
+		Security $security
+	) {
+		$this->entityManager = $entityManager;
+		$this->security = $security;
+	}
 
 		/**
 		 * Create
@@ -37,13 +38,12 @@ class EvaluationProcessingService
 
 				// Set properties of the Evaluation entity
 				if ($this->security->getUser() instanceof User) {
-						$evaluation->setRequester($this->security->getUser());;
+					$evaluation->setRequester($this->security->getUser());;
 				} elseif ($this->security->getUser() instanceof CasUser) {
-						$userAtHand = $this->entityManager->getRepository(User::class)
-							->findOneBy(['username' => $this->security->getUser()->getUserIdentifier()]);
-						$evaluation->setRequester($userAtHand);;
+					$userAtHand = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $this->security->getUser()->getUserIdentifier()]);
+					$evaluation->setRequester($userAtHand);;
 				} else {
-						$evaluation->setRequester(null);
+					$evaluation->setRequester(null);
 				}
 
 				$evaluation->setStatus(1);
@@ -54,10 +54,9 @@ class EvaluationProcessingService
 
 				$evaluation->setReqAdmin($formData['requiredForAdmission']);
 
-				if ($formData['locatedUsa'] == 'Yes' &&
+				if ($formData['locatedUsa'] == 'Yes' && 
 					$formData['institutionListed'] == 'Yes') {
-				  $institution = $this->entityManager->getRepository(Institution::class)
-						->findOneBy(['id' => $formData['institution']]);
+					$institution = $this->entityManager->getRepository(Institution::class)->findOneBy(['id' => $formData['institution']]);
 					$evaluation->setInstitution($institution);
 					$evaluation->setInstitutionOther('');
 					$evaluation->setInstitutionCountry('United States');
@@ -65,7 +64,7 @@ class EvaluationProcessingService
 				else if ($formData['locatedUsa'] == 'Yes' &&
 					$formData['institutionListed'] == 'No') {
 					$evaluation->setInstitutionOther($formData['institutionName']);
-						$evaluation->setInstitutionCountry('United States');
+					$evaluation->setInstitutionCountry('United States');
 				}
 				else if ($formData['locatedUsa'] == 'No') {
 					$evaluation->setInstitutionOther($formData['institutionName']);
@@ -135,6 +134,30 @@ class EvaluationProcessingService
 				// Persist the entity
 				$this->entityManager->persist($evaluation);
 				$this->entityManager->flush(); // Save changes to the database
+
+				// Store the syllabus file
+				if ((isset($formData['courseSyllabus'])) && (!empty($formData['courseSyllabus']))) {
+					$filesService = new EvaluationFilesService();
+					$filesService->saveSyllabus($evaluation, $formData);
+				}
+
+				// Store the document file
+				if ((isset($formData['courseDocument'])) && (!empty($formData['courseDocument']))) {
+					$filesService = new EvaluationFilesService();
+					$filesService->saveCourseDocument($evaluation, $formData);
+				}
+
+				// Store the lab syllabus file
+				if ((isset($formData['labSyllabus'])) && (!empty($formData['labSyllabus']))) {
+					$filesService = new EvaluationFilesService();
+					$filesService->saveLabSyllabus($evaluation, $formData);
+				}
+
+				// Store the lab document file
+				if ((isset($formData['labDocument'])) && (!empty($formData['labDocument']))) {
+					$filesService = new EvaluationFilesService();
+					$filesService->saveLabDocument($evaluation, $formData);
+				}
 
 				// Create a new instance of the Trail entity
 				$trail = new Trail();

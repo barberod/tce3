@@ -82,40 +82,39 @@ class RequesterPageController extends AbstractController
 		#[Route('/secure/requester/evaluation/create', name: 'requester_evaluation_create_form', methods: ['GET', 'POST'])]
 		public function requesterEvaluationCreateForm(Request $request): Response
 		{
-				$form = $this->createForm(EvaluationCreateType::class);
-				$form->handleRequest($request);
-				if ($form->isSubmitted() && $form->isValid()) {
-						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
-						$evaluationProcessingService->createEvaluation($form->getData());
-						return $this->redirectToRoute('requester_evaluation_table');
-				}
+			$form = $this->createForm(EvaluationCreateType::class);
+			$form->handleRequest($request);
+			if ($form->isSubmitted() && $form->isValid()) {
+				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+				$evaluationProcessingService->createEvaluation($form->getData());
+				return $this->redirectToRoute('requester_evaluation_table');
+			}
 
-				return $this->render('evaluation/form/create.html.twig', [
-					'context' => 'requester',
-					'page_title' => 'Create Evaluation',
-					'prepend' => 'Create Evaluation',
-					'form' => $form->createView(),
-					'postData' => $form->getData(),
-				]);
+			return $this->render('evaluation/form/create.html.twig', [
+				'context' => 'requester',
+				'page_title' => 'Create Evaluation',
+				'prepend' => 'Create Evaluation',
+				'form' => $form->createView(),
+				'postData' => $form->getData(),
+			]);
 		}
-
 
 		#[Route('/secure/requester/evaluation/{id}', name: 'requester_evaluation_page', methods: ['GET'])]
 		#[IsGranted('requester+read', 'evaluation')]
 		public function requesterEvaluationPage(
 			Evaluation $evaluation,
 			EvaluationOptionsService $optionsService
-		):
-		Response {
-				return $this->render('evaluation/page.html.twig', [
-					'context' => 'requester',
-					'page_title' => 'Evaluation #'.$evaluation->getID(),
-					'prepend' => 'Evaluation #'.$evaluation->getID(),
-					'evaluation' => $evaluation,
-					'id' => $evaluation->getID(),
-					'uuid' => $evaluation->getID(),
-					'options' => $optionsService->getOptions('requester', $evaluation),
-				]);
+		): Response {
+			return $this->render('evaluation/page.html.twig', [
+				'context' => 'requester',
+				'page_title' => 'Evaluation #'.$evaluation->getID(),
+				'prepend' => 'Evaluation #'.$evaluation->getID(),
+				'evaluation' => $evaluation,
+				'id' => $evaluation->getID(),
+				'uuid' => $evaluation->getID(),
+				'options' => $optionsService->getOptions('requester', $evaluation),
+				'files' => $this->filesService->getFileLocations($evaluation),
+			]);
 		}
 
 		#[Route('/secure/requester/evaluation/{id}/update-as-requester', name: 'requester_evaluation_update_form', methods: ['GET', 'POST'])]

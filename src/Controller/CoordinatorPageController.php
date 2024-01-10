@@ -356,18 +356,18 @@ class CoordinatorPageController extends AbstractController
 		public function coordinatorEvaluationPage(
 			Evaluation $evaluation,
 			EvaluationOptionsService $optionsService
-		):
-		Response {
-				return $this->render('evaluation/page.html.twig', [
-					'context' => 'coordinator',
-					'page_title' => 'Evaluation #'.$evaluation->getID(),
-					'prepend' => 'Evaluation #'.$evaluation->getID(),
-					'evaluation' => $evaluation,
-					'id' => $evaluation->getID(),
-					'uuid' => $evaluation->getID(),
-					'options' => $optionsService->getOptions('coordinator', $evaluation),
-					'files' => $this->filesService->getFileLocations($evaluation),
-				]);
+		): Response 
+		{
+			return $this->render('evaluation/page.html.twig', [
+				'context' => 'coordinator',
+				'page_title' => 'Evaluation #'.$evaluation->getID(),
+				'prepend' => 'Evaluation #'.$evaluation->getID(),
+				'evaluation' => $evaluation,
+				'id' => $evaluation->getID(),
+				'uuid' => $evaluation->getID(),
+				'options' => $optionsService->getOptions('coordinator', $evaluation),
+				'files' => $this->filesService->getFileLocations($evaluation),
+			]);
 		}
 
 		#[Route('/secure/coordinator/evaluation/{id}/update', name: 'coordinator_evaluation_update_form', methods: ['GET', 'POST'])]
