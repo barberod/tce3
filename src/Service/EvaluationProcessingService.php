@@ -1698,7 +1698,7 @@ class EvaluationProcessingService
 			$coordinatorText .= 'Unknown';
 		}
 
-		$trail->setBody('Requester\'s information refreshed in web app by '.$coordinatorText);
+		$trail->setBody('Requester\'s information refreshed in web app by '.$coordinatorText.'.');
 		$trail->setBodyAnon('Requester\'s information refreshed in web app by coordinator.');
 		$trail->setCreated(new \DateTime());
 

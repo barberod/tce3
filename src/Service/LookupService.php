@@ -264,6 +264,9 @@ class LookupService
 				if ($this->isFullTimeEmployee($requesterAttributes['Attr'])) {
 						return 'Faculty/Staff';
 				}
+                if ($this->isFormerStudent($requesterAttributes['Attr'])) {
+                    return 'Former Student';
+                }
 				return 'Unknown';
 		}
 
@@ -368,4 +371,11 @@ class LookupService
 				}
 				return false;
 		}
+
+        private function isFormerStudent(array $attributes): bool {
+            if (in_array("former-credit-student@gt", $attributes)) {
+                    return true;
+            }
+            return false;
+    }
 }
