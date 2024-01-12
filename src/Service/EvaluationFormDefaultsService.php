@@ -32,8 +32,8 @@ class EvaluationFormDefaultsService
 				'requiredForAdmission' => $evaluation->getReqAdmin(),
 				'hasLab' => $this->getHasLab($evaluation),
 				'locatedUsa' => $this->getLocatedUsa($evaluation),
-				'state' => $evaluation->getInstitution()->getState() ?: '',
-				'institution' => $evaluation->getInstitution()->getId() ?: '',
+				'state' => $this->getState($evaluation),
+				'institution' => $this->getInstitution($evaluation),,
 				'institutionListed' => $this->getInstitutionListed($evaluation),
 				'institutionCountry' => $evaluation->getInstitutionCountry(),
 				'institutionName' => $evaluation->getInstitutionOther()
@@ -63,6 +63,22 @@ class EvaluationFormDefaultsService
 				return 'Yes';
 			}
 			return 'No';
+		}
+
+		public function getState(Evaluation $evaluation): string
+		{
+			if ($evaluation->getInstitution()) {
+				return $evaluation->getInstitution()->getState() ?: '';
+			}
+			return '';
+		}
+
+		public function getInstitution(Evaluation $evaluation): string
+		{
+			if ($evaluation->getInstitution()) {
+				return $evaluation->getInstitution()->getId() ?: '';
+			}
+			return '';
 		}
 
 		public function getInstitutionListed(Evaluation $evaluation): string
