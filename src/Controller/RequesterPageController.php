@@ -201,25 +201,25 @@ class RequesterPageController extends AbstractController
 		#[IsGranted( 'requester+resubmit', 'evaluation' )]
 		public function requesterEvaluationResubmitForm(Request $request, Evaluation $evaluation): Response
 		{
-				$form = $this->createForm(EvaluationResubmitType::class);
-				$form->handleRequest($request);
-				if ($form->isSubmitted()) {
-						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
-						$evaluationProcessingService->resubmitEvaluation($evaluation,
-							$form->getData());
-						return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
-				}
+			$form = $this->createForm(EvaluationResubmitType::class);
+			$form->handleRequest($request);
+			if ($form->isSubmitted()) {
+				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+				$evaluationProcessingService->resubmitEvaluation($evaluation,
+					$form->getData());
+				return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+			}
 
-				return $this->render('evaluation/form/resubmit.html.twig', [
-					'context' => 'requester',
-					'page_title' => 'Evaluation #'.$evaluation->getID(),
-					'prepend' => 'Resubmit | Evaluation #'.$evaluation->getID(),
-					'evaluation' => $evaluation,
-					'id' => $evaluation->getID(),
-					'uuid' => $evaluation->getID(),
-					'verb' => 'resubmit',
-					'form' => $form->createView(),
-				]);
+			return $this->render('evaluation/form/resubmit.html.twig', [
+				'context' => 'requester',
+				'page_title' => 'Evaluation #'.$evaluation->getID(),
+				'prepend' => 'Resubmit | Evaluation #'.$evaluation->getID(),
+				'evaluation' => $evaluation,
+				'id' => $evaluation->getID(),
+				'uuid' => $evaluation->getID(),
+				'verb' => 'resubmit',
+				'form' => $form->createView(),
+			]);
 		}
 
 		#[Route('/secure/requester/course', name: 'requester_course_table', methods: ['GET'])]

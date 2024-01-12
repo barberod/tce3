@@ -60,6 +60,10 @@
 
         <!-- Right side -->
         <div id="right-side" class="col-12 col-lg-6 d-flex flex-column">
+            {% if context == "requester" and evaluation.phase == "Student" %}
+                {% include "evaluation/fragment/resubmit-notice.html.twig" %}
+            {% endif %}
+
             {% if verb|default() %}
                 {% include 'evaluation/form/' ~ verb ~ '.html.twig' %}
             {% else %}
