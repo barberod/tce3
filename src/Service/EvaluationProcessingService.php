@@ -187,7 +187,7 @@ class EvaluationProcessingService
 			$this->entityManager->flush(); // Save changes to the database
 
 			// Send email
-			$emailService = new EmailService();
+			$emailService = new EmailService($this->entityManager);
 			$emailService->emailToRequesterUponNewRequest($this->security->getUser()->getUserIdentifier(), $evaluation);
 		}
 

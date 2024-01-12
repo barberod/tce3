@@ -32,7 +32,7 @@ class EmailService
      */
     public function sendNow(array $args = [])
     {
-        $loader = new FilesystemLoader($_SERVER['DOCUMENT_ROOT'] . '/templates/emails/');
+        $loader = new FilesystemLoader('../templates/emails/');
         $twig = new TwigEnvironment($loader);
         $twig->addExtension(new CssInlinerExtension());
         $messageListener = new MessageListener(null, new BodyRenderer($twig));
