@@ -36,7 +36,19 @@ class EvaluationFormDefaultsService
 				'institution' => $this->getInstitution($evaluation),
 				'institutionListed' => $this->getInstitutionListed($evaluation),
 				'institutionCountry' => $evaluation->getInstitutionCountry(),
-				'institutionName' => $evaluation->getInstitutionOther()
+				'institutionName' => $evaluation->getInstitutionOther(),
+				'courseSubjCode' => $evaluation->getCourseSubjCode() ?: '',
+				'courseCrseNum' => $evaluation->getCourseCrseNum() ?: '',
+				'courseTitle' => $evaluation->getCourseTitle() ?: '',
+				'courseTerm' => $evaluation->getCourseTerm() ?: '',
+				'courseCreditBasis' => $evaluation->getCourseCreditBasis() ?: '',
+				'courseCreditHours' => $evaluation->getCourseCreditHrs() ?: '',
+				'labPrefix' => $evaluation->getLabSubjCode() ?: '',
+				'labNumber' => $evaluation->getLabCrseNum() ?: '',
+				'labTitle' => $evaluation->getLabTitle() ?: '',
+				'labSemester' => $evaluation->getLabTerm() ?: '',
+				'labCreditBasis' => $evaluation->getLabCreditBasis() ?: '',
+				'labCreditHours' => $evaluation->getLabCreditHrs() ?: '',
 			);
 		}
 

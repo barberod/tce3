@@ -40,7 +40,7 @@ class EvaluationUpdateType extends AbstractType
 
 		$builder
 			->add('created', DateTimeType::class, [
-				'label' => 'Current DateTime',
+				'label' => 'DateTime',
 				'disabled' => true,
 				'with_seconds' => false,
 				'widget' => 'single_text',
@@ -168,14 +168,6 @@ class EvaluationUpdateType extends AbstractType
 				'required' => false,
 				'placeholder' => '- Select one -',
 			])
-			->add('courseSyllabus', FileType::class, [
-				'label' => 'Course Syllabus',
-				'required' => false,
-			])
-			->add('courseDocument', FileType::class, [
-				'label' => 'Course Document',
-				'required' => false,
-			])
 			->add('labPrefix', TextType::class, [
 				'label' => 'Lab Prefix',
 				'required' => false,
@@ -216,34 +208,26 @@ class EvaluationUpdateType extends AbstractType
 				'required' => false,
 				'placeholder' => '- Select one -',
 			])
-			->add('labSyllabus', FileType::class, [
-				'label' => 'Lab Syllabus',
-				'required' => false,
-			])
-			->add('labDocument', FileType::class, [
-				'label' => 'Lab Document',
-				'required' => false,
-			])
 		;
 
 		// Add event listener to handle dynamic population of university choices based on the selected state
 		$builder->addEventListener(
 			FormEvents::PRE_SUBMIT,
 			function (FormEvent $event) {
-					$form = $event->getForm();
-					$data = $event->getData();
+				$form = $event->getForm();
+				$data = $event->getData();
 
-					if (isset($data['state'])) {
-							$institutions = $this->formOptionsService->getInstitutionsByUSState($data['state']);
-							$form->add('institution', ChoiceType::class, [
-								'label' => 'Institution',
-								'placeholder' => 'Select an institution',
-								'expanded' => false,
-								'multiple' => false,
-								'required' => false,
-								'choices' => $institutions,
-							]);
-					}
+				if (isset($data['state'])) {
+					$institutions = $this->formOptionsService->getInstitutionsByUSState($data['state']);
+					$form->add('institution', ChoiceType::class, [
+						'label' => 'Institution',
+						'placeholder' => 'Select an institution',
+						'expanded' => false,
+						'multiple' => false,
+						'required' => false,
+						'choices' => $institutions,
+					]);
+				}
 			}
 		);
     }
