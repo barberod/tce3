@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Affiliation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -20,6 +21,20 @@ class AffiliationRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Affiliation::class);
     }
+
+    public function getPersons(
+        ?int $deptID = null
+    ): array
+    {
+        $queryBuilder = $this->createQueryBuilder('a')
+        ->select('u')
+        ->join('App\Entity\User', 'u', 'WITH', 'u.id = a.facstaff')
+        ->andWhere('a.department = :departmentId')
+        ->setParameter('departmentId', $deptID)
+        ->getQuery()
+        ->getResult();
+        return $queryBuilder;
+	}
 
 //    /**
 //     * @return Affiliation[] Returns an array of Affiliation objects

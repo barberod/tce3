@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Department;
 use App\Entity\Evaluation;
 use App\Entity\User;
 use App\Form\EvaluationAnnotateAsRequesterType;
@@ -24,6 +25,8 @@ use App\Form\EvaluationReassignType;
 use App\Form\EvaluationResubmitType;
 use App\Form\EvaluationSpotArticulateType;
 use App\Form\EvaluationUpdateType;
+use App\Repository\AffiliationRepository;
+use App\Repository\DepartmentRepository;
 use App\Repository\EvaluationRepository;
 use App\Service\EvaluationFilesService;
 use App\Service\EvaluationFormDefaultsService;
@@ -316,7 +319,7 @@ class CoordinatorPageController extends AbstractController
 
 				$requester = null;
 				if (!is_null($id)) {
-						$requester = $this->entityManager->getRepository(User::class)->findOneBy(['orgID' => $id]);
+					$requester = $this->entityManager->getRepository(User::class)->findOneBy(['orgID' => $id]);
 				}
 
 				$requesterInfo = null;
@@ -936,13 +939,42 @@ class CoordinatorPageController extends AbstractController
 		}
 
 		#[Route('/secure/coordinator/department', name: 'coordinator_department_table', methods: ['GET'])]
-		public function coordinatorDepartmentTable(): Response
+		public function coordinatorDepartmentTable(DepartmentRepository $departmentRepository): Response
 		{
+				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
+				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['id', 'name']))) ? $_GET['orderby'] : null;
+				$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
+
+				$queryBuilder = $departmentRepository->getQB(
+					orderBy: $orderBy,
+					direction: $direction,
+				);
+				$adapter = new QueryAdapter($queryBuilder);
+				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
+
 				return $this->render('department/table.html.twig', [
 					'context' => 'coordinator',
 					'page_title' => 'Departments',
-					'prepend' => 'Departments'
+					'prepend' => 'Departments',
+					'pager' => $pagerfanta,
+					'orderby' => $orderBy,
+					'direction' => $direction,
+					'direction_new' => $newDirection
 				]);
+		}
+
+		#[Route('/secure/coordinator/department/{id}', name: 'coordinator_department_page', methods: ['GET'])]
+		public function coordinatorDepartmentPage(Department $department, AffiliationRepository $affiliationRepository): Response 
+		{
+			return $this->render('department/page.html.twig', [
+				'context' => 'coordinator',
+				'page_title' => 'Department #'.$department->getID().' ('.$department->getName().')',
+				'prepend' => 'Department #'.$department->getID().' ('.$department->getName().')',
+				'department' => $department,
+				'id' => $department->getID(),
+				'persons' => $affiliationRepository->getPersons(),
+			]);
 		}
 
 		#[Route('/secure/coordinator/institution', name: 'coordinator_institution_table', methods: ['GET'])]

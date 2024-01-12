@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Department;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,28 +22,18 @@ class DepartmentRepository extends ServiceEntityRepository
         parent::__construct($registry, Department::class);
     }
 
-//    /**
-//     * @return Department[] Returns an array of Department objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('d.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Department
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function getQB(
+        ?string $orderBy = null,
+        ?string $direction = null,
+    ): QueryBuilder
+    {
+        $queryBuilder = $this->createQueryBuilder('d');
+        $queryBuilder->andWhere('d.status = :one')->setParameter('one', 1);
+        if (!is_null($orderBy) && !is_null($direction)) {
+            $queryBuilder->addOrderBy('d.'.$orderBy, $direction);
+        } else {
+            $queryBuilder->addOrderBy('d.name', 'asc');
+        }
+        return $queryBuilder;
+	}
 }

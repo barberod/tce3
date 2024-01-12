@@ -1,0 +1,68 @@
+{% extends 'page/page.html.twig' %}
+
+{% block breadcrumbs %}
+<div class="col-12 px-3">
+    <nav class="row" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url('homepage') }}">Home</a></li>
+            {% if context|default() %}
+                {% if (context == "manager") or (context == "coordinator") or (context == "observer") or (context == "assignee") or (context == "requester") %}
+                    {% set home_route = context ~ '_home' %}
+                    <li class="breadcrumb-item"><a href="{{ url(home_route) }}">{{ context|capitalize }}</a></li>
+                    <li class="breadcrumb-item"><a href="#">Departments</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Department #{{ id }}</li>
+                {% endif %}
+            {% endif %}
+        </ol>
+    </nav>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="col-12">
+    <div class="row content">
+        <div class="col-12 d-flex flex-column">
+            
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Display Name</th>
+                        <th>Email</th>
+                        <th>Category</th>
+                        <th>Options</th>
+                    </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+
+                    {% if persons is empty %}
+                        <tr>
+                            <td colspan="8" class="text-center fst-italic">No data</td>
+                        </tr>
+                    {% else %}
+                        {% for person in persons %}
+                        <tr>
+                            <td>{{ person.un }}</td>
+                            <td>{{ person.dn }}</td>
+                            <td>{{ person.email }}</td>
+                            <td>{{ person.category }}</td>
+                            <td>
+                                <a class="me-2" href="{{ url(department_page, {'id':department.id}) }}">View</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- no scripts -->
+{% endblock %}
