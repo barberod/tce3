@@ -25,6 +25,7 @@ class EvaluationOptionsService
 				$verbs[] = 'annotate';
 				$verbs[] = 'annotate_as_requester';
 				$verbs[] = 'append';
+				$verbs[] = 'append_as_requester';
 				$verbs[] = 'assign';
 				$verbs[] = 'evaluate';
 				$verbs[] = 'example';

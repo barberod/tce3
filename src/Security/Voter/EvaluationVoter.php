@@ -65,6 +65,7 @@ class EvaluationVoter extends Voter
 						self::ANNOTATE,
 						self::ANNOTATE_AS_REQUESTER,
 						self::APPEND,
+						self::APPEND_AS_REQUESTER,
 						self::ASSIGN,
 						self::EVALUATE,
 						self::EXAMPLE,
@@ -202,19 +203,19 @@ class EvaluationVoter extends Voter
 		}
 
 		private function canAppend(Evaluation $evaluation, UserInterface $user, string $context): bool {
-				// Admin, Manager, Coordinator can append to everything
-				if (in_array($context, [self::ADMIN, self::MANAGER, self::COORDINATOR])) {
-						return true;
-				}
-				return false;
+			// Admin, Manager, Coordinator can append to everything
+			if (in_array($context, [self::ADMIN, self::MANAGER, self::COORDINATOR, self::ASSIGNEE])) {
+				return true;
+			}
+			return false;
 		}
 
 		private function canAppendAsRequester(Evaluation $evaluation, UserInterface $user, string $context): bool {
-				// Requester can append-as-requester only their own evaluations
-				if ($context == self::REQUESTER && ($evaluation->getRequester()->getUserIdentifier() === $user->getUserIdentifier())) {
-						return true;
-				}
-				return false;
+			// Requester can append-as-requester only their own evaluations
+			if ($context == self::REQUESTER && ($evaluation->getRequester()->getUserIdentifier() === $user->getUserIdentifier())) {
+				return true;
+			}
+			return false;
 		}
 
 		private function canAssign(Evaluation $evaluation, UserInterface $user, string $context): bool {

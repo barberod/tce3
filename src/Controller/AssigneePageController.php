@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Evaluation;
 use App\Entity\User;
+use App\Form\EvaluationAppendType;
 use App\Form\EvaluationAssignType;
 use App\Form\EvaluationEvaluateType;
 use App\Repository\EvaluationRepository;
@@ -213,32 +214,55 @@ class AssigneePageController extends AbstractController
 		public function assigneeEvaluationPage(
 			Evaluation $evaluation,
 			EvaluationOptionsService $optionsService
-		):
-		Response {
-				return $this->render('evaluation/page.html.twig', [
-					'context' => 'assignee',
-					'page_title' => 'Evaluation #'.$evaluation->getID(),
-					'prepend' => 'Evaluation #'.$evaluation->getID(),
-					'evaluation' => $evaluation,
-					'id' => $evaluation->getID(),
-					'uuid' => $evaluation->getID(),
-					'options' => $optionsService->getOptions('assignee', $evaluation),
-				]);
+		): Response {
+			return $this->render('evaluation/page.html.twig', [
+				'context' => 'assignee',
+				'page_title' => 'Evaluation #'.$evaluation->getID(),
+				'prepend' => 'Evaluation #'.$evaluation->getID(),
+				'evaluation' => $evaluation,
+				'id' => $evaluation->getID(),
+				'uuid' => $evaluation->getID(),
+				'options' => $optionsService->getOptions('assignee', $evaluation),
+			]);
 		}
 
 		#[Route('/secure/assignee/evaluation/{id}/annotate', name: 'assignee_evaluation_annotate_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'assignee+annotate', 'evaluation' )]
 		public function assigneeEvaluationAnnotateForm(Evaluation $evaluation): Response
 		{
-				return $this->render('evaluation/page.html.twig', [
-					'context' => 'assignee',
-					'page_title' => 'Evaluation #'.$evaluation->getID(),
-					'prepend' => 'Write a Note | Evaluation #'.$evaluation->getID(),
-					'evaluation' => $evaluation,
-					'id' => $evaluation->getID(),
-					'uuid' => $evaluation->getID(),
-					'verb' => 'annotate'
-				]);
+			return $this->render('evaluation/page.html.twig', [
+				'context' => 'assignee',
+				'page_title' => 'Evaluation #'.$evaluation->getID(),
+				'prepend' => 'Write a Note | Evaluation #'.$evaluation->getID(),
+				'evaluation' => $evaluation,
+				'id' => $evaluation->getID(),
+				'uuid' => $evaluation->getID(),
+				'verb' => 'annotate'
+			]);
+		}
+
+		#[Route('/secure/assignee/evaluation/{id}/append', name: 'assignee_evaluation_append_form', methods: ['GET', 'POST'])]
+		#[IsGranted( 'assignee+append', 'evaluation' )]
+		public function assigneeEvaluationAppendForm(Request $request, Evaluation $evaluation): Response
+		{
+			$form = $this->createForm(EvaluationAppendType::class);
+			$form->handleRequest($request);
+			if ($form->isSubmitted()) {
+				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+				$evaluationProcessingService->appendEvaluation($evaluation, $form->getData());
+				return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+			}
+
+			return $this->render('evaluation/form/append.html.twig', [
+				'context' => 'assignee',
+				'page_title' => 'Evaluation #'.$evaluation->getID(),
+				'prepend' => 'Upload a File | Evaluation #'.$evaluation->getID(),
+				'evaluation' => $evaluation,
+				'id' => $evaluation->getID(),
+				'uuid' => $evaluation->getID(),
+				'verb' => 'append',
+				'form' => $form->createView(),
+			]);
 		}
 
 		#[Route('/secure/assignee/evaluation/{id}/evaluate', name: 'assignee_evaluation_evaluate_form', methods: ['GET', 'POST'])]

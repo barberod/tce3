@@ -12,9 +12,9 @@
 
             <!-- Right side -->
             <div id="right-side" class="col-12 col-lg-6 d-flex flex-column">
-                <!-- Form 03 (append) -->
+                <!-- Form 03b (append-as-requester) -->
                 {{ form_start(form) }}
-                <form id="form-03">
+                <form id="form-03b">
                     <div class="card border-primary mb-3">
                         <h2 class="card-header bg-primary border-primary h5">
                             Upload a File
@@ -23,17 +23,6 @@
                             <div id="fileGrp" class="mb-5">
                                 <div class="mb-4">
                                     {{ form_row(form.attachedFile) }}
-                                </div>
-                                <div class="mb-4">
-                                    {{ form_row(form.addNote) }}
-                                </div>
-                            </div>
-                            <div id="noteFieldSet" class="mb-5">
-                                <div class="mb-4">
-                                    {{ form_row(form.visibleNote) }}
-                                </div>
-                                <div class="mb-4">
-                                    {{ form_row(form.noteBody) }}
                                 </div>
                             </div>
                             <p class="mb-4">Use the Submit save and attach the file to evaluation.</p>
@@ -45,7 +34,7 @@
                     </div>
                 </form>
                 {{ form_end(form) }}
-                <!-- /#form-03 (append) -->
+                <!-- /#form-03b (append-as-requester) -->
 
                 {% include "evaluation/fragment/notes.html.twig" %}
                 {% include "evaluation/fragment/trails.html.twig" %}
@@ -56,7 +45,7 @@
 {% endblock %}
 
 {% block scripts %}
-    <script type="text/javascript" src="{{ asset('js/evaluation/append.js') }}"></script>
+<!-- no scripts -->
 {% endblock %}
 
 

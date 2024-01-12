@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Evaluation;
 use App\Form\EvaluationAnnotateAsRequesterType;
+use App\Form\EvaluationAppendAsRequesterType;
 use App\Form\EvaluationCreateType;
 use App\Form\EvaluationResubmitType;
 use App\Form\EvaluationUpdateType;
@@ -181,20 +182,28 @@ class RequesterPageController extends AbstractController
 				]);
 		}
 
-		#[Route('/secure/requester/evaluation/{id}/append-as-requester', name: 'requester_evaluation_append_form', methods: ['GET', 'POST'])]
+		#[Route('/secure/requester/evaluation/{id}/append-as-requester', name: 'requester_evaluation_append_as_requester_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'requester+append_as_requester', 'evaluation' )]
-		public function requesterEvaluationAppendForm(Evaluation $evaluation):
-		Response
+		public function requesterEvaluationAppendForm(Request $request, Evaluation $evaluation): Response
 		{
-				return $this->render('evaluation/page.html.twig', [
-					'context' => 'requester',
-					'page_title' => 'Evaluation #'.$evaluation->getID(),
-					'prepend' => 'Upload a File | Evaluation #'.$evaluation->getID(),
-					'evaluation' => $evaluation,
-					'id' => $evaluation->getID(),
-					'uuid' => $evaluation->getID(),
-					'verb' => 'append'
-				]);
+			$form = $this->createForm(EvaluationAppendAsRequesterType::class);
+			$form->handleRequest($request);
+			if ($form->isSubmitted()) {
+				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+				$evaluationProcessingService->appendAsRequesterEvaluation($evaluation, $form->getData());
+				return $this->redirectToRoute('requester_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+			}
+
+			return $this->render('evaluation/form/append-as-requester.html.twig', [
+				'context' => 'requester',
+				'page_title' => 'Evaluation #'.$evaluation->getID(),
+				'prepend' => 'Upload a File | Evaluation #'.$evaluation->getID(),
+				'evaluation' => $evaluation,
+				'id' => $evaluation->getID(),
+				'uuid' => $evaluation->getID(),
+				'verb' => 'append-as-requester',
+				'form' => $form->createView(),
+			]);
 		}
 
 		#[Route('/secure/requester/evaluation/{id}/resubmit', name: 'requester_evaluation_resubmit_form', methods: ['GET', 'POST'])]

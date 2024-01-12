@@ -7,6 +7,7 @@ use App\Entity\Evaluation;
 use App\Entity\User;
 use App\Form\EvaluationAnnotateAsRequesterType;
 use App\Form\EvaluationAnnotateType;
+use App\Form\EvaluationAppendType;
 use App\Form\EvaluationAssignType;
 use App\Form\EvaluationCreateType;
 use App\Form\EvaluationEvaluateType;
@@ -59,19 +60,19 @@ class CoordinatorPageController extends AbstractController
 			Security $security,
 			EvaluationFilesService $filesService
 		) {
-				$this->entityManager = $entityManager;
-				$this->security = $security;
-				$this->filesService = $filesService;
+			$this->entityManager = $entityManager;
+			$this->security = $security;
+			$this->filesService = $filesService;
 		}
 
 		#[Route('/secure/coordinator', name: 'coordinator_home')]
 		public function coordinator(): Response
 		{
-				return $this->render('page/homepage.html.twig', [
-					'context' => 'coordinator',
-					'page_title' => 'Transfer Credit Evaluation',
-					'prepend' => 'Coordinator'
-				]);
+			return $this->render('page/homepage.html.twig', [
+				'context' => 'coordinator',
+				'page_title' => 'Transfer Credit Evaluation',
+				'prepend' => 'Coordinator'
+			]);
 		}
 
 		#[Route('/secure/coordinator/evaluation', name: 'coordinator_evaluation_table', methods: ['GET'])]
@@ -403,87 +404,92 @@ class CoordinatorPageController extends AbstractController
 		#[IsGranted( 'coordinator+delete', 'evaluation' )]
 		public function coordinatorEvaluationDeleteForm(Evaluation $evaluation): Response
 		{
-				return $this->render('evaluation/page.html.twig', [
-					'context' => 'coordinator',
-					'page_title' => 'Evaluation #'.$evaluation->getID(),
-					'prepend' => 'Delete | Evaluation #'.$evaluation->getID(),
-					'evaluation' => $evaluation,
-					'id' => $evaluation->getID(),
-					'uuid' => $evaluation->getID(),
-					'verb' => 'delete'
-				]);
+			return $this->render('evaluation/page.html.twig', [
+				'context' => 'coordinator',
+				'page_title' => 'Evaluation #'.$evaluation->getID(),
+				'prepend' => 'Delete | Evaluation #'.$evaluation->getID(),
+				'evaluation' => $evaluation,
+				'id' => $evaluation->getID(),
+				'uuid' => $evaluation->getID(),
+				'verb' => 'delete'
+			]);
 		}
 
 		#[Route('/secure/coordinator/evaluation/{id}/annotate', name: 'coordinator_evaluation_annotate_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+annotate', 'evaluation' )]
-		public function coordinatorEvaluationAnnotateForm(Request $request,
-			Evaluation $evaluation): Response
+		public function coordinatorEvaluationAnnotateForm(Request $request, Evaluation $evaluation): Response
 		{
-				$form = $this->createForm(EvaluationAnnotateType::class);
-				$form->handleRequest($request);
-				if ($form->isSubmitted()) {
-						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
-						$evaluationProcessingService->annotateEvaluation($evaluation,
-							$form->getData());
-						return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
-				}
+			$form = $this->createForm(EvaluationAnnotateType::class);
+			$form->handleRequest($request);
+			if ($form->isSubmitted()) {
+				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+				$evaluationProcessingService->annotateEvaluation($evaluation, $form->getData());
+				return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+			}
 
-				return $this->render('evaluation/form/annotate.html.twig', [
-					'context' => 'coordinator',
-					'page_title' => 'Evaluation #'.$evaluation->getID(),
-					'prepend' => 'Write a Note | Evaluation #'.$evaluation->getID(),
-					'evaluation' => $evaluation,
-					'id' => $evaluation->getID(),
-					'uuid' => $evaluation->getID(),
-					'verb' => 'annotate',
-					'form' => $form->createView(),
-				]);
+			return $this->render('evaluation/form/annotate.html.twig', [
+				'context' => 'coordinator',
+				'page_title' => 'Evaluation #'.$evaluation->getID(),
+				'prepend' => 'Write a Note | Evaluation #'.$evaluation->getID(),
+				'evaluation' => $evaluation,
+				'id' => $evaluation->getID(),
+				'uuid' => $evaluation->getID(),
+				'verb' => 'annotate',
+				'form' => $form->createView(),
+			]);
 		}
 
 		#[Route('/secure/coordinator/evaluation/{id}/annotate-as-requester', name: 'coordinator_evaluation_annotate_as_requester_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+annotate_as_requester', 'evaluation' )]
 		public function coordinatorEvaluationAnnotateAsRequesterForm(Request $request, Evaluation $evaluation): Response
 		{
-				$form = $this->createForm(EvaluationAnnotateAsRequesterType::class);
-				$form->handleRequest($request);
-				if ($form->isSubmitted()) {
-						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
-						$evaluationProcessingService->annotateAsRequesterEvaluation($evaluation, $form->getData());
-						return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
-				}
+			$form = $this->createForm(EvaluationAnnotateAsRequesterType::class);
+			$form->handleRequest($request);
+			if ($form->isSubmitted()) {
+				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+				$evaluationProcessingService->annotateAsRequesterEvaluation($evaluation, $form->getData());
+				return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+			}
 
-				return $this->render('evaluation/form/annotate-as-requester.html.twig', [
-					'context' => 'coordinator',
-					'page_title' => 'Evaluation #'.$evaluation->getID(),
-					'prepend' => 'Write a Note | Evaluation #'.$evaluation->getID(),
-					'evaluation' => $evaluation,
-					'id' => $evaluation->getID(),
-					'uuid' => $evaluation->getID(),
-					'verb' => 'annotate-as-requester',
-					'form' => $form->createView(),
-				]);
+			return $this->render('evaluation/form/annotate-as-requester.html.twig', [
+				'context' => 'coordinator',
+				'page_title' => 'Evaluation #'.$evaluation->getID(),
+				'prepend' => 'Write a Note | Evaluation #'.$evaluation->getID(),
+				'evaluation' => $evaluation,
+				'id' => $evaluation->getID(),
+				'uuid' => $evaluation->getID(),
+				'verb' => 'annotate-as-requester',
+				'form' => $form->createView(),
+			]);
 		}
 
 		#[Route('/secure/coordinator/evaluation/{id}/append', name: 'coordinator_evaluation_append_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+append', 'evaluation' )]
-		public function coordinatorEvaluationAppendForm(Evaluation $evaluation):
-		Response
+		public function coordinatorEvaluationAppendForm(Request $request, Evaluation $evaluation): Response
 		{
-				return $this->render('evaluation/page.html.twig', [
-					'context' => 'coordinator',
-					'page_title' => 'Evaluation #'.$evaluation->getID(),
-					'prepend' => 'Upload a File | Evaluation #'.$evaluation->getID(),
-					'evaluation' => $evaluation,
-					'id' => $evaluation->getID(),
-					'uuid' => $evaluation->getID(),
-					'verb' => 'append'
-				]);
+			$form = $this->createForm(EvaluationAppendType::class);
+			$form->handleRequest($request);
+			if ($form->isSubmitted()) {
+				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+				$evaluationProcessingService->appendEvaluation($evaluation, $form->getData());
+				return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+			}
+
+			return $this->render('evaluation/form/append.html.twig', [
+				'context' => 'coordinator',
+				'page_title' => 'Evaluation #'.$evaluation->getID(),
+				'prepend' => 'Upload a File | Evaluation #'.$evaluation->getID(),
+				'evaluation' => $evaluation,
+				'id' => $evaluation->getID(),
+				'uuid' => $evaluation->getID(),
+				'verb' => 'append',
+				'form' => $form->createView(),
+			]);
 		}
 
 		#[Route('/secure/coordinator/evaluation/{id}/assign', name: 'coordinator_evaluation_assign_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+assign', 'evaluation' )]
-		public function coordinatorEvaluationAssignForm(Request $request,
-			Evaluation $evaluation): Response
+		public function coordinatorEvaluationAssignForm(Request $request, Evaluation $evaluation): Response
 		{
 				$form = $this->createForm(EvaluationAssignType::class);
 				$form->handleRequest($request);
