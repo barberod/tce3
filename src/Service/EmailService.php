@@ -81,7 +81,7 @@ class EmailService
                 'textTemplate' => 'plaintext/to-requester-upon-new-request.txt.twig',
                 'emailData' => array(
                     'evaluation' => $evaluation,
-                    'recipientName' => $recipient->getDisplayName(),
+                    'recipient' => $recipient,
                     'previewText' => $recipient->getDisplayName().', your evaluation request has been created.'
                 )
             );

@@ -2,23 +2,15 @@
 
 {% block inner %}
 
-=========================
-DO NOT REPLY
-=========================
+Name: {{ emailData.recipient.displayName }}
+GTID: {{ emailData.recipient.orgID }}
+Username: {{ emailData.recipient.username }}
 
-Name: [node:field-eval-person-dn]
-GTID: [node:field-eval-person-gtid]
-Username: [node:field-eval-person-username]
-
-Thank you for submitting [node:field-eval-subject-code] [node:field-eval-course-number] for evaluation on [site:current-date].
+Thank you for submitting {{ emailData.evaluation.courseSubjCode }} {{ emailData.evaluation.courseCrseNum }} for evaluation on {{ emailData.evaluation.created }}.
 
 Our next steps are to review your course and attached information for content. After initial review, we will request an evaluation on your behalf from the appropriate Georgia Tech faculty member in that area of study. Once they have conducted their review and appropriate assignment of credit, our office will conduct a final review and make all necessary updates to your Georgia Tech record, as well as notifications to pertinent parties. During this process you may receive emails requesting additional information or clarification. Please note this process can take several weeks. An estimated evaluation time is 20 business days. The process may take longer during peak periods. You may login to https://transfercredit.gatech.edu at any time to view the status of pending evaluations.
 
 Registrar's Office
 Georgia Tech
-
-=========================
-DO NOT REPLY
-=========================
 
 {% endblock %}

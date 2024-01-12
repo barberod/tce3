@@ -292,3 +292,9 @@ export DBTS=sometimestamp
 
 mysqldump --no-tablespaces -u $DBUN -p$DBPW $DBDB > ~/projects/tce3/$DBDB$DBTS.sql
 ```
+
+## Redeploy?
+
+```bash
+zip -r tce3.zip tce3 -x 'tce3/data/*' -x 'tce3/files/*'
+```
