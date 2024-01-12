@@ -54,7 +54,7 @@ class FormOptionsService
 					'EDUC' => 'EDUC',
 					'EENG' => 'EENG',
 					'EME' => 'EME',
-					'ENG' => 'ENG',
+					'ENGL' => 'ENGL',
 					'ENVE' => 'ENVE',
 					'ENVS' => 'ENVS',
 					'FS' => 'FS',
