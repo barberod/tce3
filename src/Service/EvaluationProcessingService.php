@@ -8,6 +8,7 @@ use App\Entity\Institution;
 use App\Entity\Note;
 use App\Entity\Trail;
 use App\Entity\User;
+use App\Service\EmailService;
 use App\Service\EvaluationFilesService;
 use Doctrine\ORM\EntityManagerInterface;
 use EcPhp\CasBundle\Security\Core\User\CasUser;
@@ -168,13 +169,13 @@ class EvaluationProcessingService
 			$requester = $this->security->getUser();
 			$requesterText = '';
 			if ($requester instanceof User) {
-					$requesterText .= $this->security->getUser()->attributes()['profile']['dn'];
-					$requesterText .= ' ('.$this->security->getUser()->attributes()['profile']['org_id'].')';
+				$requesterText .= $this->security->getUser()->attributes()['profile']['dn'];
+				$requesterText .= ' ('.$this->security->getUser()->attributes()['profile']['org_id'].')';
 			} elseif ($requester instanceof CasUser) {
-					$requesterText .= $this->security->getUser()->getAttributes()['profile']['dn'];
-					$requesterText .= ' ('.$this->security->getUser()->getAttributes()['profile']['org_id'].')';
+				$requesterText .= $this->security->getUser()->getAttributes()['profile']['dn'];
+				$requesterText .= ' ('.$this->security->getUser()->getAttributes()['profile']['org_id'].')';
 			} else {
-					$requesterText .= 'Unknown';
+				$requesterText .= 'Unknown';
 			}
 
 			$trail->setBody('Evaluation initiated by '.$requesterText.'. Phase set to Registrar 1.');
@@ -184,6 +185,10 @@ class EvaluationProcessingService
 			// Persist the entity
 			$this->entityManager->persist($trail);
 			$this->entityManager->flush(); // Save changes to the database
+
+			// Send email
+			$emailService = new EmailService();
+			$emailService->emailToRequesterUponNewRequest($this->security->getUser()->getUserIdentifier(), $evaluation);
 		}
 
 		/**

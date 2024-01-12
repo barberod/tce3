@@ -1,0 +1,73 @@
+{% apply inline_css %}
+<style>
+.document {
+    background-color: #fff;
+    border: 0;
+    width: 100%;
+}
+.inner {
+    border: 0;
+    color: #262626;
+    font-family: 'Arial','Helvetica',sans-serif;
+    font-size: 14px;
+}
+.inner p,
+.inner li {
+    font-size: 14px;
+}
+.inner table td {
+    border-style: solid; 
+    border-width: 1px; 
+    border-color: #ccc;
+    color: #262626;
+    font-family: 'Arial','Helvetica',sans-serif;
+    font-size: 14px;
+}
+.inner table td.spacer {
+    border-style: solid; 
+    border-width: 0px; 
+    border-color: #fff;
+}
+.outer {
+    border: 0;
+}
+.outer .logo {
+    width: 560px;
+}
+.outer .heading {
+    height: 45px;
+}
+.outer .heading h1,
+.outer .heading h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
+</style>
+<div class="preview" style="display:none;font-size:1px;color:#333333;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+    {{ emailData.previewText }}            
+</div>
+<div class="message">
+    <div class="outer top">
+        <div class="logo">
+            <img class="Registrar's Office" width="560" src="https://ro-blob.azureedge.net/ro-blob/public/img/email/georgia-tech-registrar_560x150.png" />
+        </div>
+        <hr style="border-width: 0; background: #262626; color: #262626; height:1px">
+        <br/>
+        <br/>
+        <div class="heading">
+            <h1>Georgia Institute of Technology</h1>
+            <h2>Registrar's Office</h2>
+            <h3>Transfer Credit Evaluation</h3>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <div class="inner">
+        {% block inner %}
+        {% endblock %}
+    </div>
+    <br/>
+    <br/>
+</div>
+{% endapply %}
