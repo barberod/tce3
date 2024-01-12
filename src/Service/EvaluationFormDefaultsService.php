@@ -33,7 +33,7 @@ class EvaluationFormDefaultsService
 				'hasLab' => $this->getHasLab($evaluation),
 				'locatedUsa' => $this->getLocatedUsa($evaluation),
 				'state' => $this->getState($evaluation),
-				'institution' => $this->getInstitution($evaluation),,
+				'institution' => $this->getInstitution($evaluation),
 				'institutionListed' => $this->getInstitutionListed($evaluation),
 				'institutionCountry' => $evaluation->getInstitutionCountry(),
 				'institutionName' => $evaluation->getInstitutionOther()
