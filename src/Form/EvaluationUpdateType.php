@@ -132,21 +132,25 @@ class EvaluationUpdateType extends AbstractType
 				'label' => 'Course Prefix',
 				'required' => false,
 				'help' => 'Example: "BIOL"',
+				'data' => $formDefaults['courseSubjCode'],
 			])
 			->add('courseCrseNum', TextType::class, [
 				'label' => 'Course Number',
 				'required' => false,
 				'help' => 'Example: "1012"',
+				'data' => $formDefaults['courseCrseNum'],
 			])
 			->add('courseTitle', TextType::class, [
 				'label' => 'Course Title',
 				'required' => false,
 				'help' => 'Example: "General Biology"',
+				'data' => $formDefaults['courseTitle'],
 			])
 			->add('courseTerm', TextType::class, [
 				'label' => 'Academic Term',
 				'required' => false,
 				'help' => 'Example: "Fall 2023"',
+				'data' => $formDefaults['courseTerm'],
 			])
 			->add('courseCreditBasis', ChoiceType::class, [
 				'label' => 'Credit System',
@@ -159,6 +163,7 @@ class EvaluationUpdateType extends AbstractType
 				'multiple' => false,
 				'required' => false,
 				'placeholder' => '- Select one -',
+				'data' => $formDefaults['courseCreditBasis'],
 			])
 			->add('courseCreditHours', ChoiceType::class, [
 				'label' => 'Credit Hours',
@@ -167,26 +172,31 @@ class EvaluationUpdateType extends AbstractType
 				'multiple' => false,
 				'required' => false,
 				'placeholder' => '- Select one -',
+				'data' => $formDefaults['courseCreditHours'],
 			])
 			->add('labPrefix', TextType::class, [
 				'label' => 'Lab Prefix',
 				'required' => false,
 				'help' => 'Example: "BIOL"',
+				'data' => $formDefaults['labPrefix'],
 			])
 			->add('labNumber', TextType::class, [
 				'label' => 'Lab Number',
 				'required' => false,
 				'help' => 'Example: "1013"',
+				'data' => $formDefaults['labNumber'],
 			])
 			->add('labTitle', TextType::class, [
 				'label' => 'Lab Title',
 				'required' => false,
 				'help' => 'Example: "General Biology Laboratory"',
+				'data' => $formDefaults['labTitle'],
 			])
 			->add('labSemester', TextType::class, [
 				'label' => 'Academic Term',
 				'required' => false,
 				'help' => 'Example: "Spring 2024"',
+				'data' => $formDefaults['labSemester'],
 			])
 			->add('labCreditBasis', ChoiceType::class, [
 				'label' => 'Credit System',
@@ -199,6 +209,7 @@ class EvaluationUpdateType extends AbstractType
 				'multiple' => false,
 				'required' => false,
 				'placeholder' => '- Select one -',
+				'data' => $formDefaults['labCreditBasis'],
 			])
 			->add('labCreditHours', ChoiceType::class, [
 				'label' => 'Credit Hours',
@@ -207,6 +218,7 @@ class EvaluationUpdateType extends AbstractType
 				'multiple' => false,
 				'required' => false,
 				'placeholder' => '- Select one -',
+				'data' => $formDefaults['labCreditHours'],
 			])
 		;
 
