@@ -380,11 +380,11 @@ class CoordinatorPageController extends AbstractController
 		public function coordinatorEvaluationUpdateForm(Request $request,
 			Evaluation $evaluation): Response
 		{
-				$form = $this->createForm(EvaluationUpdateType::class);
+				$form = $this->createForm(EvaluationUpdateType::class, null, ['evaluation' => $evaluation]);
 				$form->handleRequest($request);
 				if ($form->isSubmitted()) {
 						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
-						$evaluationProcessingService->updateEvaluation($evaluation,$form->getData());
+						$evaluationProcessingService->updateEvaluation($evaluation, $form->getData());
 						return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
 				}
 
