@@ -195,8 +195,8 @@ class EvaluationFinalizeType extends AbstractType
 					->add('policy', ChoiceType::class, [
 						'label' => 'Shall this become a transfer equivalency policy?',
 						'choices' => [
-							'Yes' => 'Yes',
-							'No' => 'No',
+							'Policy' => 'Policy',
+							'Not Policy' => 'Not Policy',
 						],
 						'expanded' => false,
 						'multiple' => false,
