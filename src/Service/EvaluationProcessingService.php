@@ -214,10 +214,10 @@ class EvaluationProcessingService
 				$evaluation->setInstitutionCountry($formData['country']);
 			}
 
-			$evaluation->setCourseSubjCode($formData['coursePrefix']);
-			$evaluation->setCourseCrseNum($formData['courseNumber']);
+			$evaluation->setCourseSubjCode($formData['courseSubjCode']);
+			$evaluation->setCourseCrseNum($formData['courseCrseNum']);
 			$evaluation->setCourseTitle($formData['courseTitle']);
-			$evaluation->setCourseTerm($formData['courseSemester']);
+			$evaluation->setCourseTerm($formData['courseTerm']);
 			$evaluation->setCourseCreditBasis($formData['courseCreditBasis']);
 			$evaluation->setCourseCreditHrs($formData['courseCreditHours']);
 
