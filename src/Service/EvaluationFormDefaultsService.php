@@ -32,8 +32,8 @@ class EvaluationFormDefaultsService
 				'requiredForAdmission' => $evaluation->getReqAdmin(),
 				'hasLab' => $this->getHasLab($evaluation),
 				'locatedUsa' => $this->getLocatedUsa($evaluation),
-				'state' => $evaluation->getInstitution()->getState(),
-				'institution' => $evaluation->getInstitution()->getId(),
+				'state' => $evaluation->getInstitution()->getState() ?: '',
+				'institution' => $evaluation->getInstitution()->getId() ?: '',
 				'institutionListed' => $this->getInstitutionListed($evaluation),
 				'institutionCountry' => $evaluation->getInstitutionCountry(),
 				'institutionName' => $evaluation->getInstitutionOther()
