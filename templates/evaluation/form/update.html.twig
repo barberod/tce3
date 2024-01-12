@@ -23,12 +23,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12 col-lg-5">
-                                {% if app.user %}
-                                <div class="mb-3">
-                                    <label for="requesterUn" class="form-label">Requester</label>
-                                    <input id="requesterUn" disabled="disabled" class="form-control" value="{{ app.user.username }}" />
-                                </div>
-                                {% endif %}
+                                {{ form_row(form.requester) }}
                                 {{ form_row(form.created) }}
                             </div>
                             <div class="col-12 col-lg-5 offset-lg-1">

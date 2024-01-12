@@ -28,6 +28,7 @@ class EvaluationFormDefaultsService
 			$requesterAttributes = $lookup->getRequesterAttributes($evaluation->getRequester()->getOrgID());
 
 			return array(
+				'requester' => $evaluation->getRequester()->getUserIdentifier(),
 				'created' => $evaluation->getCreated(),
 				'requiredForAdmission' => $evaluation->getReqAdmin(),
 				'hasLab' => $this->getHasLab($evaluation),
