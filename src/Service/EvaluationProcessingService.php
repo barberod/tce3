@@ -315,35 +315,117 @@ class EvaluationProcessingService
 		 * @param Evaluation $evaluation
 		 * @param array $formData
 		 */
+		/**
+		 * Update
+		 * 
+		 * @param Evaluation $evaluation
+		 * @param array $formData
+		 */
+		public function updateAsRequesterEvaluation(Evaluation $evaluation, array $formData): void
+		{
+			$evaluation->setUpdated(new \DateTime());
+			$evaluation->setReqAdmin($formData['requiredForAdmission']);
+
+			if ($formData['locatedUsa'] == 'Yes' && 
+				$formData['institutionListed'] == 'Yes') {
+				$institution = $this->entityManager->getRepository(Institution::class)->findOneBy(['id' => $formData['institution']]);
+				$evaluation->setInstitution($institution);
+				$evaluation->setInstitutionOther('');
+				$evaluation->setInstitutionCountry('United States');
+			}
+			else if ($formData['locatedUsa'] == 'Yes' &&
+				$formData['institutionListed'] == 'No') {
+				$evaluation->setInstitutionOther($formData['institutionName']);
+				$evaluation->setInstitutionCountry('United States');
+			}
+			else if ($formData['locatedUsa'] == 'No') {
+				$evaluation->setInstitutionOther($formData['institutionName']);
+				$evaluation->setInstitutionCountry($formData['country']);
+			}
+
+			$evaluation->setCourseSubjCode($formData['courseSubjCode']);
+			$evaluation->setCourseCrseNum($formData['courseCrseNum']);
+			$evaluation->setCourseTitle($formData['courseTitle']);
+			$evaluation->setCourseTerm($formData['courseTerm']);
+			$evaluation->setCourseCreditBasis($formData['courseCreditBasis']);
+			$evaluation->setCourseCreditHrs($formData['courseCreditHours']);
+
+			if ($formData['hasLab'] == 'Yes') {
+				$evaluation->setLabSubjCode($formData['labPrefix']);
+				$evaluation->setLabCrseNum($formData['labNumber']);
+				$evaluation->setLabTitle($formData['labTitle']);
+				$evaluation->setLabTerm($formData['labSemester']);
+				$evaluation->setLabCreditBasis($formData['labCreditBasis']);
+				$evaluation->setLabCreditHrs($formData['labCreditHours']);
+			} else {
+				$evaluation->setLabSubjCode('');
+				$evaluation->setLabCrseNum('');
+				$evaluation->setLabTitle('');
+				$evaluation->setLabTerm('');
+				$evaluation->setLabCreditBasis('');
+				$evaluation->setLabCreditHrs('');
+			}
+
+			// Persist the entity
+			$this->entityManager->persist($evaluation);
+			$this->entityManager->flush(); // Save changes to the database
+
+			// Create a new instance of the Trail entity
+			$trail = new Trail();
+
+			// Set properties of the Trail entity
+			$trail->setEvaluation($evaluation);
+
+			$requester = $this->security->getUser();
+			$requesterText = '';
+			if ($requester instanceof User) {
+				$requesterText .= $this->security->getUser()->attributes()['profile']['dn'];
+				$requesterText .= ' ('.$this->security->getUser()->attributes()['profile']['org_id'].')';
+			} elseif ($requester instanceof CasUser) {
+				$requesterText .= $this->security->getUser()->getAttributes()['profile']['dn'];
+				$requesterText .= ' ('.$this->security->getUser()->getAttributes()['profile']['org_id'].')';
+			} else {
+				$requesterText .= 'Unknown';
+			}
+
+			$trail->setBody('Evaluation details edited by '.$requesterText.'.');
+			$trail->setBodyAnon('Evaluation details edited by requester.');
+			$trail->setCreated(new \DateTime());
+
+			// Persist the entity
+			$this->entityManager->persist($trail);
+			$this->entityManager->flush(); // Save changes to the database
+		}
+
 		public function annotateAsRequesterEvaluation(Evaluation $evaluation, array
 		$formData): void
 		{
-				// Create a note
-				$note = new Note();
-				$note->setEvaluation($evaluation);
+			// Create a note
+			$note = new Note();
+			$note->setEvaluation($evaluation);
 
-				if ($this->security->getUser() instanceof User) {
-						$note->setAuthor($this->security->getUser());
-				} elseif ($this->security->getUser() instanceof CasUser) {
-						$userAtHand = $this->entityManager->getRepository(User::class)
-							->findOneBy(['username' => $this->security->getUser()->getUserIdentifier()]);
-						$note->setAuthor($userAtHand);
-				} else {
-						$note->setAuthor(null);
-				}
+			if ($this->security->getUser() instanceof User) {
+				$note->setAuthor($this->security->getUser());
+			} elseif ($this->security->getUser() instanceof CasUser) {
+				$userAtHand = $this->entityManager->getRepository(User::class)
+					->findOneBy(['username' => $this->security->getUser()->getUserIdentifier()]);
+				$note->setAuthor($userAtHand);
+			} else {
+				$note->setAuthor(null);
+			}
 
-				$note->setBody($formData['noteBody']);
-				$note->setCreated(new \DateTime());
-				$note->setVisibleToRequester(1);
+			$note->setBody($formData['noteBody']);
+			$note->setCreated(new \DateTime());
+			$note->setVisibleToRequester(1);
 
-				// Persist the entity
-				$this->entityManager->persist($note);
-				$this->entityManager->flush(); // Save changes to the database
+			// Persist the entity
+			$this->entityManager->persist($note);
+			$this->entityManager->flush(); // Save changes to the database
 
-				// Indicate the evaluation was updated
-				$evaluation->setUpdated(new \DateTime());
-				$this->entityManager->persist($evaluation);
-				$this->entityManager->flush(); // Save changes to the database
+			// Indicate the evaluation was updated
+			$evaluation->setUpdated(new \DateTime());
+			$this->entityManager->persist($evaluation);
+			$this->entityManager->flush(); // Save changes to the database
 		}
 
 		/**
@@ -1542,60 +1624,60 @@ class EvaluationProcessingService
 		public function resubmitEvaluation(Evaluation $evaluation, array
 		$formData): void
 		{
-				$evaluation->setPhase('Registrar 1');
-				$evaluation->setUpdated(new \DateTime());
+			$evaluation->setPhase('Registrar 1');
+			$evaluation->setUpdated(new \DateTime());
 
-				// Persist the entity
-				$this->entityManager->persist($evaluation);
-				$this->entityManager->flush(); // Save changes to the database
+			// Persist the entity
+			$this->entityManager->persist($evaluation);
+			$this->entityManager->flush(); // Save changes to the database
 
-				// Create a note
-				if ($formData['addNote'] == 'Yes') {
-						$note = new Note();
-						$note->setEvaluation($evaluation);
+			// Create a note
+			if ($formData['addNote'] == 'Yes') {
+				$note = new Note();
+				$note->setEvaluation($evaluation);
 
-						if ($this->security->getUser() instanceof User) {
-								$note->setAuthor($this->security->getUser());
-						} elseif ($this->security->getUser() instanceof CasUser) {
-								$userAtHand = $this->entityManager->getRepository(User::class)
-									->findOneBy(['username' => $this->security->getUser()->getUserIdentifier()]);
-								$note->setAuthor($userAtHand);
-						} else {
-								$note->setAuthor(null);
-						}
-
-						$note->setBody($formData['noteBody']);
-						$note->setCreated(new \DateTime());
-						$note->setVisibleToRequester(1);
-
-						// Persist the entity
-						$this->entityManager->persist($note);
-						$this->entityManager->flush(); // Save changes to the database
-				}
-
-				// Create a trail
-				$trail = new Trail();
-				$trail->setEvaluation($evaluation);
-
-				$requester = $this->security->getUser();
-				$requesterText = '';
-				if ($requester instanceof User) {
-						$requesterText .= $this->security->getUser()->attributes()['profile']['dn'];
-						$requesterText .= ' ('.$this->security->getUser()->attributes()['profile']['un'].')';
-				} elseif ($requester instanceof CasUser) {
-						$requesterText .= $this->security->getUser()->getAttributes()['profile']['dn'];
-						$requesterText .= ' ('.$this->security->getUser()->getAttributes()['profile']['un'].')';
+				if ($this->security->getUser() instanceof User) {
+						$note->setAuthor($this->security->getUser());
+				} elseif ($this->security->getUser() instanceof CasUser) {
+						$userAtHand = $this->entityManager->getRepository(User::class)
+							->findOneBy(['username' => $this->security->getUser()->getUserIdentifier()]);
+						$note->setAuthor($userAtHand);
 				} else {
-						$requesterText .= 'Unknown';
+						$note->setAuthor(null);
 				}
 
-				$trail->setBody('Resubmitted to Registrar 1 by '.$requesterText.'. Phase set to Registrar 1.');
-				$trail->setBodyAnon('Resubmitted to Registrar by requester.');
-				$trail->setCreated(new \DateTime());
+				$note->setBody($formData['noteBody']);
+				$note->setCreated(new \DateTime());
+				$note->setVisibleToRequester(1);
 
 				// Persist the entity
-				$this->entityManager->persist($trail);
+				$this->entityManager->persist($note);
 				$this->entityManager->flush(); // Save changes to the database
+			}
+
+			// Create a trail
+			$trail = new Trail();
+			$trail->setEvaluation($evaluation);
+
+			$requester = $this->security->getUser();
+			$requesterText = '';
+			if ($requester instanceof User) {
+				$requesterText .= $this->security->getUser()->attributes()['profile']['dn'];
+				$requesterText .= ' ('.$this->security->getUser()->attributes()['profile']['org_id'].')';
+			} elseif ($requester instanceof CasUser) {
+				$requesterText .= $this->security->getUser()->getAttributes()['profile']['dn'];
+				$requesterText .= ' ('.$this->security->getUser()->getAttributes()['profile']['org_id'].')';
+			} else {
+				$requesterText .= 'Unknown';
+			}
+
+			$trail->setBody('Resubmitted to Registrar 1 by '.$requesterText.'. Phase set to Registrar 1.');
+			$trail->setBodyAnon('Resubmitted to Registrar by requester.');
+			$trail->setCreated(new \DateTime());
+
+			// Persist the entity
+			$this->entityManager->persist($trail);
+			$this->entityManager->flush(); // Save changes to the database
 		}
 
 		/**

@@ -60,6 +60,7 @@ class EvaluationVoter extends Voter
 						self::CREATE,
 						self::READ,
 						self::UPDATE,
+						self::UPDATE_AS_REQUESTER,
 						self::DELETE,
 						self::ANNOTATE,
 						self::ANNOTATE_AS_REQUESTER,
@@ -161,11 +162,11 @@ class EvaluationVoter extends Voter
 		}
 
 		private function canUpdateAsRequester(Evaluation $evaluation, UserInterface $user, string $context): bool {
-				// Requester can update only their own evaluations of phase "Student"
-				if ($context == self::REQUESTER && ($evaluation->getRequester()->getUserIdentifier() === $user->getUserIdentifier()) && ($evaluation->getPhase() == 'Student')) {
-						return true;
-				}
-				return false;
+			// Requester can update only their own evaluations of phase "Student"
+			if ($context == self::REQUESTER && ($evaluation->getRequester()->getUserIdentifier() === $user->getUserIdentifier()) && ($evaluation->getPhase() == 'Student')) {
+				return true;
+			}
+			return false;
 		}
 
 		private function canDelete(Evaluation $evaluation, UserInterface $user, string $context): bool {

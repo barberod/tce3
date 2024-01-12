@@ -377,27 +377,26 @@ class CoordinatorPageController extends AbstractController
 
 		#[Route('/secure/coordinator/evaluation/{id}/update', name: 'coordinator_evaluation_update_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+update', 'evaluation' )]
-		public function coordinatorEvaluationUpdateForm(Request $request,
-			Evaluation $evaluation): Response
+		public function coordinatorEvaluationUpdateForm(Request $request, Evaluation $evaluation): Response
 		{
-				$form = $this->createForm(EvaluationUpdateType::class, null, ['evaluation' => $evaluation]);
-				$form->handleRequest($request);
-				if ($form->isSubmitted()) {
-						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
-						$evaluationProcessingService->updateEvaluation($evaluation, $form->getData());
-						return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
-				}
+			$form = $this->createForm(EvaluationUpdateType::class, null, ['evaluation' => $evaluation]);
+			$form->handleRequest($request);
+			if ($form->isSubmitted()) {
+				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+				$evaluationProcessingService->updateEvaluation($evaluation, $form->getData());
+				return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+			}
 
-				return $this->render('evaluation/form/update.html.twig', [
-					'context' => 'coordinator',
-					'page_title' => 'Evaluation #'.$evaluation->getID(),
-					'prepend' => 'Edit Details | Evaluation #'.$evaluation->getID(),
-					'evaluation' => $evaluation,
-					'id' => $evaluation->getID(),
-					'uuid' => $evaluation->getID(),
-					'verb' => 'update',
-					'form' => $form->createView(),
-				]);
+			return $this->render('evaluation/form/update.html.twig', [
+				'context' => 'coordinator',
+				'page_title' => 'Evaluation #'.$evaluation->getID(),
+				'prepend' => 'Edit Details | Evaluation #'.$evaluation->getID(),
+				'evaluation' => $evaluation,
+				'id' => $evaluation->getID(),
+				'uuid' => $evaluation->getID(),
+				'verb' => 'update',
+				'form' => $form->createView(),
+			]);
 		}
 
 		#[Route('/secure/coordinator/evaluation/{id}/delete', name: 'coordinator_evaluation_delete_form', methods: ['GET', 'POST'])]
@@ -513,9 +512,9 @@ class CoordinatorPageController extends AbstractController
 				$form = $this->createForm(EvaluationEvaluateType::class);
 				$form->handleRequest($request);
 				if ($form->isSubmitted()) {
-						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
-						$evaluationProcessingService->evaluateEvaluation($evaluation, $form->getData());
-						return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+					$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+					$evaluationProcessingService->evaluateEvaluation($evaluation, $form->getData());
+					return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
 				}
 
 				return $this->render('evaluation/form/evaluate.html.twig', [
@@ -535,39 +534,39 @@ class CoordinatorPageController extends AbstractController
 		public function coordinatorEvaluationExampleForm(Evaluation $evaluation):
 		Response
 		{
-				return $this->render('evaluation/page.html.twig', [
-					'context' => 'coordinator',
-					'page_title' => 'Evaluation #'.$evaluation->getID(),
-					'prepend' => 'Example | Evaluation #'.$evaluation->getID(),
-					'evaluation' => $evaluation,
-					'id' => $evaluation->getID(),
-					'uuid' => $evaluation->getID(),
-					'verb' => 'example'
-				]);
+			return $this->render('evaluation/page.html.twig', [
+				'context' => 'coordinator',
+				'page_title' => 'Evaluation #'.$evaluation->getID(),
+				'prepend' => 'Example | Evaluation #'.$evaluation->getID(),
+				'evaluation' => $evaluation,
+				'id' => $evaluation->getID(),
+				'uuid' => $evaluation->getID(),
+				'verb' => 'example'
+			]);
 		}
 
 		#[Route('/secure/coordinator/evaluation/{id}/finalize', name: 'coordinator_evaluation_finalize_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+finalize', 'evaluation' )]
 		public function coordinatorEvaluationFinalizeForm(Request $request, Evaluation $evaluation): Response
 		{
-				$form = $this->createForm(EvaluationFinalizeType::class, null, ['evaluation' => $evaluation]);
-				$form->handleRequest($request);
-				if ($form->isSubmitted()) {
-						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
-						$evaluationProcessingService->finalizeEvaluation($evaluation, $form->getData());
-						return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
-				}
+			$form = $this->createForm(EvaluationFinalizeType::class, null, ['evaluation' => $evaluation]);
+			$form->handleRequest($request);
+			if ($form->isSubmitted()) {
+				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+				$evaluationProcessingService->finalizeEvaluation($evaluation, $form->getData());
+				return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+			}
 
-				return $this->render('evaluation/form/finalize.html.twig', [
-					'context' => 'coordinator',
-					'page_title' => 'Evaluation #'.$evaluation->getID(),
-					'prepend' => 'Finalize | Evaluation #'.$evaluation->getID(),
-					'evaluation' => $evaluation,
-					'id' => $evaluation->getID(),
-					'uuid' => $evaluation->getID(),
-					'verb' => 'finalize',
-					'form' => $form->createView(),
-				]);
+			return $this->render('evaluation/form/finalize.html.twig', [
+				'context' => 'coordinator',
+				'page_title' => 'Evaluation #'.$evaluation->getID(),
+				'prepend' => 'Finalize | Evaluation #'.$evaluation->getID(),
+				'evaluation' => $evaluation,
+				'id' => $evaluation->getID(),
+				'uuid' => $evaluation->getID(),
+				'verb' => 'finalize',
+				'form' => $form->createView(),
+			]);
 		}
 
 		#[Route('/secure/coordinator/evaluation/{id}/forward', name: 'coordinator_evaluation_forward_form', methods: ['GET', 'POST'])]

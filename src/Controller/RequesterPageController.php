@@ -6,6 +6,7 @@ use App\Entity\Evaluation;
 use App\Form\EvaluationAnnotateAsRequesterType;
 use App\Form\EvaluationCreateType;
 use App\Form\EvaluationResubmitType;
+use App\Form\EvaluationUpdateType;
 use App\Form\ScratchFormType;
 use App\Repository\EvaluationRepository;
 use App\Service\EvaluationFilesService;
@@ -117,19 +118,28 @@ class RequesterPageController extends AbstractController
 			]);
 		}
 
-		#[Route('/secure/requester/evaluation/{id}/update-as-requester', name: 'requester_evaluation_update_form', methods: ['GET', 'POST'])]
+		#[Route('/secure/requester/evaluation/{id}/update-as-requester', name: 'requester_evaluation_update_as_requester_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'requester+update_as_requester', 'evaluation' )]
-		public function requesterEvaluationUpdateForm(Evaluation $evaluation): Response
+		public function requesterEvaluationUpdateForm(Request $request, Evaluation $evaluation): Response
 		{
-				return $this->render('evaluation/page.html.twig', [
-					'context' => 'requester',
-					'page_title' => 'Evaluation #'.$evaluation->getID(),
-					'prepend' => 'Edit Details | Evaluation #'.$evaluation->getID(),
-					'evaluation' => $evaluation,
-					'id' => $evaluation->getID(),
-					'uuid' => $evaluation->getID(),
-					'verb' => 'update'
-				]);
+			$form = $this->createForm(EvaluationUpdateType::class, null, ['evaluation' => $evaluation]);
+			$form->handleRequest($request);
+			if ($form->isSubmitted()) {
+				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+				$evaluationProcessingService->updateAsRequesterEvaluation($evaluation, $form->getData());
+				return $this->redirectToRoute('requester_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+			}
+
+			return $this->render('evaluation/form/update.html.twig', [
+				'context' => 'requester',
+				'page_title' => 'Evaluation #'.$evaluation->getID(),
+				'prepend' => 'Edit Details | Evaluation #'.$evaluation->getID(),
+				'evaluation' => $evaluation,
+				'id' => $evaluation->getID(),
+				'uuid' => $evaluation->getID(),
+				'verb' => 'update-as-requester',
+				'form' => $form->createView(),
+			]);
 		}
 
 		#[Route('/secure/requester/evaluation/{id}/delete-as-requester', name: 'requester_evaluation_delete_form', methods: ['GET', 'POST'])]

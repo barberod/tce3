@@ -20,6 +20,7 @@ class EvaluationOptionsService
 				$verbs[] = 'create';
 				$verbs[] = 'read';
 				$verbs[] = 'update';
+				$verbs[] = 'update_as_requester';
 				$verbs[] = 'delete';
 				$verbs[] = 'annotate';
 				$verbs[] = 'annotate_as_requester';
