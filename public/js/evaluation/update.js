@@ -101,6 +101,7 @@ function whenUsaInstitutionIsListed() {
   institutionNameField.style.display = 'none';
   institutionNameLabel.style.display = 'none';
   institutionNameHelp.style.display = 'none';
+  setStateAndInstitution();
 }
 
 function whenUsaInstitutionIsNotListed() {
@@ -137,13 +138,49 @@ function whenInternationalInstitution() {
 
 determineInstitutionSituation();
 
+function setStateAndInstitution() {
+  const institutionSelect = document.getElementById('evaluation_update_institution');
+  const selectedState = document.getElementById('evaluation_update_state').value;
+
+  const xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText);
+        updateInstitutionOptions(response);
+        getInstitutionFromHiddenValue();
+      } else {
+        // Handle error if needed
+      }
+    }
+  };
+  xhr.open('GET', '/get-institutions?usState=' + selectedState);
+  xhr.send();
+
+  function updateInstitutionOptions(data) {
+    institutionSelect.innerHTML = '<option value="">Select an institution</option>';
+    Object.keys(data).forEach(function (key) {
+      const option = document.createElement('option');
+      option.value = data[key];
+      option.textContent = key;
+      institutionSelect.appendChild(option);
+    });
+  }
+
+  function getInstitutionFromHiddenValue() {
+    const hiddenInstitution = document.getElementById('evaluation_update_institutionSelection').value;
+    if (hiddenInstitution && !isNaN(hiddenInstitution)) {
+      document.getElementById('evaluation_update_institution').value = hiddenInstitution;
+    }
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   const stateSelect = document.getElementById('evaluation_update_state');
   const institutionSelect = document.getElementById('evaluation_update_institution');
 
   stateSelect.addEventListener('change', function () {
     const selectedState = stateSelect.value;
-
     const xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
       if (xhr.readyState === XMLHttpRequest.DONE) {
