@@ -76,7 +76,7 @@ class EmailService
             $args = array(
                 'fromAddress' => 'Transfer Credit <transfercredit@registrar.gatech.edu>',
                 'mailTo' => $recipient->getEmail(),
-                'subjectLine' => '[Transfer Credit] Evaluation #'. $evaluation->getId() . ' Created',
+                'subjectLine' => '[Transfer Credit] Evaluation Request Submitted',
                 'htmlTemplate' => 'html/to-requester-upon-new-request.html.twig',
                 'textTemplate' => 'plaintext/to-requester-upon-new-request.txt.twig',
                 'emailData' => array(
