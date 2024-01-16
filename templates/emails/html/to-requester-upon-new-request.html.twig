@@ -7,7 +7,7 @@
 {% set institutionText = '' %}
 {% if evaluation.institution is not empty %}
     {% set institutionText = 'at ' . evaluation.institution.name %}
-{% else if evaluation.institutionOther is not empty %}
+{% elseif evaluation.institutionOther is not empty %}
     {% set institutionText = 'at ' . evaluation.institutionOther %}
 {% endif %}
 
