@@ -611,6 +611,10 @@ class EvaluationProcessingService
 				// Persist the entity
 				$this->entityManager->persist($trail);
 				$this->entityManager->flush(); // Save changes to the database
+
+				// Send email
+				$emailService = new EmailService($this->entityManager);
+				$emailService->emailToAssigneeUponNewAssignment($this->security->getUser()->getUserIdentifier(), $evaluation);
 		}
 
 		/**
@@ -968,6 +972,10 @@ class EvaluationProcessingService
 				// Persist the entity
 				$this->entityManager->persist($trail);
 				$this->entityManager->flush(); // Save changes to the database
+
+				// Send email
+				$emailService = new EmailService($this->entityManager);
+				$emailService->emailToAssigneeUponNewAssignment($this->security->getUser()->getUserIdentifier(), $evaluation);
 		}
 
 		/**
@@ -1718,6 +1726,10 @@ class EvaluationProcessingService
 				// Persist the entity
 				$this->entityManager->persist($trail);
 				$this->entityManager->flush(); // Save changes to the database
+
+				// Send email
+				$emailService = new EmailService($this->entityManager);
+				$emailService->emailToAssigneeUponNewAssignment($this->security->getUser()->getUserIdentifier(), $evaluation);
 		}
 
 		/**

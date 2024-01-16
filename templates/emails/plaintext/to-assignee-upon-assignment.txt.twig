@@ -1,0 +1,33 @@
+{% extends 'plaintext/base.txt.twig' %}
+
+{% block inner %}
+
+Dear {{ emailData.recipient.displayName }},
+
+{% set institutionText = '' %}
+{% if evaluation.institution is not empty %}
+    {% institutionText = evaluation.institution.name %}
+{% elseif evaluation.institutionOther is not empty %}
+    {% institutionText = evaluation.institutionOther %}
+{% endif %}
+
+Transfer Credit Evaluation #{{ emailData.evaluation.id }} was assigned to you on {{ 'now'|date('Y-m-d H:i:s') }}.
+
+-- EVALUATION --
+Course: {{ emailData.evaluation.courseSubjCode }} {{ emailData.evaluation.courseCrseNum }}, {{ emailData.evaluation.courseSubjCode }} {{ emailData.evaluation.courseTitle }}
+Institution: {{ institutionText }}
+
+-- REQUESTER --
+Name: {{ emailData.requester.dn }}
+GTID: {{ emailData.requester.orgID }}
+
+-- LINK --
+https://dev.transfercredit.gatech.edu/secure/assignee/evaluation/{{ emailData.evaluation.id }}
+
+Thank you,
+
+Transfer Credit Evaluation
+Registrar's Office
+Georgia Tech
+
+{% endblock %}

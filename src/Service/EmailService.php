@@ -19,6 +19,8 @@ use Twig\Extra\CssInliner\CssInlinerExtension;
 
 class EmailService
 {
+    private String $roText = ' This message was sent by the Registrar\'s Office at Georgia Tech.';
+    
     private EntityManagerInterface $entityManager;
 
     public function __construct(
@@ -76,13 +78,36 @@ class EmailService
             $args = array(
                 'fromAddress' => 'Transfer Credit <transfercredit@registrar.gatech.edu>',
                 'mailTo' => $recipient->getEmail(),
-                'subjectLine' => '[Transfer Credit] Evaluation Request Submitted',
+                'subjectLine' => 'New evaluation request submitted',
                 'htmlTemplate' => 'html/to-requester-upon-new-request.html.twig',
                 'textTemplate' => 'plaintext/to-requester-upon-new-request.txt.twig',
                 'emailData' => array(
                     'evaluation' => $evaluation,
                     'recipient' => $recipient,
-                    'previewText' => $recipient->getDisplayName().', your evaluation request has been created.'
+                    'previewText' => $recipient->getDisplayName().', your transfer credit evaluation request has been created.'.$this->roText
+                )
+            );
+            if ($this->sendNow($args) == false) {
+                // log it
+            };
+        }
+    }
+
+    public function emailToAssigneeUponNewAssignment(string $un, Evaluation $evaluation) {
+        $recipient = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $un]);
+        $requester = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $evaluation->getRequester()->getUserIdentifier()]);
+        if ($recipient && $requester) {
+            $args = array(
+                'fromAddress' => 'Transfer Credit <transfercredit@registrar.gatech.edu>',
+                'mailTo' => $recipient->getEmail(),
+                'subjectLine' => '[Action Required] An evaluation was assigned to you',
+                'htmlTemplate' => 'html/to-assignee-upon-new-assignment.html.twig',
+                'textTemplate' => 'plaintext/to-assignee-upon-new-assignment.txt.twig',
+                'emailData' => array(
+                    'evaluation' => $evaluation,
+                    'recipient' => $recipient,
+                    'requester' => $requester,
+                    'previewText' => $recipient->getDisplayName().', a transfer credit evaluation was assigned to you.'.$this->roText
                 )
             );
             if ($this->sendNow($args) == false) {
