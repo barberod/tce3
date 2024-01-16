@@ -115,4 +115,25 @@ class EmailService
             };
         }
     }
+
+    public function emailToRequesterUponCompletion(string $un, Evaluation $evaluation) {
+        $recipient = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $un]);
+        if ($recipient) {
+            $args = array(
+                'fromAddress' => 'Transfer Credit <transfercredit@registrar.gatech.edu>',
+                'mailTo' => $recipient->getEmail(),
+                'subjectLine' => 'Evaluation complete',
+                'htmlTemplate' => 'html/to-requester-upon-completion.html.twig',
+                'textTemplate' => 'plaintext/to-requester-upon-completion.txt.twig',
+                'emailData' => array(
+                    'evaluation' => $evaluation,
+                    'recipient' => $recipient,
+                    'previewText' => $recipient->getDisplayName().', your transfer credit evaluation request has been marked "Complete."'.$this->roText
+                )
+            );
+            if ($this->sendNow($args) == false) {
+                // log it
+            };
+        }
+    }
 }

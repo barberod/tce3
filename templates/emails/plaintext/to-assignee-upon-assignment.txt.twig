@@ -14,6 +14,7 @@
 A transfer credit evaluation has been assigned to you.
 
 -- DETAILS --
+
 Evaluation No.: #{{ emailData.evaluation.id }}
 Created: {{ emailData.evaluation.created|date('Y-m-d H:i:s') }}
 Requester: {{ emailData.requester.displayName }}
@@ -23,6 +24,7 @@ Course: {{ emailData.evaluation.courseSubjCode }} {{ emailData.evaluation.course
 Institution: {{ institutionText }}
 
 -- LINK --
+
 https://dev.transfercredit.gatech.edu/secure/assignee/evaluation/{{ emailData.evaluation.id }}
 
 Thank you,

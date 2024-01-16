@@ -4,21 +4,18 @@
 
 {{ emailData.recipient.displayName }},
 
-{% set institutionText = '' %}
-{% if evaluation.institution is not empty %}
-    {% set institutionText = 'at ' . evaluation.institution.name %}
-{% elseif evaluation.institutionOther is not empty %}
-    {% set institutionText = 'at ' . evaluation.institutionOther %}
-{% endif %}
-
-You have submitted {{ emailData.evaluation.courseSubjCode }} {{ emailData.evaluation.courseCrseNum }} {{ institutionText }}for evaluation.
+You have submitted a new transfer credit evaluation request.
 
 -- DETAILS --
 
 Evaluation No.: #{{ emailData.evaluation.id }}
 Created: {{ emailData.evaluation.created|date('Y-m-d H:i:s') }}
 Course: {{ emailData.evaluation.courseSubjCode }} {{ emailData.evaluation.courseCrseNum }}, {{ emailData.evaluation.courseSubjCode }} {{ emailData.evaluation.courseTitle }}
-Institution: {{ institutionText }}
+{% if emailData.evaluation.institution is not empty %}
+Institution: {{ emailData.evaluation.institution.name }}
+{% elseif emailData.evaluation.institutionOther is not empty %}
+Institution: {{ emailData.evaluation.institutionOther }}
+{% endif %}
 
 -- INFORMATION --
 

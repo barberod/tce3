@@ -1,0 +1,31 @@
+{% extends 'plaintext/base.txt.twig' %}
+
+{% block inner %}
+
+{{ emailData.recipient.displayName }},
+
+Your transfer credit evaluation was marked "Complete" on {{ emailData.evaluation.modified|date('Y-m-d H:i:s') }}.
+
+-- DETAILS --
+
+Evaluation No.: #{{ emailData.evaluation.id }}
+Created: {{ emailData.evaluation.created|date('Y-m-d H:i:s') }}
+Course: {{ emailData.evaluation.courseSubjCode }} {{ emailData.evaluation.courseCrseNum }}, {{ emailData.evaluation.courseSubjCode }} {{ emailData.evaluation.courseTitle }}
+{% if emailData.evaluation.institution is not empty %}
+Institution: {{ emailData.evaluation.institution.name }}
+{% elseif emailData.evaluation.institutionOther is not empty %}
+Institution: {{ emailData.evaluation.institutionOther }}
+{% endif %}
+
+-- LINK --
+
+https://dev.transfercredit.gatech.edu/secure/requester/evaluation/{{ emailData.evaluation.id }}
+
+
+Thank you,
+
+Transfer Credit Evaluation
+Registrar's Office
+Georgia Tech
+
+{% endblock %}
