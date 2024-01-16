@@ -4,15 +4,18 @@
 
 {{ emailData.recipient.displayName }},
 
-A transfer credit evaluation has been assigned to you.
+A transfer credit evaluation request has been returned to you without evaluation. Further action is required of you.
+
+-- IMPORTANT --
+
+To return your evaluation to the Registar's workflow, you must use the "Submit" option after you have uploaded your supplemental files and added your notes.
+
+There will be no further action unless you address the issues described in the notes and resubmit the request.
 
 -- DETAILS --
 
 Evaluation No.: #{{ emailData.evaluation.id }}
 Created: {{ emailData.evaluation.created|date('Y-m-d H:i:s') }}
-Requester: {{ emailData.requester.displayName }}
-Type: {{ emailData.requester.category }}
-GTID: {{ emailData.requester.orgID }}
 Course: {{ emailData.evaluation.courseSubjCode }} {{ emailData.evaluation.courseCrseNum }}, {{ emailData.evaluation.courseSubjCode }} {{ emailData.evaluation.courseTitle }}
 {% if emailData.evaluation.institution is not empty %}
 Institution: {{ emailData.evaluation.institution.name }}
@@ -22,7 +25,7 @@ Institution: {{ emailData.evaluation.institutionOther }}
 
 -- LINK --
 
-https://dev.transfercredit.gatech.edu/secure/assignee/evaluation/{{ emailData.evaluation.id }}
+https://dev.transfercredit.gatech.edu/secure/requester/evaluation/{{ emailData.evaluation.id }}
 
 Thank you,
 

@@ -136,4 +136,25 @@ class EmailService
             };
         }
     }
+
+    public function emailToRequesterUponSendBackToRequester(string $un, Evaluation $evaluation) {
+        $recipient = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $un]);
+        if ($recipient) {
+            $args = array(
+                'fromAddress' => 'Transfer Credit <transfercredit@registrar.gatech.edu>',
+                'mailTo' => $recipient->getEmail(),
+                'subjectLine' => '[Action Required] Request sent back without evaluation',
+                'htmlTemplate' => 'html/to-requester-upon-send-back-to-requester.html.twig',
+                'textTemplate' => 'plaintext/to-requester-upon-send-back-to-requester.txt.twig',
+                'emailData' => array(
+                    'evaluation' => $evaluation,
+                    'recipient' => $recipient,
+                    'previewText' => $recipient->getDisplayName().', a request was returned to you without evaluation."'.$this->roText
+                )
+            );
+            if ($this->sendNow($args) == false) {
+                // log it
+            };
+        }
+    }
 }
