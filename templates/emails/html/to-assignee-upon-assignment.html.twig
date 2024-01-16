@@ -6,15 +6,15 @@
 
 <p>Transfer Credit Evaluation <strong>#{{ emailData.evaluation.id }}</strong> was assigned to you on <strong>{{ 'now'|date('Y-m-d H:i:s') }}</strong>.</p>
 
-<p>Evaluation:</p>
+<p style=" margin-bottom: 0px;">Evaluation</p>
 
-<table role="presentation" width="100%" style="max-width: 500px;" border="0" cellpadding="0" cellspacing="0">
+<table role="presentation" width="100%" style="max-width: 500px; margin-bottom: 15px;" border="0" cellpadding="0" cellspacing="0">
     <tr style="background-color: #ffffff; width: 500px; padding: 0; margin: 0; border: none;">
         <td style="background-color: transparent; width: 20%; padding: 0; margin: 0; border: none;">
             Course: 
         </td>
         <td style="background-color: transparent; width: 80%; padding: 0; margin: 0; border: none;">
-            {{ emailData.evaluation.courseSubjCode }} {{ emailData.evaluation.courseCrseNum }}, {{ emailData.evaluation.courseSubjCode }} {{ emailData.evaluation.courseTitle }}
+            {{ emailData.evaluation.courseSubjCode }} {{ emailData.evaluation.courseCrseNum }}, {{ emailData.evaluation.courseTitle }}
         </td>
     </tr>
     <tr style="background-color: #ffffff; width: 500px; padding: 0; margin: 0; border: none;">
@@ -22,24 +22,25 @@
             Institution: 
         </td>
         <td style="background-color: transparent; width: 80%; padding: 0; margin: 0; border: none;">
-            {% if evaluation.institution is not empty %}
-                {{ evaluation.institution.name }}
-            {% elseif evaluation.institutionOther is not empty %}
-                {{ evaluation.institutionOther }}
+            {% if emailData.evaluation.institution is not empty %}
+                {{ emailData.evaluation.institution.name }}
+            {% elseif emailData.evaluation.institutionOther is not empty %}
+                {{ emailData.evaluation.institutionOther }}
             {% endif %}
         </td>
     </tr>
 </table>
+<br>
 
-<p>Requester:</p>
+<p style=" margin-bottom: 0px;">Requester</p>
 
-<table role="presentation" width="100%" style="max-width: 500px;" border="0" cellpadding="0" cellspacing="0">
+<table role="presentation" width="100%" style="max-width: 500px; margin-bottom: 15px;" border="0" cellpadding="0" cellspacing="0">
     <tr style="background-color: #ffffff; width: 500px; padding: 0; margin: 0; border: none;">
         <td style="background-color: transparent; width: 20%; padding: 0; margin: 0; border: none;">
             Name: 
         </td>
         <td style="background-color: transparent; width: 80%; padding: 0; margin: 0; border: none;">
-            {{ emailData.requester.dn }}
+            {{ emailData.requester.displayName }}
         </td>
     </tr>
     <tr style="background-color: #ffffff; width: 500px; padding: 0; margin: 0; border: none;">
@@ -52,15 +53,9 @@
     </tr>
 </table>
 
-<p>Link:</p>
-
-<table role="presentation" width="100%" style="max-width: 500px;" border="0" cellpadding="0" cellspacing="0">
-    <tr style="background-color: #ffffff; width: 500px; padding: 0; margin: 0; border: none;">
-        <td style="background-color: transparent; width: 100%; padding: 0; margin: 0; border: none;">
-            <a href="https://dev.transfercredit.gatech.edu/secure/assignee/evaluation/{{ emailData.evaluation.id }}">https://dev.transfercredit.gatech.edu/secure/assignee/evaluation/{{ emailData.evaluation.id }}</a>
-        </td>
-    </tr>
-</table>
+<p>Link<br>
+<a href="https://dev.transfercredit.gatech.edu/secure/assignee/evaluation/{{ emailData.evaluation.id }}">https://dev.transfercredit.gatech.edu/secure/assignee/evaluation/{{ emailData.evaluation.id }}</a>
+</p>
 
 <p>Thank you,</p>
 
