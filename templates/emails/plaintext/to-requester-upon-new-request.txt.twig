@@ -6,9 +6,9 @@
 
 {% set institutionText = '' %}
 {% if evaluation.institution is not empty %}
-    {% set institutionText = 'at ' . institutionText = evaluation.institution.name %}
-{% elseif evaluation.institutionOther is not empty %}
-    {% set institutionText = 'at ' . institutionText = evaluation.institutionOther %}
+    {% set institutionText = 'at ' . evaluation.institution.name %}
+{% else if evaluation.institutionOther is not empty %}
+    {% set institutionText = 'at ' . evaluation.institutionOther %}
 {% endif %}
 
 You have submitted {{ emailData.evaluation.courseSubjCode }} {{ emailData.evaluation.courseCrseNum }} {{ institutionText }}for evaluation.
