@@ -589,8 +589,8 @@ class EvaluationProcessingService
 				$trail->setEvaluation($evaluation);
 
 				$assigneeText = '';
-				$assigneeText .= $assignee->attributes()['profile']['dn'];
-				$assigneeText .= ' ('.$assignee->attributes()['profile']['un'].')';
+				$assigneeText .= $assignee->getDisplayName();
+				$assigneeText .= ' ('.$assignee->getUsername().')';
 
 				$coordinator = $this->security->getUser();
 				$coordinatorText = '';
@@ -614,7 +614,7 @@ class EvaluationProcessingService
 
 				// Send email
 				$emailService = new EmailService($this->entityManager);
-				$emailService->emailToAssigneeUponNewAssignment($this->security->getUser()->getUserIdentifier(), $evaluation);
+				$emailService->emailToAssigneeUponNewAssignment($assignee->getUsername(), $evaluation);
 		}
 
 		/**
@@ -950,8 +950,8 @@ class EvaluationProcessingService
 				$trail->setEvaluation($evaluation);
 
 				$assigneeText = '';
-				$assigneeText .= $assignee->attributes()['profile']['dn'];
-				$assigneeText .= ' ('.$assignee->attributes()['profile']['un'].')';
+				$assigneeText .= $assignee->getDisplayName();
+				$assigneeText .= ' ('.$assignee->getUsername().')';
 
 				$forwarder = $this->security->getUser();
 				$forwarderText = '';
@@ -975,7 +975,7 @@ class EvaluationProcessingService
 
 				// Send email
 				$emailService = new EmailService($this->entityManager);
-				$emailService->emailToAssigneeUponNewAssignment($this->security->getUser()->getUserIdentifier(), $evaluation);
+				$emailService->emailToAssigneeUponNewAssignment($assignee->getUsername(), $evaluation);
 		}
 
 		/**
@@ -1703,8 +1703,8 @@ class EvaluationProcessingService
 				$trail->setEvaluation($evaluation);
 
 				$assigneeText = '';
-				$assigneeText .= $assignee->attributes()['profile']['dn'];
-				$assigneeText .= ' ('.$assignee->attributes()['profile']['un'].')';
+				$assigneeText .= $assignee->getDisplayName();
+				$assigneeText .= ' ('.$assignee->getUsername().')';
 
 				$coordinator = $this->security->getUser();
 				$coordinatorText = '';
@@ -1729,7 +1729,7 @@ class EvaluationProcessingService
 
 				// Send email
 				$emailService = new EmailService($this->entityManager);
-				$emailService->emailToAssigneeUponNewAssignment($this->security->getUser()->getUserIdentifier(), $evaluation);
+				$emailService->emailToAssigneeUponNewAssignment($assignee->getUsername(), $evaluation);
 		}
 
 		/**
