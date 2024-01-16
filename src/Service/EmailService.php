@@ -20,7 +20,7 @@ use Twig\Extra\CssInliner\CssInlinerExtension;
 class EmailService
 {
     private String $roText = ' This message was sent by the Registrar\'s Office at Georgia Tech.';
-    
+
     private EntityManagerInterface $entityManager;
 
     public function __construct(
@@ -101,8 +101,8 @@ class EmailService
                 'fromAddress' => 'Transfer Credit <transfercredit@registrar.gatech.edu>',
                 'mailTo' => $recipient->getEmail(),
                 'subjectLine' => '[Action Required] An evaluation was assigned to you',
-                'htmlTemplate' => 'html/to-assignee-upon-new-assignment.html.twig',
-                'textTemplate' => 'plaintext/to-assignee-upon-new-assignment.txt.twig',
+                'htmlTemplate' => 'html/to-assignee-upon-assignment.html.twig',
+                'textTemplate' => 'plaintext/to-assignee-upon-assignment.txt.twig',
                 'emailData' => array(
                     'evaluation' => $evaluation,
                     'recipient' => $recipient,
