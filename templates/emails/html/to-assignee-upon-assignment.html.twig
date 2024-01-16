@@ -2,9 +2,9 @@
 
 {% block inner %}
 
-<p>Dear {{ emailData.recipient.displayName }},</p>
+<p>{{ emailData.recipient.displayName }},</p>
 
-<p>A transfer credit evaluation was assigned to you on {{ emailData.evaluation.updated|date('Y-m-d H:i:s') }}.</p>
+<p>A transfer credit evaluation has been assigned to you.</p>
 
 <p><em>-- Details --</em></p>
 
@@ -76,6 +76,7 @@
 <p>
     <a href="https://dev.transfercredit.gatech.edu/secure/assignee/evaluation/{{ emailData.evaluation.id }}">https://dev.transfercredit.gatech.edu/secure/assignee/evaluation/{{ emailData.evaluation.id }}</a>
 </p>
+<br>
 
 <p>Thank you,</p>
 
