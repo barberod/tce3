@@ -188,7 +188,7 @@ class EvaluationProcessingService
 
 			// Send email
 			$emailService = new EmailService($this->entityManager);
-			$emailService->emailToRequesterUponNewRequest($this->security->getUser()->getUserIdentifier(), $evaluation);
+			$emailService->emailToRequesterUponNewRequest($evaluation->getRequester()->getUsername(), $evaluation);
 		}
 
 		/**
@@ -613,10 +613,8 @@ class EvaluationProcessingService
 				$this->entityManager->flush(); // Save changes to the database
 
 				// Send email
-				$requester = $this->entityManager->getRepository(User::class)
-					->findOneBy(['username' => $formData['requester']]);
 				$emailService = new EmailService($this->entityManager);
-				$emailService->emailToAssigneeUponNewAssignment($requester->getUsername(), $evaluation);
+				$emailService->emailToAssigneeUponNewAssignment($assignee->getUsername(), $evaluation);
 		}
 
 		/**
@@ -901,7 +899,7 @@ class EvaluationProcessingService
 
 				// Send email
 				$emailService = new EmailService($this->entityManager);
-				$emailService->emailToRequesterUponNewRequest($this->security->getUser()->getUserIdentifier(), $evaluation);
+				$emailService->emailToRequesterUponCompletion($evaluation->getRequester()->getUsername(), $evaluation);
 		}
 
 		/**
