@@ -7,7 +7,7 @@ Dear {{ emailData.recipient.displayName }},
 {% set institutionText = '' %}
 {% if evaluation.institution is not empty %}
     {% institutionText = evaluation.institution.name %}
-{% elseif evaluation.institutionOther is not empty %}
+{% else if evaluation.institutionOther is not empty %}
     {% institutionText = evaluation.institutionOther %}
 {% endif %}
 
