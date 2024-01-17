@@ -1,0 +1,249 @@
+{% extends 'page/page.html.twig' %}
+
+{% block breadcrumbs %}
+<div class="col-12 px-3">
+    <nav class="row" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url('homepage') }}">Home</a></li>
+            {% if context|default() %}
+                {% if (context == "manager") or (context == "coordinator") or (context == "observer") %}
+                    {% set home_route = context ~ '_home' %}
+                    <li class="breadcrumb-item"><a href="{{ url(home_route) }}">{{ context|capitalize }}</a></li>
+
+                    {% if department|default() %}
+                    {% set department_table = context ~ '_department_table' %}
+                    <li class="breadcrumb-item"><a href="{{ url(department_table) }}">Departments</a></li>
+                    {% set department_page = context ~ '_department_page' %}
+                    <li class="breadcrumb-item"><a href="{{ url(department_page, { 'id':department.id }) }}">{{ department.name }}</a></li>
+                    {% endif %}
+                    
+                    <li class="breadcrumb-item active" aria-current="page">{{ person.username }}</li>
+                {% endif %}
+            {% endif %}
+        </ol>
+    </nav>
+</div>
+{% endblock %}
+
+{% block content %}
+    {% if context|default() %}
+        {% if (context == "manager") or (context == "coordinator") or (context == "observer") %}
+            {% set evaluation_page = context ~ '_evaluation_page' %}
+            <div class="col-12">
+                <div class="row content">
+                    <div class="col-12 d-flex flex-column">
+
+                        <div id="table-evaluations-by-assignee" class="row table-wrapper">
+                            <div class="col-12">
+
+                                <div class="row row-cols-2 mb-3">
+                                    <div class="col">
+                                        <p class="text-muted mb-0">Evaluations older than 500 days are not shown.</p>
+                                    </div>
+                                    <div class="col text-end">
+                                        <p class="mb-0">Showing {{ pager.currentPageOffsetStart() }} - {{ pager.currentPageOffsetEnd() }} of {{ pager.nbResults }}</p>
+                                    </div>
+                                </div>
+
+                                {% set created_toggler = '' %}
+                                {% if direction_new is defined %}
+                                    {% set created_toggler = '?orderby=created&direction=' ~ direction_new %}
+                                    {% if reqadm is defined %}
+                                        {% if reqadm == 'Yes' or reqadm == 'No' %}
+                                            {% set created_toggler = created_toggler ~ '&reqadm=' ~ reqadm|lower %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+
+                                {% set updated_toggler = '' %}
+                                {% if direction_new is defined %}
+                                    {% set updated_toggler = '?orderby=updated&direction=' ~ direction_new %}
+                                    {% if reqadm is defined %}
+                                        {% if reqadm == 'Yes' or reqadm == 'No' %}
+                                            {% set updated_toggler = updated_toggler ~ '&reqadm=' ~ reqadm|lower %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+
+                                {% set created_caret = '' %}
+                                {% if orderby is defined and direction is defined %}
+                                    {% if orderby == 'created' %}
+                                        {% if direction == 'asc' %}
+                                            {% set created_caret = '<i class="fa-solid fa-caret-up ms-2"></i>' %}
+                                        {% elseif direction == 'desc' %}
+                                            {% set created_caret = '<i class="fa-solid fa-caret-down ms-2"></i>' %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+
+                                {% set updated_caret = '' %}
+                                {% if orderby is defined and direction is defined %}
+                                    {% if orderby == 'updated' %}
+                                        {% if direction == 'asc' %}
+                                            {% set updated_caret = '<i class="fa-solid fa-caret-up ms-2"></i>' %}
+                                        {% elseif direction == 'desc' %}
+                                            {% set updated_caret = '<i class="fa-solid fa-caret-down ms-2"></i>' %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+
+                                <div class="row row-cols-1 mb-3">
+                                    <div class="col">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">Req Adm</th>
+                                                    <th scope="col">Course</th>
+                                                    <th scope="col">Requester</th>
+                                                    <th scope="col">Assignee</th>
+                                                    <th scope="col">
+                                                        <a href="{{ app.request.pathinfo }}{% if created_toggler is defined %}{{ created_toggler }}{% endif %}">Created{{ created_caret|raw }}</a>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <a href="{{ app.request.pathinfo }}{% if updated_toggler is defined %}{{ updated_toggler }}{% endif %}">Updated{{ updated_caret|raw }}</a>
+                                                    </th>
+                                                    <th scope="col">Phase</th>
+                                                    <th scope="col">Links</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody class="table-group-divider">
+                                                {% if pager is empty %}
+                                                    <tr>
+                                                        <td colspan="8" class="text-center fst-italic">No data</td>
+                                                    </tr>
+                                                {% else %}
+                                                    {% for evaluation in pager %}
+                                                    <tr>
+                                                        <td>
+                                                        {% if evaluation.reqAdmin == "No" %}
+                                                        <span class="text-danger me-2"><i class="fa-solid fa-circle fa-fw"></i></span>{{ evaluation.reqAdmin }}
+                                                        {% elseif evaluation.reqAdmin == "Yes" %}
+                                                        <span class="text-success me-2"><i class="fa-solid fa-circle fa-fw"></i></span>{{ evaluation.reqAdmin }}
+                                                        {% endif %}
+                                                        </td>
+                                                        <td>{{ evaluation.courseSubjCode }} {{ evaluation.courseCrseNum }} ({{ evaluation.courseCreditHrs }})<br>
+                                                            <span class="text-muted">
+                                                            {% if evaluation.institution is not empty %}
+                                                                {% set institution = evaluation.institution.name %}
+                                                            {% elseif evaluation.institutionOther|default() %}
+                                                                {% set institution = evaluation.institutionOther %}
+                                                            {% else %}
+                                                                {% set institution = 'Unknown' %}
+                                                            {% endif %}
+
+                                                            {% set maxLength = 32 %}
+                                                            {% set ellipsis = '...' %}
+                                                            {% if institution|length > maxLength %}
+                                                                {{ institution|slice(0, maxLength) ~ ellipsis }}
+                                                            {% else %}
+                                                                {{ institution }}
+                                                            {% endif %}
+                                                            </span>
+                                                        </td>
+                                                        <td>{{ evaluation.requester.displayName }}<br><span class="text-muted">{{ evaluation.requester.orgID }}</span></td>
+                                                        <td>
+                                                            {% if evaluation.assignee.username is defined %}
+                                                                {% if evaluation.assignee.username != 'admin' %}
+                                                                    {% if evaluation.assignee.displayName is defined %}
+                                                                        {{ evaluation.assignee.displayName }}<br>
+                                                                    {% endif %}
+                                                                        <span class="text-muted">{{ evaluation.assignee.username }}</span>
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                        {% if evaluation.created %}
+                                                        {{ evaluation.created | date('Y-m-d H:i') }}<br><span class="text-muted">{{ evaluation.created|time_diff }}</span>
+                                                        {% endif %}
+                                                        </td>
+                                                        <td>
+                                                        {% if evaluation.updated %}
+                                                        {{ evaluation.updated | date('Y-m-d H:i') }}<br><span class="text-muted">{{ evaluation.updated|time_diff }}</span>
+                                                        {% endif %}
+                                                        </td>
+                                                        <td>{{ evaluation.phase }}</td>
+                                                        <td>
+                                                            <a class="me-2" href="{{ url(evaluation_page, {'id':evaluation.id}) }}">View</a>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                {% endif %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{ pagerfanta(pager) }}
+
+                                <!-- Page Navigation -->
+                                <div id="page-navigation" class="row justify-content-center mb-3" style="display: none;">
+                                    <div class="col-12 col-lg-8 col-xl-10">
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination">
+
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="First">
+                                                        <span aria-hidden="true">
+                                                            <i class="fa-solid fa-backward-fast me-2"></i>First
+                                                        </span>
+                                                    </a>
+                                                </li>
+
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Previous">
+                                                        <span aria-hidden="true">
+                                                            <i class="fa-solid fa-caret-left me-2"></i>Previous
+                                                        </span>
+                                                    </a>
+                                                </li>
+
+                                                <li class="page-item" aria-current="page">
+                                                    <a class="page-link" href="#">5</a>
+                                                </li>
+
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Next">
+                                                        <span aria-hidden="true">
+                                                            Next<i class="fa-solid fa-caret-right ms-2"></i>
+                                                        </span>
+                                                    </a>
+                                                </li>
+
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Last">
+                                                        <span aria-hidden="true">
+                                                            Last<i class="fa-solid fa-forward-fast ms-2"></i>
+                                                        </span>
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                    <div class="col-12 col-lg-4 col-xl-2">
+                                        <div class="input-group">
+                                            <select class="form-select" id="inputGoToPage" aria-label="Go to page">
+                                                <option selected>Page...</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                            </select>
+                                            <button class="btn btn-outline-primary" type="button">Go</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /#page-navigation -->
+                            </div>
+                        </div>
+                        <!-- /#table-evaluations -->
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+<!-- no script -->
+{% endblock %}

@@ -22,9 +22,7 @@ class AffiliationRepository extends ServiceEntityRepository
         parent::__construct($registry, Affiliation::class);
     }
 
-    public function getPersons(
-        ?int $deptID = null
-    ): array
+    public function getPersons(?int $deptID = null): array
     {
         $queryBuilder = $this->createQueryBuilder('a')
         ->select('u')

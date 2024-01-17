@@ -977,8 +977,40 @@ class CoordinatorPageController extends AbstractController
 				'page_title' => 'Department #'.$department->getID().' ('.$department->getName().')',
 				'prepend' => 'Department #'.$department->getID().' ('.$department->getName().')',
 				'department' => $department,
-				'id' => $department->getID(),
-				'persons' => $affiliationRepository->getPersons(),
+				'persons' => $affiliationRepository->getPersons($department->getID()),
+			]);
+		}
+
+		#[Route('/secure/coordinator/department/{id}/{username}', name: 'coordinator_department_assignee_page', methods: ['GET'])]
+		public function coordinatorDepartmentAssigneePage(Request $request): Response 
+		{
+			$evaluationRepository = $this->entityManager->getRepository(Evaluation::class);
+			$department = $this->entityManager->getRepository(Department::class)->findOneBy(['id' => $request->attributes->get('id')]);
+			$person = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $request->attributes->get('username')]);
+			
+			$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
+			$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
+			$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+			$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
+
+			$queryBuilder = $evaluationRepository->getQB(
+				orderBy: $orderBy,
+				direction: $direction,
+				assignee: $person
+			);
+			$adapter = new QueryAdapter($queryBuilder);
+			$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
+
+			return $this->render('assignee/table.html.twig', [
+				'context' => 'coordinator',
+				'page_title' => 'Assignee: '.$person->getUsername().' ('.$person->getDisplayName().')',
+				'prepend' => $person->getUsername(),
+				'pager' => $pagerfanta,
+				'orderby' => $orderBy,
+				'direction' => $direction,
+				'direction_new' => $newDirection,
+				'department' => $department,
+				'person' => $person
 			]);
 		}
 
