@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Evaluation;
+use App\Entity\Institution;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -33,36 +34,41 @@ class EvaluationRepository extends ServiceEntityRepository
         ?string $phase = null,
         ?UserInterface $requester = null,
         ?UserInterface $assignee = null,
-		?bool $bypass = false
+		?bool $bypass = false,
+        ?Institution $institution = null,
     ): QueryBuilder
     {
-				$queryBuilder = $this->createQueryBuilder('e');
+        $queryBuilder = $this->createQueryBuilder('e');
 
-				if ($bypass) {
-						$queryBuilder->andWhere('e.id = :zero')->setParameter('zero', 0);
-						return $queryBuilder;
-				}
+        if ($bypass) {
+            $queryBuilder->andWhere('e.id = :zero')->setParameter('zero', 0);
+            return $queryBuilder;
+        }
 
         $queryBuilder->andWhere('e.status = :one')->setParameter('one', 1);
 
         if (!is_null($reqAdmin)) {$queryBuilder->andWhere('e.reqAdmin=:val1')->setParameter('val1', $reqAdmin);}
         if (!is_null($phase)) {$queryBuilder->andWhere('e.phase=:val2')->setParameter('val2', $phase);}
         if (!is_null($requester)) {
-						$queryBuilder->leftJoin('e.requester', 'r');
-						$queryBuilder->andWhere('r.username=:val3')->setParameter('val3', $requester->getUserIdentifier());
+            $queryBuilder->leftJoin('e.requester', 'r');
+            $queryBuilder->andWhere('r.username=:val3')->setParameter('val3', $requester->getUserIdentifier());
         }
         if (!is_null($assignee)) {
-						$queryBuilder->leftJoin('e.assignee', 'a');
-						$queryBuilder->andWhere('a.username=:val4')->setParameter('val4', $assignee->getUserIdentifier());
-				}
-				if (!is_null($orderBy) && !is_null($direction)) {
-						$queryBuilder->addOrderBy('e.'.$orderBy, $direction);
-				} else {
-						$queryBuilder->addOrderBy('e.updated', 'desc');
-				}
+            $queryBuilder->leftJoin('e.assignee', 'a');
+            $queryBuilder->andWhere('a.username=:val4')->setParameter('val4', $assignee->getUserIdentifier());
+        }
+        if (!is_null($institution)) {
+            $queryBuilder->leftJoin('e.institution', 'i');
+            $queryBuilder->andWhere('i.id=:val5')->setParameter('val5', $institution->getId());
+        }
+        if (!is_null($orderBy) && !is_null($direction)) {
+            $queryBuilder->addOrderBy('e.'.$orderBy, $direction);
+        } else {
+            $queryBuilder->addOrderBy('e.updated', 'desc');
+        }
 
-				return $queryBuilder;
-		}
+        return $queryBuilder;
+	}
 
 
     /**

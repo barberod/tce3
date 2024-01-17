@@ -6,7 +6,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ url('homepage') }}">Home</a></li>
             {% if context|default() %}
-                {% if (context == "manager") or (context == "coordinator") or (context == "observer") or (context == "assignee") or (context == "requester") %}
+                {% if (context == "manager") or (context == "coordinator") or (context == "observer") or (context == "assignee") %}
                     {% set home_route = context ~ '_home' %}
                     <li class="breadcrumb-item"><a href="{{ url(home_route) }}">{{ context|capitalize }}</a></li>
                     {% set department_table = context ~ '_department_table' %}

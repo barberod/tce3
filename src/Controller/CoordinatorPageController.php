@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Department;
 use App\Entity\Evaluation;
+use App\Entity\Institution;
 use App\Entity\User;
 use App\Form\EvaluationAnnotateAsRequesterType;
 use App\Form\EvaluationAnnotateType;
@@ -29,10 +30,12 @@ use App\Form\EvaluationUpdateType;
 use App\Repository\AffiliationRepository;
 use App\Repository\DepartmentRepository;
 use App\Repository\EvaluationRepository;
+use App\Repository\InstitutionRepository;
 use App\Service\EvaluationFilesService;
 use App\Service\EvaluationFormDefaultsService;
 use App\Service\EvaluationOptionsService;
 use App\Service\EvaluationProcessingService;
+use App\Service\FormOptionsService;
 use App\Service\LookupService;
 use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
@@ -108,32 +111,32 @@ class CoordinatorPageController extends AbstractController
 		public function coordinatorEvaluationTableStudent(EvaluationRepository
 		$evaluationRepository): Response
 		{
-				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
-				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
-				$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
-				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
-				$reqAdm = (isset($_GET['reqadm']) && (in_array($_GET['reqadm'], ['yes', 'no']))) ? ucfirst($_GET['reqadm']) : null;
+			$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
+			$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
+			$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+			$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
+			$reqAdm = (isset($_GET['reqadm']) && (in_array($_GET['reqadm'], ['yes', 'no']))) ? ucfirst($_GET['reqadm']) : null;
 
-				$queryBuilder = $evaluationRepository->getQB(
-					orderBy: $orderBy,
-					direction: $direction,
-					reqAdmin: $reqAdm,
-					phase: 'Student'
-				);
-				$adapter = new QueryAdapter($queryBuilder);
-				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
+			$queryBuilder = $evaluationRepository->getQB(
+				orderBy: $orderBy,
+				direction: $direction,
+				reqAdmin: $reqAdm,
+				phase: 'Student'
+			);
+			$adapter = new QueryAdapter($queryBuilder);
+			$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
 
-				return $this->render('evaluation/table.html.twig', [
-					'context' => 'coordinator',
-					'page_title' => 'Evaluations',
-					'prepend' => 'Evaluations',
-					'pager' => $pagerfanta,
-					'orderby' => $orderBy,
-					'direction' => $direction,
-					'direction_new' => $newDirection,
-					'reqadm' => $reqAdm,
-					'phase' => 'Student',
-				]);
+			return $this->render('evaluation/table.html.twig', [
+				'context' => 'coordinator',
+				'page_title' => 'Evaluations',
+				'prepend' => 'Evaluations',
+				'pager' => $pagerfanta,
+				'orderby' => $orderBy,
+				'direction' => $direction,
+				'direction_new' => $newDirection,
+				'reqadm' => $reqAdm,
+				'phase' => 'Student',
+			]);
 		}
 
 		#[Route('/secure/coordinator/evaluation/r1', name: 'coordinator_evaluation_table_r1', methods: ['GET'])]
@@ -1015,13 +1018,64 @@ class CoordinatorPageController extends AbstractController
 		}
 
 		#[Route('/secure/coordinator/institution', name: 'coordinator_institution_table', methods: ['GET'])]
-		public function coordinatorInstitutionTable(): Response
+		public function coordinatorInstitutionTable(InstitutionRepository $institutionRepository): Response
 		{
-				return $this->render('institution/table.html.twig', [
-					'context' => 'coordinator',
-					'page_title' => 'Institutions',
-					'prepend' => 'Institutions'
-				]);
+			$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
+			$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['id', 'name']))) ? $_GET['orderby'] : null;
+			$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+			$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
+
+			$service = new FormOptionsService($this->entityManager);
+			$usState = (isset($_GET['usstate']) && (in_array(strtoupper($_GET['usstate']), $service->getUsStateAbbreviations()))) ? strtoupper($_GET['usstate']) : null;
+
+			$queryBuilder = $institutionRepository->getQB(
+				orderBy: $orderBy,
+				direction: $direction,
+				usState: $usState,
+			);
+			$adapter = new QueryAdapter($queryBuilder);
+			$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
+
+			return $this->render('institution/table.html.twig', [
+				'context' => 'coordinator',
+				'page_title' => 'Institutions',
+				'prepend' => 'Institutions',
+				'pager' => $pagerfanta,
+				'orderby' => $orderBy,
+				'direction' => $direction,
+				'direction_new' => $newDirection,
+				'usstate' => $usState,
+				'us_state_options' => $service->getUsStateOptions(),
+			]);
+		}
+
+		#[Route('/secure/coordinator/institution/{id}', name: 'coordinator_institution_page', methods: ['GET'])]
+		public function coordinatorInstitutionPage(Institution $institution, InstitutionRepository $institutionRepository): Response 
+		{
+			$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
+			$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
+			$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+			$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
+
+			$evaluationRepository = $this->entityManager->getRepository(Evaluation::class);
+			$queryBuilder = $evaluationRepository->getQB(
+				orderBy: $orderBy,
+				direction: $direction,
+				institution: $institution,
+			);
+			$adapter = new QueryAdapter($queryBuilder);
+			$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
+
+			return $this->render('institution/page.html.twig', [
+				'context' => 'coordinator',
+				'page_title' => 'Institution #'.$institution->getDapipID().' ('.$institution->getName().')',
+				'prepend' => 'Institution #'.$institution->getDapipID(),
+				'pager' => $pagerfanta,
+				'orderby' => $orderBy,
+				'direction' => $direction,
+				'direction_new' => $newDirection,
+				'institution' => $institution,
+			]);
 		}
 
 		#[Route('/secure/coordinator/file/{id}/{subfolder}/{filename}', name: 'coordinator_file_download', methods: ['GET'])]

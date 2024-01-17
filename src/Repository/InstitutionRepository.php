@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Institution;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,28 +22,22 @@ class InstitutionRepository extends ServiceEntityRepository
         parent::__construct($registry, Institution::class);
     }
 
-//    /**
-//     * @return Institution[] Returns an array of Institution objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('i')
-//            ->andWhere('i.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('i.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Institution
-//    {
-//        return $this->createQueryBuilder('i')
-//            ->andWhere('i.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function getQB(
+        ?string $orderBy = null,
+        ?string $direction = null,
+        ?string $usState = null,
+    ): QueryBuilder
+    {
+        $queryBuilder = $this->createQueryBuilder('i');
+        $queryBuilder->andWhere('i.status = :one')->setParameter('one', 1);
+        if (!is_null($usState)) {
+            $queryBuilder->andWhere('i.state=:val1')->setParameter('val1', $usState);
+        }
+        if (!is_null($orderBy) && !is_null($direction)) {
+            $queryBuilder->addOrderBy('i.'.$orderBy, $direction);
+        } else {
+            $queryBuilder->addOrderBy('i.name', 'asc');
+        }
+        return $queryBuilder;
+	}
 }
