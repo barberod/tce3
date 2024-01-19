@@ -16,10 +16,18 @@
                 <span class="fw-normal">{{ note.author.displayName }} &lt;{{ note.author.username }}&gt;</span>
                 {% endif %}
                 
+                {% if context == "coordinator" %}
+                    {% if note.author.username == app.user.username %}
+                    <form class="fw-normal text-muted float-end" style="display: inline; padding: 0 8px 0 0; margin: 0; text-decoration: none;" action="{{ url('coordinator_evaluation_annotate_delete_form', {'id':note.id }) }}" method="post">
+                        <button class="btn btn-link" style="padding: 0; margin: 0; text-decoration: none;" type="submit"><i class="fa-regular fa-circle-xmark"></i></button>
+                    </form>
+                    {% endif %}
+                {% endif %}
+
                 {% if context != "requester" and note.visibleToRequester == 1 %}
-                <span class="fw-normal text-muted float-end"><i class="fa-regular fa-eye"></i></span>
+                <span class="fw-normal text-muted float-end" style="padding: 4px 8px 0 0;"><i class="fa-regular fa-eye"></i></span>
                 {% elseif context != "requester" and note.visibleToRequester == 0 %}
-                <span class="fw-normal text-muted float-end"><i class="fa-regular fa-eye-slash"></i></span>
+                <span class="fw-normal text-muted float-end" style="padding: 4px 8px 0 0;"><i class="fa-regular fa-eye-slash"></i></span>
                 {% endif %}
             </h3>
             <p class="font-monospace mb-0">

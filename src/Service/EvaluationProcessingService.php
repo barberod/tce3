@@ -431,6 +431,15 @@ class EvaluationProcessingService
 		}
 
 		/**
+		 * Annotation Deletion
+		 */
+		public function annotationDelete(Note $note): void
+		{
+			$this->entityManager->remove($note);
+			$this->entityManager->flush();
+		}
+
+		/**
 		 * Append
 		 * 
 		 * @param Evaluation $evaluation

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Department;
 use App\Entity\Evaluation;
 use App\Entity\Institution;
+use App\Entity\Note;
 use App\Entity\User;
 use App\Form\AffiliationCreateType;
 use App\Form\EvaluationAnnotateAsRequesterType;
@@ -442,6 +443,16 @@ class CoordinatorPageController extends AbstractController
 				'verb' => 'annotate',
 				'form' => $form->createView(),
 			]);
+		}
+
+		#[Route('/secure/coordinator/evaluation/{id}/annotate/delete', name: 'coordinator_evaluation_annotate_delete_form', methods: ['GET', 'POST'])]
+		public function coordinatorEvaluationAnnotateDeleteForm(Request $request): Response
+		{
+			$note = $this->entityManager->getRepository(Note::class)->findOneBy(['id' => $request->attributes->get('id')]);
+			$evalID = $note->getEvaluation()->getID();
+			$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+			$evaluationProcessingService->annotationDelete($note);
+			return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evalID], Response::HTTP_SEE_OTHER);
 		}
 
 		#[Route('/secure/coordinator/evaluation/{id}/annotate-as-requester', name: 'coordinator_evaluation_annotate_as_requester_form', methods: ['GET', 'POST'])]
