@@ -339,8 +339,8 @@ class EvaluationVoter extends Voter
 		}
 
 		private function canReassign(Evaluation $evaluation, UserInterface $user, string $context): bool {
-				// Admin, Manager, Coordinator can reassign any evaluation with phase "Department"
-				if (in_array($context, [self::ADMIN, self::MANAGER, self::COORDINATOR]) && ($evaluation->getPhase() == 'Department')) {
+				// Admin, Manager, Coordinator can reassign any evaluation with phase "Department" or "Complete"
+				if (in_array($context, [self::ADMIN, self::MANAGER, self::COORDINATOR]) && ($evaluation->getPhase() == 'Department' || $evaluation->getPhase() == 'Complete')) {
 						return true;
 				}
 				return false;
