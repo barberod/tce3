@@ -51,11 +51,17 @@
                             {% set subjectCode_toggler = '' %}
                             {% if direction_new is defined %}
                                 {% set subjectCode_toggler = '?orderby=subjectCode&direction=' ~ direction_new %}
+                                {% if subj is defined %}
+                                    {% set subjectCode_toggler = subjectCode_toggler ~ '&subj=' ~ subj|lower %}
+                                {% endif %}
                             {% endif %}
 
                             {% set courseNumber_toggler = '' %}
                             {% if direction_new is defined %}
                                 {% set courseNumber_toggler = '?orderby=courseNumber&direction=' ~ direction_new %}
+                                {% if subj is defined %}
+                                    {% set courseNumber_toggler = courseNumber_toggler ~ '&subj=' ~ subj|lower %}
+                                {% endif %}
                             {% endif %}
 
                             {% set subjectCode_caret = '' %}
