@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Course;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,28 +22,23 @@ class CourseRepository extends ServiceEntityRepository
         parent::__construct($registry, Course::class);
     }
 
-//    /**
-//     * @return Course[] Returns an array of Course objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Course
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function getQB(
+        ?string $orderBy = null,
+        ?string $direction = null,
+        ?string $subjCode = null,
+    ): QueryBuilder
+    {
+        $queryBuilder = $this->createQueryBuilder('d');
+        $queryBuilder->andWhere('d.status = :one')->setParameter('one', 1);
+        if (!is_null($subjCode)) {
+            $queryBuilder->andWhere('d.subjectCode=:val1')->setParameter('val1', $subjCode);
+        }
+        if (!is_null($orderBy) && !is_null($direction)) {
+            $queryBuilder->addOrderBy('d.'.$orderBy, $direction);
+        } else {
+            $queryBuilder->addOrderBy('d.subjectCode', 'asc');
+            $queryBuilder->addOrderBy('d.courseNumber', 'asc');
+        }
+        return $queryBuilder;
+	}
 }

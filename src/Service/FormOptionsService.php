@@ -20,135 +20,134 @@ class FormOptionsService
 		}
 
 		public function getSubjectCodeOptions(): array {
-				return array(
-					'ACCT' => 'ACCT',
-					'AE' => 'AE',
-					'AS' => 'AS',
-					'APPH' => 'APPH',
-					'ASE' => 'ASE',
-					'ARBC' => 'ARBC',
-					'ARCH' => 'ARCH',
-					'BIOS' => 'BIOS',
-					'BIOL' => 'BIOL',
-					'BMEJ' => 'BMEJ',
-					'BMED' => 'BMED',
-					'BMEM' => 'BMEM',
-					'BC' => 'BC',
-					'BCP' => 'BCP',
-					'CETL' => 'CETL',
-					'CHBE' => 'CHBE',
-					'CHEM' => 'CHEM',
-					'CHIN' => 'CHIN',
-					'CP' => 'CP',
-					'CEE' => 'CEE',
-					'COA' => 'COA',
-					'COE' => 'COE',
-					'CX' => 'CX',
-					'CSE' => 'CSE',
-					'CS' => 'CS',
-					'COOP' => 'COOP',
-					'DOPP' => 'DOPP',
-					'EAS' => 'EAS',
-					'ECE' => 'ECE',
-					'ECON' => 'ECON',
-					'EDUC' => 'EDUC',
-					'EENG' => 'EENG',
-					'EME' => 'EME',
-					'ENGL' => 'ENGL',
-					'ENVE' => 'ENVE',
-					'ENVS' => 'ENVS',
-					'FS' => 'FS',
-					'FIL' => 'FIL',
-					'FREN' => 'FREN',
-					'GEOG' => 'GEOG',
-					'HIST' => 'HIST',
-					'HTS' => 'HTS',
-					'HUM' => 'HUM',
-					'ID' => 'ID',
-					'ISYE' => 'ISYE',
-					'INTA' => 'INTA',
-					'IL' => 'IL',
-					'INTN' => 'INTN',
-					'IMBA' => 'IMBA',
-					'IAC' => 'IAC',
-					'JAPN' => 'JAPN',
-					'KOR' => 'KOR',
-					'LATN' => 'LATN',
-					'LS' => 'LS',
-					'LING' => 'LING',
-					'LMC' => 'LMC',
-					'MGT' => 'MGT',
-					'MOT' => 'MOT',
-					'MLDR' => 'MLDR',
-					'MSE' => 'MSE',
-					'MATH' => 'MATH',
-					'ME' => 'ME',
-					'MP' => 'MP',
-					'MSL' => 'MSL',
-					'ML' => 'ML',
-					'MUSI' => 'MUSI',
-					'NS' => 'NS',
-					'NEUR' => 'NEUR',
-					'NRE' => 'NRE',
-					'PERS' => 'PERS',
-					'PHIL' => 'PHIL',
-					'PHYS' => 'PHYS',
-					'POL' => 'POL',
-					'PTFE' => 'PTFE',
-					'PSYC' => 'PSYC',
-					'PUBJ' => 'PUBJ',
-					'PUBP' => 'PUBP',
-					'RUSS' => 'RUSS',
-					'SCI' => 'SCI',
-					'SLS' => 'SLS',
-					'SS' => 'SS',
-					'SOC' => 'SOC',
-					'SPAN' => 'SPAN',
-					'SWAH' => 'SWAH',
-					'UCGA' => 'UCGA',
-					'VIP' => 'VIP',
-					'WOLO' => 'WOLO',
-				);
+			return array(
+				'ACCT' => 'ACCT',
+				'AE' => 'AE',
+				'AS' => 'AS',
+				'APPH' => 'APPH',
+				'ASE' => 'ASE',
+				'ARBC' => 'ARBC',
+				'ARCH' => 'ARCH',
+				'BIOS' => 'BIOS',
+				'BIOL' => 'BIOL',
+				'BMEJ' => 'BMEJ',
+				'BMED' => 'BMED',
+				'BMEM' => 'BMEM',
+				'BC' => 'BC',
+				'BCP' => 'BCP',
+				'CETL' => 'CETL',
+				'CHBE' => 'CHBE',
+				'CHEM' => 'CHEM',
+				'CHIN' => 'CHIN',
+				'CP' => 'CP',
+				'CEE' => 'CEE',
+				'COA' => 'COA',
+				'COE' => 'COE',
+				'CX' => 'CX',
+				'CSE' => 'CSE',
+				'CS' => 'CS',
+				'COOP' => 'COOP',
+				'DOPP' => 'DOPP',
+				'EAS' => 'EAS',
+				'ECE' => 'ECE',
+				'ECON' => 'ECON',
+				'EDUC' => 'EDUC',
+				'EENG' => 'EENG',
+				'EME' => 'EME',
+				'ENGL' => 'ENGL',
+				'ENVE' => 'ENVE',
+				'ENVS' => 'ENVS',
+				'FS' => 'FS',
+				'FIL' => 'FIL',
+				'FREN' => 'FREN',
+				'GEOG' => 'GEOG',
+				'HIST' => 'HIST',
+				'HTS' => 'HTS',
+				'HUM' => 'HUM',
+				'ID' => 'ID',
+				'ISYE' => 'ISYE',
+				'INTA' => 'INTA',
+				'IL' => 'IL',
+				'INTN' => 'INTN',
+				'IMBA' => 'IMBA',
+				'IAC' => 'IAC',
+				'JAPN' => 'JAPN',
+				'KOR' => 'KOR',
+				'LATN' => 'LATN',
+				'LS' => 'LS',
+				'LING' => 'LING',
+				'LMC' => 'LMC',
+				'MGT' => 'MGT',
+				'MOT' => 'MOT',
+				'MLDR' => 'MLDR',
+				'MSE' => 'MSE',
+				'MATH' => 'MATH',
+				'ME' => 'ME',
+				'MP' => 'MP',
+				'MSL' => 'MSL',
+				'ML' => 'ML',
+				'MUSI' => 'MUSI',
+				'NS' => 'NS',
+				'NEUR' => 'NEUR',
+				'NRE' => 'NRE',
+				'PERS' => 'PERS',
+				'PHIL' => 'PHIL',
+				'PHYS' => 'PHYS',
+				'POL' => 'POL',
+				'PTFE' => 'PTFE',
+				'PSYC' => 'PSYC',
+				'PUBJ' => 'PUBJ',
+				'PUBP' => 'PUBP',
+				'RUSS' => 'RUSS',
+				'SCI' => 'SCI',
+				'SLS' => 'SLS',
+				'SS' => 'SS',
+				'SOC' => 'SOC',
+				'SPAN' => 'SPAN',
+				'SWAH' => 'SWAH',
+				'UCGA' => 'UCGA',
+				'VIP' => 'VIP',
+				'WOLO' => 'WOLO',
+			);
 		}
 
 		public function getCoursesBySubjectCode(string $subjectCode): array {
-				$courses = $this->entityManager->getRepository(Course::class)->findBy(['subjectCode' => $subjectCode]);
-				$selectors = [];
-				foreach ($courses as $course) {
-						$selectors[$course->getSubjectCode().' '.$course->getCourseNumber()] =
-							$course->getId();
-				}
-				return $selectors;
+			$courses = $this->entityManager->getRepository(Course::class)->findBy(['subjectCode' => $subjectCode]);
+			$selectors = [];
+			foreach ($courses as $course) {
+				$selectors[$course->getSubjectCode().' '.$course->getCourseNumber()] = $course->getId();
+			}
+			return $selectors;
 		}
 
 		public function getDepartmentOptions(): array {
-				$departments = $this->entityManager
-					->getRepository(Department::class)
-					->createQueryBuilder('d')
-					->where('d.status = 1')
-					->orderBy('d.name', 'ASC')
-					->getQuery()
-					->getResult();
+			$departments = $this->entityManager
+				->getRepository(Department::class)
+				->createQueryBuilder('d')
+				->where('d.status = 1')
+				->orderBy('d.name', 'ASC')
+				->getQuery()
+				->getResult();
 
-				$selectors = [];
-				foreach ($departments as $department) {
-						$selectors[$department->getName()] = $department->getId();
-				}
-				return $selectors;
+			$selectors = [];
+			foreach ($departments as $department) {
+					$selectors[$department->getName()] = $department->getId();
+			}
+			return $selectors;
 		}
 
 		function getAssigneesByDepartment(int $deptID): array {
-				$department = $this->entityManager->getRepository(Department::class)->findOneBy(['id' => $deptID]);
-				$affiliations = $this->entityManager->getRepository(Affiliation::class)->findBy(['department' => $department]);
-				$assignees = [];
-				foreach ($affiliations as $affiliation) {
-						$assignees[] = $affiliation->getFacstaff();
-				}
-				$selectors = [];
-				foreach ($assignees as $assignee) {
-						$selectors[$assignee->getDisplayName()] = $assignee->getUsername();
-				}
-				return $selectors;
+			$department = $this->entityManager->getRepository(Department::class)->findOneBy(['id' => $deptID]);
+			$affiliations = $this->entityManager->getRepository(Affiliation::class)->findBy(['department' => $department]);
+			$assignees = [];
+			foreach ($affiliations as $affiliation) {
+					$assignees[] = $affiliation->getFacstaff();
+			}
+			$selectors = [];
+			foreach ($assignees as $assignee) {
+					$selectors[$assignee->getDisplayName()] = $assignee->getUsername();
+			}
+			return $selectors;
 		}
 
 		function getCreditHourOptions(): array {

@@ -20,32 +20,65 @@
 {% block content %}
     {% if context|default() %}
         {% if (context == "manager") or (context == "coordinator") or (context == "observer") or (context == "assignee") %}
-            {#  set course_page = context ~ '_course_page' #}
-
+            {%  set course_page = context ~ '_course_page' %}
             <div class="col-12">
                 <div class="row content">
-
+                    <!-- #table-courses -->
                     <div id="table-courses" class="row table-wrapper">
-                        <div class="col-12">   
+                        <div class="col-12">
 
                             <div class="row row-cols-1 mb-3">
                                 <div class="col text-end">
-                                    <p class="mb-0">Showing 3 of 5432</p>
+                                    <p class="mb-0">Showing {{ pager.currentPageOffsetStart() }} - {{ pager.currentPageOffsetEnd() }} of {{ pager.nbResults }}</p>
                                 </div>
                             </div>
 
                             <form class="row mb-3">
                                 <div class="col-8 col-md-6 col-lg-4 col-xl-3">
                                     <div class="input-group mb-3">
-                                        <label for="subjCodeSelector" class="form-label fw-bold me-3 pt-2">Subj Code:</label>
+                                        <label for="subjCodeSelector" class="form-label fw-bold me-3 pt-2">Subject Code:</label>
                                         <select class="form-select" id="subjCodeSelector" aria-label="Filter by subject code">
                                             <option selected>-Any-</option>
-                                            <option value="ACCT">ACCT</option>
+                                            {% for option in subj_options %}
+                                                <option value="{{ option }}">{{ option }}</option>
+                                            {% endfor %}
                                         </select>
-                                        <button class="btn btn-outline-primary" type="button" id="filter-button">Filter</button>
+                                        <button class="btn btn-outline-primary" type="button" id="subjCodeBtn">Filter</button>
                                     </div> 
                                 </div>
                             </form>
+
+                            {% set subjectCode_toggler = '' %}
+                            {% if direction_new is defined %}
+                                {% set subjectCode_toggler = '?orderby=subjectCode&direction=' ~ direction_new %}
+                            {% endif %}
+
+                            {% set courseNumber_toggler = '' %}
+                            {% if direction_new is defined %}
+                                {% set courseNumber_toggler = '?orderby=courseNumber&direction=' ~ direction_new %}
+                            {% endif %}
+
+                            {% set subjectCode_caret = '' %}
+                            {% if orderby is defined and direction is defined %}
+                                {% if orderby == 'subjectCode' %}
+                                    {% if direction == 'asc' %}
+                                        {% set subjectCode_caret = '<i class="fa-solid fa-caret-up ms-2"></i>' %}
+                                    {% elseif direction == 'desc' %}
+                                        {% set subjectCode_caret = '<i class="fa-solid fa-caret-down ms-2"></i>' %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+
+                            {% set courseNumber_caret = '' %}
+                            {% if orderby is defined and direction is defined %}
+                                {% if orderby == 'courseNumber' %}
+                                    {% if direction == 'asc' %}
+                                        {% set courseNumber_caret = '<i class="fa-solid fa-caret-up ms-2"></i>' %}
+                                    {% elseif direction == 'desc' %}
+                                        {% set courseNumber_caret = '<i class="fa-solid fa-caret-down ms-2"></i>' %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
 
                             <div class="row row-cols-1 mb-3">
                                 <div class="col">
@@ -53,41 +86,41 @@
                                         <table class="table table-striped">
                                             <thead>
                                             <tr>
-                                                <th scope="col">Subj Code</th>
-                                                <th scope="col">Crse Num</th>
-                                                <th scope="col">Links</th>
+                                                <th scope="col" style="width: 10%;">
+                                                    <a href="{{ app.request.pathinfo }}{% if subjectCode_toggler is defined %}{{ subjectCode_toggler }}{% endif %}">Subj Code{{ subjectCode_caret|raw }}</a>
+                                                </th>
+                                                <th scope="col" style="width: 80%;">
+                                                    <a href="{{ app.request.pathinfo }}{% if courseNumber_toggler is defined %}{{ courseNumber_toggler }}{% endif %}">Crse Num{{ courseNumber_caret|raw }}</a>
+                                                </th>
+                                                <th style="width: 10%;">Options</th>
                                             </tr>
                                             </thead>
                                             <tbody class="table-group-divider">
+                                            {% if pager is empty %}
                                                 <tr>
-                                                    <td>ACCT</td>
-                                                    <td>1000</td>
+                                                    <td colspan="8" class="text-center fst-italic">No data</td>
+                                                </tr>
+                                            {% else %}
+                                                {% for course in pager %}
+                                                <tr>
+                                                    <td>{{ course.subjectCode }}</td>
+                                                    <td>{{ course.courseNumber }}</td>
                                                     <td>
-                                                        <a class="me-2" href="{# url(course_page, {'id':'1234'}) #}">View</a>
+                                                        <a class="me-2" href="">View</a>
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td>ACCT</td>
-                                                    <td>2000</td>
-                                                    <td>
-                                                        <a class="me-2" href="{# url(course_page, {'id':'1234'}) #}">View</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>ACCT</td>
-                                                    <td>3000</td>
-                                                    <td>
-                                                        <a class="me-2" href="{# url(course_page, {'id':'1234'}) #}">View</a>
-                                                    </td>
-                                                </tr>
+                                                {% endfor %}
+                                            {% endif %}
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
 
+                            {{ pagerfanta(pager) }}
+
                             <!-- Page Navigation -->
-                            <div id="page-navigation" class="row justify-content-center mb-3">
+                            <div id="page-navigation" class="row justify-content-center mb-3" style="display: none;">
                                 <div class="col-12 col-lg-8 col-xl-10">
                                     <nav aria-label="Page navigation">
                                         <ul class="pagination">
@@ -159,5 +192,5 @@
 {% endblock %}
 
 {% block scripts %}
-<!-- no scripts -->
+    <script type="text/javascript" src="{{ asset('js/course/table.js') }}"></script>
 {% endblock %}

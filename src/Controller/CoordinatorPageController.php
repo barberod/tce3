@@ -30,6 +30,7 @@ use App\Form\EvaluationResubmitType;
 use App\Form\EvaluationSpotArticulateType;
 use App\Form\EvaluationUpdateType;
 use App\Repository\AffiliationRepository;
+use App\Repository\CourseRepository;
 use App\Repository\DepartmentRepository;
 use App\Repository\EvaluationRepository;
 use App\Repository\InstitutionRepository;
@@ -950,39 +951,61 @@ class CoordinatorPageController extends AbstractController
 		}
 
 		#[Route('/secure/coordinator/course', name: 'coordinator_course_table', methods: ['GET'])]
-		public function coordinatorCourseTable(): Response
+		public function coordinatorCourseTable(CourseRepository $courseRepository): Response
 		{
-				return $this->render('course/table.html.twig', [
-					'context' => 'coordinator',
-					'page_title' => 'Courses',
-					'prepend' => 'Courses'
-				]);
+			$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
+			$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['subjectCode', 'courseNumber']))) ? $_GET['orderby'] : null;
+			$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+			$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
+
+			$service = new FormOptionsService($this->entityManager);
+			$subj = (isset($_GET['subj']) && (in_array(strtoupper($_GET['subj']), $service->getSubjectCodeOptions()))) ? strtoupper($_GET['subj']) : null;
+
+			$queryBuilder = $courseRepository->getQB(
+				orderBy: $orderBy,
+				direction: $direction,
+				subjCode: $subj,
+			);
+			$adapter = new QueryAdapter($queryBuilder);
+			$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
+
+			return $this->render('course/table.html.twig', [
+				'context' => 'coordinator',
+				'page_title' => 'Courses',
+				'prepend' => 'Courses',
+				'pager' => $pagerfanta,
+				'orderby' => $orderBy,
+				'direction' => $direction,
+				'direction_new' => $newDirection,
+				'subj' => $subj,
+				'subj_options' => $service->getSubjectCodeOptions(),
+			]);
 		}
 
 		#[Route('/secure/coordinator/department', name: 'coordinator_department_table', methods: ['GET'])]
 		public function coordinatorDepartmentTable(DepartmentRepository $departmentRepository): Response
 		{
-				$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
-				$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['id', 'name']))) ? $_GET['orderby'] : null;
-				$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
-				$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
+			$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
+			$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['id', 'name']))) ? $_GET['orderby'] : null;
+			$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+			$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
 
-				$queryBuilder = $departmentRepository->getQB(
-					orderBy: $orderBy,
-					direction: $direction,
-				);
-				$adapter = new QueryAdapter($queryBuilder);
-				$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
+			$queryBuilder = $departmentRepository->getQB(
+				orderBy: $orderBy,
+				direction: $direction,
+			);
+			$adapter = new QueryAdapter($queryBuilder);
+			$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
 
-				return $this->render('department/table.html.twig', [
-					'context' => 'coordinator',
-					'page_title' => 'Departments',
-					'prepend' => 'Departments',
-					'pager' => $pagerfanta,
-					'orderby' => $orderBy,
-					'direction' => $direction,
-					'direction_new' => $newDirection
-				]);
+			return $this->render('department/table.html.twig', [
+				'context' => 'coordinator',
+				'page_title' => 'Departments',
+				'prepend' => 'Departments',
+				'pager' => $pagerfanta,
+				'orderby' => $orderBy,
+				'direction' => $direction,
+				'direction_new' => $newDirection
+			]);
 		}
 
 		#[Route('/secure/coordinator/department/{id}', name: 'coordinator_department_page', methods: ['GET'])]
