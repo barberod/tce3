@@ -49,7 +49,15 @@
                             <td>{{ person.email }}</td>
                             <td>{{ person.category }}</td>
                             <td>
-                                <a class="me-2" href="{{ url(context ~ '_department_assignee_page', {'id':department.id, 'username': person.username}) }}">View</a>
+                                <a class="btn btn-link" style="padding: 0; margin: 0 5px; text-decoration: none;" href="{{ url(context ~ '_department_assignee_page', {'id':department.id, 'username': person.username}) }}">View</a>
+                                {% if context == "coordinator" %}
+                                <form style="display: inline; padding: 0; margin: 0; text-decoration: none;" action="{{ url('coordinator_department_assignee_update_page', {'username': person.username }) }}" method="post">
+                                    <button class="btn btn-link" style="padding: 0; margin: 0; text-decoration: none;" type="submit">Refresh</button>
+                                </form>
+                                <form style="display: inline; padding: 0; margin: 0; text-decoration: none;" action="{{ url('coordinator_department_assignee_delete_page', {'id':department.id, 'username': person.username }) }}" method="post">
+                                    <button class="btn btn-link" style="padding: 0; margin: 0; text-decoration: none;" type="submit">Remove</button>
+                                </form>
+                                {% endif %}
                             </td>
                         </tr>
                         {% endfor %}

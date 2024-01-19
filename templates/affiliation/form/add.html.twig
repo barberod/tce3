@@ -1,0 +1,60 @@
+{% extends 'page/page.html.twig' %}
+
+{% block breadcrumbs %}
+<div class="col-12 px-3">
+    <nav class="row" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url('homepage') }}">Home</a></li>
+            {% if context|default() %}
+                {% if (context == "manager") or (context == "coordinator") or (context == "observer") or (context == "assignee") %}
+                    {% set home_route = context ~ '_home' %}
+                    <li class="breadcrumb-item"><a href="{{ url(home_route) }}">{{ context|capitalize }}</a></li>
+                    {% set department_table = context ~ '_department_table' %}
+                    <li class="breadcrumb-item"><a href="{{ url(department_table) }}">Departments</a></li>
+                    {% set department_page = context ~ '_department_page' %}
+                    <li class="breadcrumb-item"><a href="{{ url(department_page, {'id':department.id }) }}">{{ department.name }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Add Affiliation</li>
+                {% endif %}
+            {% endif %}
+        </ol>
+    </nav>
+</div>
+{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+    <div class="col-12">
+        <div class="row content">
+            <div class="col-12">
+                <div class="card border-primary mb-3">
+                    <h2 class="card-header bg-primary border-primary h5">Faculty/Staff</h2>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 col-lg-5">
+                                <div class="mb-3">
+                                    {{ form_row(form.username) }}
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-5 offset-lg-1">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="mb-0">Click the "Submit" button to add the new affiliation.</p>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <button class="btn btn-primary" type="submit">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{{ asset('js/evaluation/create.js') }}"></script>
+{% endblock %}
+

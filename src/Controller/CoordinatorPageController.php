@@ -6,6 +6,7 @@ use App\Entity\Department;
 use App\Entity\Evaluation;
 use App\Entity\Institution;
 use App\Entity\User;
+use App\Form\AffiliationCreateType;
 use App\Form\EvaluationAnnotateAsRequesterType;
 use App\Form\EvaluationAnnotateType;
 use App\Form\EvaluationAppendType;
@@ -31,6 +32,7 @@ use App\Repository\AffiliationRepository;
 use App\Repository\DepartmentRepository;
 use App\Repository\EvaluationRepository;
 use App\Repository\InstitutionRepository;
+use App\Service\AffiliationProcessingService;
 use App\Service\EvaluationFilesService;
 use App\Service\EvaluationFormDefaultsService;
 use App\Service\EvaluationOptionsService;
@@ -984,6 +986,28 @@ class CoordinatorPageController extends AbstractController
 			]);
 		}
 
+		#[Route('/secure/coordinator/department/{id}/add', name: 'coordinator_department_assignee_add_page', methods: ['GET', 'POST'])]
+		public function coordinatorDepartmentAssigneeAddPage(Request $request, Evaluation $evaluation): Response
+		{
+			$department = $this->entityManager->getRepository(Department::class)->findOneBy(['id' => $request->attributes->get('id')]);
+
+			$form = $this->createForm(AffiliationCreateType::class);
+			$form->handleRequest($request);
+			if ($form->isSubmitted()) {
+				$affiliationProcessingService = new AffiliationProcessingService($this->entityManager, $this->security);
+				$affiliationProcessingService->createAffiliation($form->getData(), $department);
+				return $this->redirectToRoute('coordinator_department_page', ['id' => $department->getID()], Response::HTTP_SEE_OTHER);
+			}
+
+			return $this->render('affiliation/form/add.html.twig', [
+				'context' => 'coordinator',
+				'page_title' => 'Add Affiliation to Department #'.$department->getID().' ('.$department->getName().')',
+				'prepend' => 'Add Affiliation | Department #'.$department->getID(),
+				'department' => $department,
+				'form' => $form->createView(),
+			]);
+		}
+
 		#[Route('/secure/coordinator/department/{id}/{username}', name: 'coordinator_department_assignee_page', methods: ['GET'])]
 		public function coordinatorDepartmentAssigneePage(Request $request): Response 
 		{
@@ -1015,6 +1039,28 @@ class CoordinatorPageController extends AbstractController
 				'department' => $department,
 				'person' => $person
 			]);
+		}
+
+		#[Route('/secure/coordinator/department/{id}/{username}/delete', name: 'coordinator_department_assignee_delete_page', methods: ['POST'])]
+		public function coordinatorDepartmentAssigneeDeletePage(Request $request): Response 
+		{
+			$department = $this->entityManager->getRepository(Department::class)->findOneBy(['id' => $request->attributes->get('id')]);
+			$person = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $request->attributes->get('username')]);
+			
+			$affiliationProcessingService = new AffiliationProcessingService($this->entityManager, $this->security);
+			$affiliationProcessingService->deleteAffiliation($person, $department);
+
+			return $this->redirectToRoute('coordinator_department_page', ['id' => $department->getID()], Response::HTTP_SEE_OTHER);
+		}
+
+		#[Route('/secure/coordinator/department/{id}/{username}/update', name: 'coordinator_department_assignee_update_page', methods: ['POST'])]
+		public function coordinatorDepartmentAssigneeUpdatePage(Request $request): Response 
+		{
+			$department = $this->entityManager->getRepository(Department::class)->findOneBy(['id' => $request->attributes->get('id')]);
+			$person = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $request->attributes->get('username')]);
+			$affiliationProcessingService = new AffiliationProcessingService($this->entityManager, $this->security);
+			$affiliationProcessingService->updateAffiliation($person);
+			return $this->redirectToRoute('coordinator_department_page', ['id' => $department->getID()], Response::HTTP_SEE_OTHER);
 		}
 
 		#[Route('/secure/coordinator/institution', name: 'coordinator_institution_table', methods: ['GET'])]
