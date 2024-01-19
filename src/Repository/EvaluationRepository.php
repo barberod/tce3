@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Course;
 use App\Entity\Evaluation;
 use App\Entity\Institution;
 use App\Entity\User;
@@ -67,6 +68,30 @@ class EvaluationRepository extends ServiceEntityRepository
             $queryBuilder->addOrderBy('e.updated', 'desc');
         }
 
+        return $queryBuilder;
+	}
+
+    public function getEvaluationsByCourse(
+        ?string $orderBy = null,
+        ?string $direction = null,
+        ?string $reqAdmin = null,
+        ?Course $course = null,
+    ): QueryBuilder
+    {
+        $queryBuilder = $this->createQueryBuilder('e');
+        $queryBuilder->andWhere('e.status = :one')->setParameter('one', 1);
+        if (!is_null($reqAdmin)) {$queryBuilder->andWhere('e.reqAdmin=:val0')->setParameter('val0', $reqAdmin);}
+        if (!is_null($course)) {
+            $queryBuilder->andWhere('e.finalEquiv1Course=:val1')->setParameter('val1', $course);
+            $queryBuilder->orWhere('e.finalEquiv2Course=:val2')->setParameter('val2', $course);
+            $queryBuilder->orWhere('e.finalEquiv3Course=:val3')->setParameter('val3', $course);
+            $queryBuilder->orWhere('e.finalEquiv4Course=:val4')->setParameter('val4', $course);
+        }
+        if (!is_null($orderBy) && !is_null($direction)) {
+            $queryBuilder->addOrderBy('e.'.$orderBy, $direction);
+        } else {
+            $queryBuilder->addOrderBy('e.updated', 'desc');
+        }
         return $queryBuilder;
 	}
 

@@ -28,16 +28,16 @@ class CourseRepository extends ServiceEntityRepository
         ?string $subjCode = null,
     ): QueryBuilder
     {
-        $queryBuilder = $this->createQueryBuilder('d');
-        $queryBuilder->andWhere('d.status = :one')->setParameter('one', 1);
+        $queryBuilder = $this->createQueryBuilder('c');
+        $queryBuilder->andWhere('c.status = :one')->setParameter('one', 1);
         if (!is_null($subjCode)) {
-            $queryBuilder->andWhere('d.subjectCode=:val1')->setParameter('val1', $subjCode);
+            $queryBuilder->andWhere('c.subjectCode=:val1')->setParameter('val1', $subjCode);
         }
         if (!is_null($orderBy) && !is_null($direction)) {
-            $queryBuilder->addOrderBy('d.'.$orderBy, $direction);
+            $queryBuilder->addOrderBy('c.'.$orderBy, $direction);
         } else {
-            $queryBuilder->addOrderBy('d.subjectCode', 'asc');
-            $queryBuilder->addOrderBy('d.courseNumber', 'asc');
+            $queryBuilder->addOrderBy('c.subjectCode', 'asc');
+            $queryBuilder->addOrderBy('c.courseNumber', 'asc');
         }
         return $queryBuilder;
 	}

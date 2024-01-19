@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Course;
 use App\Entity\Department;
 use App\Entity\Evaluation;
 use App\Entity\Institution;
@@ -979,6 +980,39 @@ class CoordinatorPageController extends AbstractController
 				'direction_new' => $newDirection,
 				'subj' => $subj,
 				'subj_options' => $service->getSubjectCodeOptions(),
+			]);
+		}
+
+		#[Route('/secure/coordinator/course/{id}', name: 'coordinator_course_page', methods: ['GET'])]
+		public function coordinatorCoursePage(Request $request, Course $course, EvaluationRepository $evaluationRepository): Response 
+		{
+			$course = $this->entityManager->getRepository(Course::class)->findOneBy(['id' => $request->attributes->get('id')]);
+
+			$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
+			$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['id', 'name']))) ? $_GET['orderby'] : null;
+			$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+			$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
+			$reqAdm = (isset($_GET['reqadm']) && (in_array($_GET['reqadm'], ['yes', 'no']))) ? ucfirst($_GET['reqadm']) : null;
+
+			$queryBuilder = $evaluationRepository->getEvaluationsByCourse(
+				orderBy: $orderBy,
+				direction: $direction,
+				reqAdmin: $reqAdm,
+				course: $course,
+			);
+			$adapter = new QueryAdapter($queryBuilder);
+			$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
+
+			return $this->render('course/page.html.twig', [
+				'context' => 'coordinator',
+				'page_title' => 'Course: '.$course->getSubjectCode().' '.$course->getCourseNumber(),
+				'prepend' => 'Course: '.$course->getSubjectCode().' '.$course->getCourseNumber(),
+				'pager' => $pagerfanta,
+				'orderby' => $orderBy,
+				'direction' => $direction,
+				'direction_new' => $newDirection,
+				'course' => $course,
+				'reqadm' => $reqAdm,
 			]);
 		}
 

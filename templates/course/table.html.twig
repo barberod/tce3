@@ -112,7 +112,7 @@
                                                     <td>{{ course.subjectCode }}</td>
                                                     <td>{{ course.courseNumber }}</td>
                                                     <td>
-                                                        <a class="me-2" href="">View</a>
+                                                        <a class="me-2" href="{{ url(course_page, {'id':course.id}) }}">View</a>
                                                     </td>
                                                 </tr>
                                                 {% endfor %}
