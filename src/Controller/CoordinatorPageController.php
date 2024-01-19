@@ -27,6 +27,7 @@ use App\Form\EvaluationHideType;
 use App\Form\EvaluationHoldType;
 use App\Form\EvaluationLookUpRequesterType;
 use App\Form\EvaluationReassignType;
+use App\Form\EvaluationRemoveHoldType;
 use App\Form\EvaluationResubmitType;
 use App\Form\EvaluationSpotArticulateType;
 use App\Form\EvaluationUpdateType;
@@ -872,6 +873,32 @@ class CoordinatorPageController extends AbstractController
 					'id' => $evaluation->getID(),
 					'uuid' => $evaluation->getID(),
 					'verb' => 'reassign',
+					'form' => $form->createView(),
+				]);
+		}
+
+		#[Route('/secure/coordinator/evaluation/{id}/remove-hold', name: 'coordinator_evaluation_remove_hold_form', methods: ['GET', 'POST'])]
+		#[IsGranted( 'coordinator+remove_hold', 'evaluation' )]
+		public function coordinatorEvaluationRemoveHoldForm(Request $request, Evaluation $evaluation): Response
+		{
+				$form = $this->createForm(EvaluationRemoveHoldType::class);
+				$form->handleRequest($request);
+				if ($form->isSubmitted()) {
+						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+						$evaluationProcessingService->removeHoldEvaluation($evaluation,
+							$form->getData());
+						return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+				}
+
+				return $this->render('evaluation/form/remove-hold.html.twig', [
+					'context' => 'coordinator',
+					'page_title' => 'Evaluation #'.$evaluation->getID(),
+					'prepend' => 'Remove Hold | Evaluation #'
+						.$evaluation->getID(),
+					'evaluation' => $evaluation,
+					'id' => $evaluation->getID(),
+					'uuid' => $evaluation->getID(),
+					'verb' => 'remove_hold',
 					'form' => $form->createView(),
 				]);
 		}

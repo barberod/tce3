@@ -42,6 +42,7 @@ class EvaluationOptionsService
 				$verbs[] = 'hold';
 				$verbs[] = 'pass';
 				$verbs[] = 'reassign';
+				$verbs[] = 'remove_hold';
 				$verbs[] = 'resubmit';
 				$verbs[] = 'spot_articulate';
 				$verbs[] = 'look_up_requester';

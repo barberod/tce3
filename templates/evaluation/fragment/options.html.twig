@@ -101,6 +101,13 @@
             </a>
             {% endif %}
 
+            <!-- Hold -->
+            {% if options.remove_hold %}
+            <a href="{{ url( context ~ '_evaluation_remove_hold_form', { 'id':id|raw }) }}" id="option-x2" class="list-group-item list-group-item-action">
+                <i class="fa-regular fa-window-maximize fa-fw me-2"></i>Remove Hold
+            </a>
+            {% endif %}
+
             <!-- Complete -->
             {% if options.from_complete_to_hold %}
             <a href="{{ url( context ~ '_evaluation_from_complete_to_hold_form', { 'id':id|raw }) }}" id="option-20" class="list-group-item list-group-item-action">

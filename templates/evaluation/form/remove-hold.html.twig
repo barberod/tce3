@@ -1,0 +1,65 @@
+{% extends 'evaluation/page.html.twig' %}
+
+{% block content %}
+    <div class="col-12">
+        <div class="row content">
+            <!-- Left side -->
+            <div id="left-side" class="col-12 col-lg-6 d-flex flex-column">
+                {% include "evaluation/fragment/details.html.twig" %}
+                {% include "evaluation/fragment/files.html.twig" %}
+            </div>
+            <!-- #/left-side -->
+
+            <!-- Right side -->
+            <div id="right-side" class="col-12 col-lg-6 d-flex flex-column">
+
+                <!-- Form x2 (remove-hold) -->
+                {{ form_start(form) }}
+                <form id="form-x2">
+                    <div class="card border-primary mb-3">
+                        <h2 class="card-header bg-primary border-primary h5">
+                            Remove Hold
+                        </h2>
+                        <div class="card-body">
+                            <div id="assignGrp" class="mb-5">
+                                <div class="mb-4">
+                                    {{ form_row(form.phase) }}
+                                </div>
+                                <div class="mb-4">
+                                    {{ form_row(form.addNote) }}
+                                </div>
+                            </div>
+                            <div id="noteFieldSet" class="mb-5">
+                                <div class="mb-4">
+                                    {{ form_row(form.noteBody) }}
+                                </div>
+                            </div>
+                            <p class="mb-4">Use the Submit button to move this evaluation a different phase.</p>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-0">About automated emails:</p>
+                            <p class="mb-0">An email <strong>will</strong> go to the student if you select "Student" or "Complete" here.</p>
+                            <p class="mb-0">An email <strong>will not</strong> go to the assignee if you select "Department" here.</p>
+                            <p class="mb-4">As expected, no email will be triggered if you select "Registrar 1" or "Registrar 2" here.</p>
+                        </div>
+                        <div class="card-footer border-top-none p-3">
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                            <a class="btn btn-outline-secondary ms-2" href=".">Exit without submitting</a>
+                        </div>
+                    </div>
+                </form>
+                {{ form_end(form) }}
+                <!-- /#form-x2 (remove-hold) -->
+
+                {% include "evaluation/fragment/notes.html.twig" %}
+                {% include "evaluation/fragment/trails.html.twig" %}
+            </div>
+            <!-- #/right-side -->
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{{ asset('js/evaluation/remove-hold.js') }}"></script>
+{% endblock %}
+

@@ -41,6 +41,7 @@ class EvaluationVoter extends Voter
 		public const HOLD = 'hold';
 		public const PASS = 'pass';
 		public const REASSIGN = 'reassign';
+		public const REMOVE_HOLD = 'remove_hold';
 		public const RESUBMIT = 'resubmit';
 		public const SPOT_ARTICULATE = 'spot_articulate';
 		public const LOOK_UP_REQUESTER = 'look_up_requester';
@@ -82,6 +83,7 @@ class EvaluationVoter extends Voter
 						self::HOLD,
 						self::PASS,
 						self::REASSIGN,
+						self::REMOVE_HOLD,
 						self::RESUBMIT,
 						self::SPOT_ARTICULATE,
 						self::LOOK_UP_REQUESTER
@@ -131,6 +133,7 @@ class EvaluationVoter extends Voter
 						self::HOLD => $this->canHold($subject, $user, $attributes[0]),
 						self::PASS => $this->canPass($subject, $user, $attributes[0]),
 						self::REASSIGN => $this->canReassign($subject, $user, $attributes[0]),
+						self::REMOVE_HOLD => $this->canRemoveHold($subject, $user, $attributes[0]),
 						self::RESUBMIT => $this->canResubmit($subject, $user, $attributes[0]),
 						self::SPOT_ARTICULATE => $this->canSpotArticulate($subject, $user, $attributes[0]),
 						self::LOOK_UP_REQUESTER => $this->canLookUpRequester($subject, $user, $attributes[0]),
@@ -243,8 +246,8 @@ class EvaluationVoter extends Voter
 		}
 
 		private function canFinalize(Evaluation $evaluation, UserInterface $user, string $context): bool {
-				// Admin, Manager, Coordinator can finalize any evaluation with phase "R2"
-				if (in_array($context, [self::ADMIN, self::MANAGER, self::COORDINATOR]) && ($evaluation->getPhase() == 'Registrar 2')) {
+				// Admin, Manager, Coordinator can finalize any evaluation with phase "R2" or "Hold"
+				if (in_array($context, [self::ADMIN, self::MANAGER, self::COORDINATOR]) && ($evaluation->getPhase() == 'Registrar 2' || $evaluation->getPhase() == 'Hold')) {
 						return true;
 				}
 				return false;
@@ -344,6 +347,14 @@ class EvaluationVoter extends Voter
 						return true;
 				}
 				return false;
+		}
+
+		private function canRemoveHold(Evaluation $evaluation, UserInterface $user, string $context): bool {
+			// Admin, Manager, Coordinator can remove any evaluation with phase "Hold"
+			if (in_array($context, [self::ADMIN, self::MANAGER, self::COORDINATOR]) && ($evaluation->getPhase() == 'Hold')) {
+				return true;
+			}
+			return false;
 		}
 
 		private function canResubmit(Evaluation $evaluation, UserInterface $user, string $context): bool {
