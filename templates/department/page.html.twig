@@ -22,7 +22,24 @@
 {% block content %}
 <div class="col-12">
     <div class="row content">
+        <div class="col-12 d-flex flex-column ">
+
+        </div>
+    </div>
+</div>
+<div class="col-12">
+    <div class="row content">
         <div class="col-12 d-flex flex-column">
+
+            {% if context == "coordinator" %}
+            <div class="row justify-content-md-end pb-4">
+                <div class="col col-xs-12 col-sm-6 col-md-4 col-xl-2">
+                    <div class="d-grid gap-2">
+                        <a class="btn btn-primary" href="{{ url('coordinator_department_assignee_add_page', {'id':department.id }) }}">Add</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
             
             <div class="table-responsive">
                 <table class="table table-striped">
