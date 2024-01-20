@@ -1,40 +1,55 @@
-<!-- Form 14 (pass) -->
-<form id="form-14">
-    <div class="card border-primary mb-3">
-        <h2 class="card-header bg-primary border-primary h5">
-            Send Back to Registrar without Evaluating
-        </h2>
-        <div class="card-body">
+{% extends 'evaluation/page.html.twig' %}
 
-            <div id="noteGrp" class="mb-5">
-                <div class="mb-4">
-                    <label for="noteYesOrNo" class="form-label">Add a note?</label>
-                    <select class="form-select" id="noteYesOrNo" name="noteYesOrNo">
-                        <option value="Yes">Yes</option>
-                        <option value="No" selected>No</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="visibleToRequester" class="form-label">Shall this note be visible to the requester?</label>
-                    <select class="form-select" id="visibleToRequester">
-                        <option selected>- Select -</option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="noteText" class="form-label">Note</label>
-                    <textarea class="form-control" id="noteText" name="noteText" rows="3"></textarea>
-                </div>
+{% block content %}
+    <div class="col-12">
+        <div class="row content">
+            <!-- Left side -->
+            <div id="left-side" class="col-12 col-lg-6 d-flex flex-column">
+                {% include "evaluation/fragment/details.html.twig" %}
+                {% include "evaluation/fragment/files.html.twig" %}
             </div>
+            <!-- #/left-side -->
 
-            <p class="mb-4">Use the Submit button to pass this evaluation back to the Registrar.</p>
+            <!-- Right side -->
+            <div id="right-side" class="col-12 col-lg-6 d-flex flex-column">
 
-        </div>
-        <div class="card-footer border-top-none p-3">
-            <button class="btn btn-primary" type="submit">Submit</button>
-            <a class="btn btn-outline-secondary ms-2" href=".">Exit without submitting</a>
+                <!-- Form 14 (pass) -->
+                {{ form_start(form) }}
+                <form id="form-14">
+                    <div class="card border-primary mb-3">
+                        <h2 class="card-header bg-primary border-primary h5">
+                            Pass
+                        </h2>
+                        <div class="card-body">
+                            <div id="assignGrp" class="mb-5">
+                                <div class="mb-4">
+                                    {{ form_row(form.addNote) }}
+                                </div>
+                            </div>
+                            <div id="noteFieldSet" class="mb-5">
+                                <div class="mb-4">
+                                    {{ form_row(form.noteBody) }}
+                                </div>
+                            </div>
+                            <p class="mb-2">Use the Submit button to pass back this request without evaluating it.</p>
+                            <p class="mb-0">It will return to the "Registrar 1" phase.</p>
+                        </div>
+                        <div class="card-footer border-top-none p-3">
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                            <a class="btn btn-outline-secondary ms-2" href=".">Exit without submitting</a>
+                        </div>
+                    </div>
+                </form>
+                {{ form_end(form) }}
+                <!-- /#form-14 (pass) -->
+                {% include "evaluation/fragment/notes.html.twig" %}
+                {% include "evaluation/fragment/trails.html.twig" %}
+            </div>
+            <!-- #/right-side -->
         </div>
     </div>
-</form>
-<!-- /#form-14 (pass) -->
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{{ asset('js/evaluation/pass.js') }}"></script>
+{% endblock %}

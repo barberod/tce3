@@ -334,11 +334,11 @@ class EvaluationVoter extends Voter
 		}
 
 		private function canPass(Evaluation $evaluation, UserInterface $user, string $context): bool {
-				// Assignee can pass only evaluations assigned to them with phase "Department"
-				if ($context == self::ASSIGNEE && ($evaluation->getPhase() == 'Department') && ($evaluation->getAssignee()->getUserIdentifier() === $user->getUserIdentifier())) {
-						return true;
-				}
-				return false;
+			// Assignee can pass only evaluations assigned to them with phase "Department"
+			if ($context == self::ASSIGNEE && ($evaluation->getPhase() == 'Department') && ($evaluation->getAssignee()->getUserIdentifier() === $user->getUserIdentifier())) {
+				return true;
+			}
+			return false;
 		}
 
 		private function canReassign(Evaluation $evaluation, UserInterface $user, string $context): bool {

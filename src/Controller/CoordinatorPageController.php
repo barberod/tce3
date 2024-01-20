@@ -26,6 +26,7 @@ use App\Form\EvaluationFromStudentToR1Type;
 use App\Form\EvaluationHideType;
 use App\Form\EvaluationHoldType;
 use App\Form\EvaluationLookUpRequesterType;
+use App\Form\EvaluationPassType;
 use App\Form\EvaluationReassignType;
 use App\Form\EvaluationRemoveHoldType;
 use App\Form\EvaluationResubmitType;
@@ -838,17 +839,26 @@ class CoordinatorPageController extends AbstractController
 
 		#[Route('/secure/coordinator/evaluation/{id}/pass', name: 'coordinator_evaluation_pass_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+pass', 'evaluation' )]
-		public function coordinatorEvaluationPassForm(Evaluation $evaluation): Response
+		public function coordinatorEvaluationPassForm(Request $request, Evaluation $evaluation): Response
 		{
-				return $this->render('evaluation/page.html.twig', [
-					'context' => 'coordinator',
-					'page_title' => 'Evaluation #'.$evaluation->getID(),
-					'prepend' => 'Pass | Evaluation #'.$evaluation->getID(),
-					'evaluation' => $evaluation,
-					'id' => $evaluation->getID(),
-					'uuid' => $evaluation->getID(),
-					'verb' => 'pass'
-				]);
+			$form = $this->createForm(EvaluationPassType::class);
+			$form->handleRequest($request);
+			if ($form->isSubmitted()) {
+				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+				$evaluationProcessingService->passEvaluation($evaluation, $form->getData());
+				return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+			}
+
+			return $this->render('evaluation/form/pass.html.twig', [
+				'context' => 'coordinator',
+				'page_title' => 'Evaluation #'.$evaluation->getID(),
+				'prepend' => 'Pass | Evaluation #'.$evaluation->getID(),
+				'evaluation' => $evaluation,
+				'id' => $evaluation->getID(),
+				'uuid' => $evaluation->getID(),
+				'verb' => 'pass',
+				'form' => $form->createView(),
+			]);
 		}
 
 		#[Route('/secure/coordinator/evaluation/{id}/reassign', name: 'coordinator_evaluation_reassign_form', methods: ['GET', 'POST'])]
