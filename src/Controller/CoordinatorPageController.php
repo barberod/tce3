@@ -55,7 +55,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('coordinator')]
@@ -397,13 +396,12 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/page.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Evaluation #'.$evaluation->getID(),
 				'options' => $optionsService->getOptions('coordinator', $evaluation),
-				'files' => $this->filesService->getFileLocations($evaluation),
 			]);
 		}
-		
 
 		#[Route('/secure/coordinator/evaluation/{id}/update', name: 'coordinator_evaluation_update_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'coordinator+update', 'evaluation' )]
@@ -420,6 +418,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/update.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Edit Details | Evaluation #'.$evaluation->getID(),
 				'verb' => 'update',
@@ -434,6 +433,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/page.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Delete | Evaluation #'.$evaluation->getID(),
 				'verb' => 'delete'
@@ -455,6 +455,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/annotate.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Write a Note | Evaluation #'.$evaluation->getID(),
 				'verb' => 'annotate',
@@ -487,6 +488,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/annotate-as-requester.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Write a Note | Evaluation #'.$evaluation->getID(),
 				'verb' => 'annotate-as-requester',
@@ -509,6 +511,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/append.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Upload a File | Evaluation #'.$evaluation->getID(),
 				'verb' => 'append',
@@ -531,6 +534,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/assign.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Assign to Department | Evaluation #'.$evaluation->getID(),
 				'verb' => 'assign',
@@ -553,6 +557,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/evaluate.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Enter Equivalencies | Evaluation #'.$evaluation->getID(),
 				'verb' => 'evaluate',
@@ -567,6 +572,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/page.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Example | Evaluation #'.$evaluation->getID(),
 				'verb' => 'example'
@@ -588,6 +594,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/finalize.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Finalize | Evaluation #'.$evaluation->getID(),
 				'verb' => 'finalize',
@@ -611,6 +618,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/assign.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Forward to a Colleague | Evaluation #'.$evaluation->getID(),
 				'verb' => 'forward',
@@ -633,6 +641,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/from-complete-to-hold.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Hold | Evaluation #'.$evaluation->getID(),
 				'verb' => 'from-complete-to-hold',
@@ -655,6 +664,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/from-dept-to-r1.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Send to R1 | Evaluation #'.$evaluation->getID(),
 				'verb' => 'from-dept-to-r1',
@@ -677,6 +687,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/from-dept-to-student.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Send to Student | Evaluation #'.$evaluation->getID(),
 				'verb' => 'from-dept-to-student',
@@ -699,6 +710,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/from-r1-to-student.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Send to Student | Evaluation #'.$evaluation->getID(),
 				'verb' => 'from-r1-to-student',
@@ -721,6 +733,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/from-r2-to-dept.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Send to Department | Evaluation #'.$evaluation->getID(),
 				'verb' => 'from-r2-to-dept',
@@ -744,6 +757,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/from-r2-to-student.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Send to Student | Evaluation #'.$evaluation->getID(),
 				'verb' => 'from-r2-to-student',
@@ -766,6 +780,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/from-student-to-r1.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Send to R1 | Evaluation #'.$evaluation->getID(),
 				'verb' => 'from-student-to-r1',
@@ -788,6 +803,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/hide.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Hide | Evaluation #'.$evaluation->getID(),
 				'verb' => 'hide',
@@ -810,6 +826,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/hold.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Hold | Evaluation #'.$evaluation->getID(),
 				'verb' => 'hold',
@@ -832,6 +849,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/pass.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Pass | Evaluation #'.$evaluation->getID(),
 				'verb' => 'pass',
@@ -847,14 +865,14 @@ class CoordinatorPageController extends AbstractController
 			$form->handleRequest($request);
 			if ($form->isSubmitted()) {
 				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
-				$evaluationProcessingService->reassignEvaluation($evaluation,
-					$form->getData());
+				$evaluationProcessingService->reassignEvaluation($evaluation, $form->getData());
 				return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
 			}
 
 			return $this->render('evaluation/form/reassign.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Reassign | Evaluation #'.$evaluation->getID(),
 				'verb' => 'reassign',
@@ -877,6 +895,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/remove-hold.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Remove Hold | Evaluation #'.$evaluation->getID(),
 				'verb' => 'remove_hold',
@@ -899,6 +918,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/resubmit.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Resubmit | Evaluation #'.$evaluation->getID(),
 				'verb' => 'resubmit',
@@ -921,6 +941,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/spot-articulate.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Spot Articulate | Evaluation #'.$evaluation->getID(),
 				'verb' => 'spot-articulate',
@@ -943,6 +964,7 @@ class CoordinatorPageController extends AbstractController
 			return $this->render('evaluation/form/look-up-requester.html.twig', [
 				'context' => 'coordinator',
 				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Refresh Requester Information | Evaluation #'.$evaluation->getID(),
 				'verb' => 'look-up-requester',
