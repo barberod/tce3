@@ -26,10 +26,14 @@ class CourseRepository extends ServiceEntityRepository
         ?string $orderBy = null,
         ?string $direction = null,
         ?string $subjCode = null,
+        ?string $reqAdmin = null,
     ): QueryBuilder
     {
         $queryBuilder = $this->createQueryBuilder('c');
         $queryBuilder->andWhere('c.status = :one')->setParameter('one', 1);
+        if (!is_null($reqAdmin)) {
+            $queryBuilder->andWhere('c.reqAdmin=:val0')->setParameter('val0', $reqAdmin);
+        }
         if (!is_null($subjCode)) {
             $queryBuilder->andWhere('c.subjectCode=:val1')->setParameter('val1', $subjCode);
         }

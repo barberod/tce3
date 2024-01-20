@@ -1,4 +1,4 @@
-{% if id is defined and context is defined and files is defined %}
+{% if evaluation.id is defined and context is defined and files is defined %}
     {% if files.attachments|length > 0 %}
         <div id="attached-files" class="card mb-3">
             <h2 class="card-header h5">
@@ -37,7 +37,7 @@
                                 {% endif %}
 
                                 <div>
-                                    <a href="{{ url( context ~ '_file_download', { 'id':id|raw, 'subfolder':'attachments', 'filename':attachment|raw }) }}"{{ target }}>
+                                    <a href="{{ url( context ~ '_file_download', { 'id':evaluation.id|raw, 'subfolder':'attachments', 'filename':attachment|raw }) }}"{{ target }}>
                                         <i class="fa-regular {{ icon }} fa-fw me-2"></i>{{ text }}
                                     </a>
                                 </div>
