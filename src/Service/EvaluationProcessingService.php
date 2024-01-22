@@ -636,7 +636,7 @@ class EvaluationProcessingService
 		{
 				$draftEqvText = ' Draft equiv: ';
 				if ($formData['eqvCnt'] == 0) {
-						$draftEqvText .= 'No equivalencies ';
+						$draftEqvText .= 'ET - NOGT ';
 				}
 
 				if (in_array($formData['eqvCnt'], array(1, 2, 3, 4))) {
@@ -701,9 +701,9 @@ class EvaluationProcessingService
 
 				$evaluation->setDraftPolicy($formData['policy']);
 				$policyText = '';
-				if ($formData['policy'] == 'Yes') {
+				if ($formData['policy'] == 'Policy') {
 						$policyText .= ' Policy.';
-				} elseif ($formData['policy'] == 'No') {
+				} elseif ($formData['policy'] == 'Not Policy') {
 						$policyText .= ' Not policy.';
 				}
 
@@ -779,7 +779,7 @@ class EvaluationProcessingService
 		{
 				$finalEqvText = ' Final equiv: ';
 				if ($formData['eqvCnt'] == 0) {
-						$finalEqvText .= 'No equivalencies ';
+						$finalEqvText .= 'ET - NOGT ';
 				}
 
 				if (in_array($formData['eqvCnt'], array(1, 2, 3, 4))) {
@@ -836,9 +836,9 @@ class EvaluationProcessingService
 
 				$evaluation->setFinalPolicy($formData['policy']);
 				$policyText = '';
-				if ($formData['policy'] == 'Yes') {
+				if ($formData['policy'] == 'Policy') {
 						$policyText .= ' Policy.';
-				} elseif ($formData['policy'] == 'No') {
+				} elseif ($formData['policy'] == 'Not Policy') {
 						$policyText .= ' Not policy.';
 				}
 
@@ -846,7 +846,25 @@ class EvaluationProcessingService
 				$evaluation->setCourseInSis($formData['courseInSis']);
 				$evaluation->setTranscriptOnHand($formData['transcriptOnHand']);
 
-				$evaluation->setPhase('Complete');
+				$newPhase = 'Complete';
+				$extraText = '';
+
+				if (!in_array($formData['requesterType'], ['Student', 'Confirmed Applicant', 'Accepted Applicant', 'Faculty/Staff'])) {
+					$newPhase = 'Hold';
+					$extraText .= ' Invalid requester type.';
+				};
+
+				if ($formData['courseInSis'] === 'No') {
+					$newPhase = 'Hold';
+					$extraText .= ' Course not entered in SIS.';
+				};
+
+				if ($formData['transcriptOnHand'] === 'No') {
+					$newPhase = 'Hold';
+					$extraText .= ' Transcript not on hand.';
+				};
+
+				$evaluation->setPhase($newPhase);
 				$evaluation->setUpdated(new \DateTime());
 
 				// Persist the entity
@@ -898,8 +916,8 @@ class EvaluationProcessingService
 						$coordinatorText .= 'Unknown';
 				}
 
-				$trail->setBody('Final equivalencies entered by '.$coordinatorText.$finalEqvText.$policyText.' Phase set to Complete.');
-				$trail->setBodyAnon('Finalized by Registrar\'s Office. Phase set to Complete.');
+				$trail->setBody('Final equivalencies entered by '.$coordinatorText.$finalEqvText.$policyText.' Phase set to '.$newPhase.'.'.$extraText);
+				$trail->setBodyAnon('Finalized by Registrar\'s Office. Phase set to '.$newPhase.'.'.$extraText);
 				$trail->setCreated(new \DateTime());
 
 				// Persist the entity
@@ -1949,7 +1967,7 @@ class EvaluationProcessingService
 		{
 				$draftEqvText = ' Draft equiv: ';
 				if ($formData['eqvCnt'] == 0) {
-						$draftEqvText .= 'No equivalencies ';
+						$draftEqvText .= 'ET - NOGT ';
 				}
 
 				if (in_array($formData['eqvCnt'], array(1, 2, 3, 4))) {
@@ -2013,9 +2031,9 @@ class EvaluationProcessingService
 
 				$evaluation->setDraftPolicy($formData['policy']);
 				$policyText = '';
-				if ($formData['policy'] == 'Yes') {
+				if ($formData['policy'] == 'Policy') {
 						$policyText .= ' Policy.';
-				} elseif ($formData['policy'] == 'No') {
+				} elseif ($formData['policy'] == 'Not Policy') {
 						$policyText .= ' Not policy.';
 				}
 
