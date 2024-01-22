@@ -854,12 +854,12 @@ class EvaluationProcessingService
 					$extraText .= ' Invalid requester type.';
 				};
 
-				if ($formData['courseInSis'] === 'No') {
+				if ($formData['courseInSis'] === 0) {
 					$newPhase = 'Hold';
 					$extraText .= ' Course not entered in SIS.';
 				};
 
-				if ($formData['transcriptOnHand'] === 'No') {
+				if ($formData['transcriptOnHand'] === 0) {
 					$newPhase = 'Hold';
 					$extraText .= ' Transcript not on hand.';
 				};
