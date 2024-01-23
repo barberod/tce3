@@ -237,7 +237,7 @@ class FileLoadCommand extends Command
 
                 // Verify the move
                 // if (file_exists("data/files-prep/in-order/files/{$eval->getID()}/course_syllabus/{$parts[1]}")) {
-                if (file_exists("data/files-prep/in-order/files/{$eval->getID()}/course_syllabus/{$parts[1]}")) {
+                if (file_exists("files/{$eval->getID()}/course_syllabus/{$parts[1]}")) {
                     $io->text(
                         sprintf("%04d/%04d\t%8s\t%64s", 
                         $current, 
