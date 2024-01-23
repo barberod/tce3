@@ -50,6 +50,7 @@ class EvaluationCreateType extends AbstractType
 						'multiple' => false,
 						'required' => false,
 						'placeholder' => '- Select one -',
+						'data' => 'No',
 					])
 					->add('hasLab', ChoiceType::class, [
 						'label' => 'Does this course have an associated lab?',
@@ -61,6 +62,7 @@ class EvaluationCreateType extends AbstractType
 						'multiple' => false,
 						'required' => false,
 						'placeholder' => '- Select one -',
+						'data' => 'No',
 					])
 					->add('locatedUsa', ChoiceType::class, [
 						'label' => 'Is the institution located in the United States?',
