@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Evaluation;
 use App\Entity\User;
 use App\Form\EvaluationAppendType;
+use App\Form\EvaluationAnnotateType;
 use App\Form\EvaluationAssignType;
 use App\Form\EvaluationEvaluateType;
 use App\Form\EvaluationPassType;
@@ -229,16 +230,24 @@ class AssigneePageController extends AbstractController
 
 		#[Route('/secure/assignee/evaluation/{id}/annotate', name: 'assignee_evaluation_annotate_form', methods: ['GET', 'POST'])]
 		#[IsGranted( 'assignee+annotate', 'evaluation' )]
-		public function assigneeEvaluationAnnotateForm(Evaluation $evaluation): Response
+		public function assigneeEvaluationAnnotateForm(Request $request, Evaluation $evaluation): Response
 		{
-			return $this->render('evaluation/page.html.twig', [
+			$form = $this->createForm(EvaluationAnnotateType::class);
+			$form->handleRequest($request);
+			if ($form->isSubmitted()) {
+				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+				$evaluationProcessingService->annotateEvaluation($evaluation, $form->getData());
+				return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+			}
+
+			return $this->render('evaluation/form/annotate.html.twig', [
 				'context' => 'assignee',
+				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Write a Note | Evaluation #'.$evaluation->getID(),
-				'evaluation' => $evaluation,
-				'id' => $evaluation->getID(),
-				'uuid' => $evaluation->getID(),
-				'verb' => 'annotate'
+				'verb' => 'annotate',
+				'form' => $form->createView(),
 			]);
 		}
 
@@ -270,24 +279,24 @@ class AssigneePageController extends AbstractController
 		#[IsGranted( 'assignee+evaluate', 'evaluation' )]
 		public function assigneeEvaluationEvaluateForm(Request $request, Evaluation $evaluation): Response
 		{
-				$form = $this->createForm(EvaluationEvaluateType::class);
-				$form->handleRequest($request);
-				if ($form->isSubmitted()) {
-						$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
-						$evaluationProcessingService->evaluateEvaluation($evaluation, $form->getData());
-						return $this->redirectToRoute('assignee_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
-				}
+			$form = $this->createForm(EvaluationEvaluateType::class);
+			$form->handleRequest($request);
+			if ($form->isSubmitted()) {
+				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+				$evaluationProcessingService->evaluateEvaluation($evaluation, $form->getData());
+				return $this->redirectToRoute('assignee_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+			}
 
-				return $this->render('evaluation/form/evaluate.html.twig', [
-					'context' => 'assignee',
-					'page_title' => 'Evaluation #'.$evaluation->getID(),
-					'prepend' => 'Enter Equivalencies | Evaluation #'.$evaluation->getID(),
-					'evaluation' => $evaluation,
-					'id' => $evaluation->getID(),
-					'uuid' => $evaluation->getID(),
-					'verb' => 'evaluate',
-					'form' => $form->createView(),
-				]);
+			return $this->render('evaluation/form/evaluate.html.twig', [
+				'context' => 'assignee',
+				'page_title' => 'Evaluation #'.$evaluation->getID(),
+				'prepend' => 'Enter Equivalencies | Evaluation #'.$evaluation->getID(),
+				'evaluation' => $evaluation,
+				'id' => $evaluation->getID(),
+				'uuid' => $evaluation->getID(),
+				'verb' => 'evaluate',
+				'form' => $form->createView(),
+			]);
 		}
 
 		#[Route('/secure/assignee/evaluation/{id}/forward', name: 'assignee_evaluation_forward_form', methods: ['GET', 'POST'])]
@@ -322,9 +331,9 @@ class AssigneePageController extends AbstractController
 			$form = $this->createForm(EvaluationPassType::class);
 			$form->handleRequest($request);
 			if ($form->isSubmitted()) {
-					$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
-					$evaluationProcessingService->passEvaluation($evaluation, $form->getData());
-					return $this->redirectToRoute('assignee_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
+				$evaluationProcessingService->passEvaluation($evaluation, $form->getData());
+				return $this->redirectToRoute('assignee_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
 			}
 
 			return $this->render('evaluation/form/pass.html.twig', [
@@ -342,51 +351,51 @@ class AssigneePageController extends AbstractController
 		#[Route('/secure/assignee/course', name: 'assignee_course_table', methods: ['GET'])]
 		public function assigneeCourseTable(): Response
 		{
-				return $this->render('course/table.html.twig', [
-					'context' => 'assignee',
-					'page_title' => 'Courses',
-					'prepend' => 'Courses'
-				]);
+			return $this->render('course/table.html.twig', [
+				'context' => 'assignee',
+				'page_title' => 'Courses',
+				'prepend' => 'Courses'
+			]);
 		}
 
 		#[Route('/secure/assignee/department', name: 'assignee_department_table', methods: ['GET'])]
 		public function assigneeDepartmentTable(): Response
 		{
-				return $this->render('department/table.html.twig', [
-					'context' => 'assignee',
-					'page_title' => 'Departments',
-					'prepend' => 'Departments'
-				]);
+			return $this->render('department/table.html.twig', [
+				'context' => 'assignee',
+				'page_title' => 'Departments',
+				'prepend' => 'Departments'
+			]);
 		}
 
 		#[Route('/secure/assignee/institution', name: 'assignee_institution_table', methods: ['GET'])]
 		public function assigneeInstitutionTable(): Response
 		{
-				return $this->render('institution/table.html.twig', [
-					'context' => 'assignee',
-					'page_title' => 'Institutions',
-					'prepend' => 'Institutions'
-				]);
+			return $this->render('institution/table.html.twig', [
+				'context' => 'assignee',
+				'page_title' => 'Institutions',
+				'prepend' => 'Institutions'
+			]);
 		}
 
 		#[Route('/secure/assignee/file/{id}/{subfolder}/{filename}', name: 'assignee_file_download', methods: ['GET'])]
 		public function downloadFile(Evaluation $evaluation, string $subfolder, string $filename): Response
 		{
-				$filePath = $this->filesService->getFilePath($evaluation, $subfolder, $filename);
-				if (!file_exists($filePath)) {
-						throw $this->createNotFoundException('The file does not exist.');
-				}
-				$fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
-				$response = new BinaryFileResponse($filePath);
+			$filePath = $this->filesService->getFilePath($evaluation, $subfolder, $filename);
+			if (!file_exists($filePath)) {
+				throw $this->createNotFoundException('The file does not exist.');
+			}
+			$fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
+			$response = new BinaryFileResponse($filePath);
 
-				// Set content disposition based on file extension
-				if (in_array($fileExtension, ['pdf', 'png', 'jpg', 'jpeg', 'gif'], true)) {
-						$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $filename);
-				} else {
-						$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
-				}
+			// Set content disposition based on file extension
+			if (in_array($fileExtension, ['pdf', 'png', 'jpg', 'jpeg', 'gif'], true)) {
+				$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $filename);
+			} else {
+				$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
+			}
 
-				$response->headers->set('Content-Type', $this->filesService->getMimeType($filePath));
-				return $response;
+			$response->headers->set('Content-Type', $this->filesService->getMimeType($filePath));
+			return $response;
 		}
 }
