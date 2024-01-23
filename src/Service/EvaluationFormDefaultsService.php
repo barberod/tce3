@@ -189,10 +189,10 @@ class EvaluationFormDefaultsService
 
 		public function getPolicyDefaultFromDraftPolicy(?string $draftPolicy): ?string
 		{
-			if ($draftPolicy === 'Policy') {
-				return 'Yes';
-			} elseif ($draftPolicy === 'Not Policy') {
-				return 'No';
+			if ($draftPolicy === 'Policy' || $draftPolicy === 'Yes' ) {
+				return 'Policy';
+			} elseif ($draftPolicy === 'Not Policy' || $draftPolicy === 'No' ) {
+				return 'Not Policy';
 			} else {
 				return null;
 			}

@@ -350,8 +350,8 @@ class EvaluationFinalizeType extends AbstractType
 
 		public function configureOptions(OptionsResolver $resolver): void
 		{
-				$resolver->setDefaults([
-					'evaluation' => null,
-				]);
+			$resolver->setDefaults([
+				'evaluation' => null,
+			]);
 		}
 }
