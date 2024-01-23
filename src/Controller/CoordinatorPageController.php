@@ -1076,7 +1076,7 @@ class CoordinatorPageController extends AbstractController
 		}
 
 		#[Route('/secure/coordinator/department/{id}/add', name: 'coordinator_department_assignee_add_page', methods: ['GET', 'POST'])]
-		public function coordinatorDepartmentAssigneeAddPage(Request $request, Evaluation $evaluation): Response
+		public function coordinatorDepartmentAssigneeAddPage(Request $request): Response
 		{
 			$department = $this->entityManager->getRepository(Department::class)->findOneBy(['id' => $request->attributes->get('id')]);
 
