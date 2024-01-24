@@ -2,12 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Course;
 use App\Entity\Evaluation;
 use App\Entity\User;
 use App\Repository\EvaluationRepository;
+use App\Repository\CourseRepository;
 use App\Service\EvaluationFilesService;
 use App\Service\EvaluationFormDefaultsService;
 use App\Service\EvaluationOptionsService;
+use App\Service\FormOptionsService;
 use App\Service\LookupService;
 use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
@@ -16,6 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -361,13 +365,68 @@ class ObserverPageController extends AbstractController
 		}
 
 		#[Route('/secure/observer/course', name: 'observer_course_table', methods: ['GET'])]
-		public function observerCourseTable(): Response
+		public function observerCourseTable(CourseRepository $courseRepository): Response
 		{
-				return $this->render('course/table.html.twig', [
-					'context' => 'observer',
-					'page_title' => 'Courses',
-					'prepend' => 'Courses'
-				]);
+			$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
+			$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['subjectCode', 'courseNumber']))) ? $_GET['orderby'] : null;
+			$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+			$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
+
+			$service = new FormOptionsService($this->entityManager);
+			$subj = (isset($_GET['subj']) && (in_array(strtoupper($_GET['subj']), $service->getSubjectCodeOptions()))) ? strtoupper($_GET['subj']) : null;
+
+			$queryBuilder = $courseRepository->getQB(
+				orderBy: $orderBy,
+				direction: $direction,
+				subjCode: $subj,
+			);
+			$adapter = new QueryAdapter($queryBuilder);
+			$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
+
+			return $this->render('course/table.html.twig', [
+				'context' => 'observer',
+				'page_title' => 'Courses',
+				'prepend' => 'Courses',
+				'pager' => $pagerfanta,
+				'orderby' => $orderBy,
+				'direction' => $direction,
+				'direction_new' => $newDirection,
+				'subj' => $subj,
+				'subj_options' => $service->getSubjectCodeOptions(),
+			]);
+		}
+
+		#[Route('/secure/observer/course/{id}', name: 'observer_course_page', methods: ['GET'])]
+		public function observerCoursePage(Request $request, Course $course, EvaluationRepository $evaluationRepository): Response 
+		{
+			$course = $this->entityManager->getRepository(Course::class)->findOneBy(['id' => $request->attributes->get('id')]);
+
+			$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
+			$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
+			$direction = (isset($_GET['direction']) && (in_array($_GET['direction'], ['asc', 'desc']))) ? $_GET['direction'] : null;
+			$newDirection = (isset($_GET['direction']) && ($_GET['direction'] == 'asc')) ? 'desc' : 'asc';
+			$reqAdm = (isset($_GET['reqadm']) && (in_array($_GET['reqadm'], ['yes', 'no']))) ? ucfirst($_GET['reqadm']) : null;
+
+			$queryBuilder = $evaluationRepository->getEvaluationsByCourse(
+				orderBy: $orderBy,
+				direction: $direction,
+				reqAdmin: $reqAdm,
+				course: $course,
+			);
+			$adapter = new QueryAdapter($queryBuilder);
+			$pagerfanta = Pagerfanta::createForCurrentPageWithMaxPerPage($adapter, $page, 30);
+
+			return $this->render('course/page.html.twig', [
+				'context' => 'observer',
+				'page_title' => 'Course: '.$course->getSubjectCode().' '.$course->getCourseNumber(),
+				'prepend' => 'Course: '.$course->getSubjectCode().' '.$course->getCourseNumber(),
+				'pager' => $pagerfanta,
+				'orderby' => $orderBy,
+				'direction' => $direction,
+				'direction_new' => $newDirection,
+				'course' => $course,
+				'reqadm' => $reqAdm,
+			]);
 		}
 
 		#[Route('/secure/observer/department', name: 'observer_department_table', methods: ['GET'])]
