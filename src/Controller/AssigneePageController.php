@@ -227,11 +227,10 @@ class AssigneePageController extends AbstractController
 		): Response {
 			return $this->render('evaluation/page.html.twig', [
 				'context' => 'assignee',
+				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Evaluation #'.$evaluation->getID(),
-				'evaluation' => $evaluation,
-				'id' => $evaluation->getID(),
-				'uuid' => $evaluation->getID(),
 				'options' => $optionsService->getOptions('assignee', $evaluation),
 			]);
 		}
@@ -273,11 +272,10 @@ class AssigneePageController extends AbstractController
 
 			return $this->render('evaluation/form/append.html.twig', [
 				'context' => 'assignee',
+				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Upload a File | Evaluation #'.$evaluation->getID(),
-				'evaluation' => $evaluation,
-				'id' => $evaluation->getID(),
-				'uuid' => $evaluation->getID(),
 				'verb' => 'append',
 				'form' => $form->createView(),
 			]);
@@ -297,11 +295,10 @@ class AssigneePageController extends AbstractController
 
 			return $this->render('evaluation/form/evaluate.html.twig', [
 				'context' => 'assignee',
+				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Enter Equivalencies | Evaluation #'.$evaluation->getID(),
-				'evaluation' => $evaluation,
-				'id' => $evaluation->getID(),
-				'uuid' => $evaluation->getID(),
 				'verb' => 'evaluate',
 				'form' => $form->createView(),
 			]);
@@ -322,11 +319,10 @@ class AssigneePageController extends AbstractController
 
 			return $this->render('evaluation/form/assign.html.twig', [
 				'context' => 'assignee',
+				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Forward to a Colleague | Evaluation #'.$evaluation->getID(),
-				'evaluation' => $evaluation,
-				'id' => $evaluation->getID(),
-				'uuid' => $evaluation->getID(),
 				'verb' => 'forward',
 				'form' => $form->createView(),
 			]);
@@ -346,11 +342,10 @@ class AssigneePageController extends AbstractController
 
 			return $this->render('evaluation/form/pass.html.twig', [
 				'context' => 'assignee',
+				'evaluation' => $evaluation,
+				'files' => $this->filesService->getFileLocations($evaluation),
 				'page_title' => 'Evaluation #'.$evaluation->getID(),
 				'prepend' => 'Pass | Evaluation #'.$evaluation->getID(),
-				'evaluation' => $evaluation,
-				'id' => $evaluation->getID(),
-				'uuid' => $evaluation->getID(),
 				'verb' => 'pass',
 				'form' => $form->createView(),
 			]);

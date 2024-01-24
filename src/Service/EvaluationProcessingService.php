@@ -636,7 +636,7 @@ class EvaluationProcessingService
 		{
 				$draftEqvText = ' Draft equiv: ';
 				if ($formData['eqvCnt'] == 0) {
-						$draftEqvText .= 'ET - NOGT ';
+						$draftEqvText .= 'ET-NOGT ';
 				}
 
 				if (in_array($formData['eqvCnt'], array(1, 2, 3, 4))) {
@@ -779,7 +779,7 @@ class EvaluationProcessingService
 		{
 				$finalEqvText = ' Final equiv: ';
 				if ($formData['eqvCnt'] == 0) {
-						$finalEqvText .= 'ET - NOGT ';
+						$finalEqvText .= 'ET-NOGT ';
 				}
 
 				if (in_array($formData['eqvCnt'], array(1, 2, 3, 4))) {
@@ -1967,7 +1967,7 @@ class EvaluationProcessingService
 		{
 				$draftEqvText = ' Draft equiv: ';
 				if ($formData['eqvCnt'] == 0) {
-						$draftEqvText .= 'ET - NOGT ';
+						$draftEqvText .= 'ET-NOGT ';
 				}
 
 				if (in_array($formData['eqvCnt'], array(1, 2, 3, 4))) {
