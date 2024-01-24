@@ -1185,7 +1185,7 @@ class CoordinatorPageController extends AbstractController
 		}
 
 		#[Route('/secure/coordinator/institution/{id}', name: 'coordinator_institution_page', methods: ['GET'])]
-		public function coordinatorInstitutionPage(Institution $institution, InstitutionRepository $institutionRepository): Response 
+		public function coordinatorInstitutionPage(Institution $institution): Response 
 		{
 			$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? $_GET['page'] : 1;
 			$orderBy = (isset($_GET['orderby']) && (in_array($_GET['orderby'], ['updated', 'created']))) ? $_GET['orderby'] : null;
