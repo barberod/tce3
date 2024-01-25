@@ -142,10 +142,7 @@ class LookupService
         if ($this->isAdmin($entry) || $this->isManager($entry) || $this->isCoordinator($entry)) {
             return true;
         }
-        if (
-            (in_array("vm61", $entry->getAttribute('gtPrimaryGTAccountUsername'))) || 
-            (in_array("ms366", $entry->getAttribute('gtPrimaryGTAccountUsername')))
-        ) {
+        if (in_array("full-time-employee@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) {
             return true;
         }
         return false;
