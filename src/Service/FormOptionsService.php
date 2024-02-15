@@ -59,6 +59,7 @@ class FormOptionsService
 				'ENVS' => 'ENVS',
 				'FS' => 'FS',
 				'FIL' => 'FIL',
+				'FREE' => 'FREE',
 				'FREN' => 'FREN',
 				'GEOG' => 'GEOG',
 				'HIST' => 'HIST',
