@@ -207,9 +207,11 @@ class Evaluation
     private ?string $loadedFrom = null;
 
     #[ORM\OneToMany(mappedBy: 'evaluation', targetEntity: Trail::class)]
+    #[ORM\OrderBy(['created' => 'DESC'])]
     private Collection $trails;
 
     #[ORM\OneToMany(mappedBy: 'evaluation', targetEntity: Note::class)]
+    #[ORM\OrderBy(['created' => 'DESC'])]
     private Collection $notes;
 
     public function __construct()
