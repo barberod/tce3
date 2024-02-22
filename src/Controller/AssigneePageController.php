@@ -244,7 +244,7 @@ class AssigneePageController extends AbstractController
 			if ($form->isSubmitted()) {
 				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
 				$evaluationProcessingService->annotateEvaluation($evaluation, $form->getData());
-				return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+				return $this->redirectToRoute('assignee_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
 			}
 
 			return $this->render('evaluation/form/annotate.html.twig', [
@@ -267,7 +267,7 @@ class AssigneePageController extends AbstractController
 			if ($form->isSubmitted()) {
 				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
 				$evaluationProcessingService->appendEvaluation($evaluation, $form->getData());
-				return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+				return $this->redirectToRoute('assignee_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
 			}
 
 			return $this->render('evaluation/form/append.html.twig', [

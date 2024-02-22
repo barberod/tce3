@@ -111,21 +111,15 @@ class ScratchFormType extends AbstractType
 								'multiple' => false,
 								'mapped' => false,
 						])
-						->add('visibleNote', ChoiceType::class, [
-								'label' => 'Shall this note be visible to the requester?',
-								'choices' => [
-										'Visible' => 'Visible',
-										'Hidden' => 'Hidden',
-								],
-								'expanded' => false,
-								'multiple' => false,
-								'required' => false,
-								'mapped' => false,
-								'placeholder' => '- Select one -',
-								'data' => 'Visible',
+						->add('visibleNote', TextType::class, [
+							'label' => 'Note Visibility',
+							'disabled' => true,
+							'data' => 'Visible',
+							'required' => false,
+							'help' => 'All new notes are visible to the requester.',
 						])
 						->add('noteBody', TextareaType::class, [
-							 'label' => 'Note',
+							'label' => 'Note',
 								'required' => false,
 								'mapped' => false,
 						])

@@ -216,7 +216,7 @@ class RequesterPageController extends AbstractController
 				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
 				$evaluationProcessingService->resubmitEvaluation($evaluation,
 					$form->getData());
-				return $this->redirectToRoute('coordinator_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
+				return $this->redirectToRoute('requester_evaluation_page', ['id' => $evaluation->getID()], Response::HTTP_SEE_OTHER);
 			}
 
 			return $this->render('evaluation/form/resubmit.html.twig', [

@@ -298,11 +298,7 @@ class EvaluationProcessingService
 
 			$note->setBody($formData['noteBody']);
 			$note->setCreated(new \DateTime());
-			if ($formData['visibleNote'] == 'Yes') {
-				$note->setVisibleToRequester(1);
-			} else {
-				$note->setVisibleToRequester(0);
-			}
+			$note->setVisibleToRequester(1);
 
 			// Persist the entity
 			$this->entityManager->persist($note);
@@ -471,11 +467,7 @@ class EvaluationProcessingService
 				$note->setBody($formData['noteBody']);
 				$note->setCreated(new \DateTime());
 
-				if ($formData['visibleNote'] == 'Yes') {
-					$note->setVisibleToRequester(1);
-				} else {
-					$note->setVisibleToRequester(0);
-				}
+				$note->setVisibleToRequester(1);
 
 				// Persist the entity
 				$this->entityManager->persist($note);
@@ -581,12 +573,7 @@ class EvaluationProcessingService
 
 						$note->setBody($formData['noteBody']);
 						$note->setCreated(new \DateTime());
-
-						if ($formData['visibleNote'] == 'Yes') {
-								$note->setVisibleToRequester(1);
-						} else {
-								$note->setVisibleToRequester(0);
-						}
+						$note->setVisibleToRequester(1);
 
 						// Persist the entity
 						$this->entityManager->persist($note);
@@ -731,12 +718,7 @@ class EvaluationProcessingService
 
 						$note->setBody($formData['noteBody']);
 						$note->setCreated(new \DateTime());
-
-						if ($formData['visibleNote'] == 'Yes') {
-								$note->setVisibleToRequester(1);
-						} else {
-								$note->setVisibleToRequester(0);
-						}
+						$note->setVisibleToRequester(1);
 
 						// Persist the entity
 						$this->entityManager->persist($note);
@@ -888,12 +870,7 @@ class EvaluationProcessingService
 
 					$note->setBody($formData['noteBody']);
 					$note->setCreated(new \DateTime());
-
-					if ($formData['visibleNote'] == 'Yes') {
-							$note->setVisibleToRequester(1);
-					} else {
-							$note->setVisibleToRequester(0);
-					}
+					$note->setVisibleToRequester(1);
 
 					// Persist the entity
 					$this->entityManager->persist($note);
@@ -964,12 +941,7 @@ class EvaluationProcessingService
 
 						$note->setBody($formData['noteBody']);
 						$note->setCreated(new \DateTime());
-
-						if ($formData['visibleNote'] == 'Yes') {
-								$note->setVisibleToRequester(1);
-						} else {
-								$note->setVisibleToRequester(0);
-						}
+						$note->setVisibleToRequester(1);
 
 						// Persist the entity
 						$this->entityManager->persist($note);
@@ -1059,12 +1031,7 @@ class EvaluationProcessingService
 
 						$note->setBody($formData['noteBody']);
 						$note->setCreated(new \DateTime());
-
-						if ($formData['visibleNote'] == 'Yes') {
-								$note->setVisibleToRequester(1);
-						} else {
-								$note->setVisibleToRequester(0);
-						}
+						$note->setVisibleToRequester(1);
 
 						// Persist the entity
 						$this->entityManager->persist($note);
@@ -1137,12 +1104,7 @@ class EvaluationProcessingService
 
 						$note->setBody($formData['noteBody']);
 						$note->setCreated(new \DateTime());
-
-						if ($formData['visibleNote'] == 'Yes') {
-								$note->setVisibleToRequester(1);
-						} else {
-								$note->setVisibleToRequester(0);
-						}
+						$note->setVisibleToRequester(1);
 
 						// Persist the entity
 						$this->entityManager->persist($note);
@@ -1205,12 +1167,7 @@ class EvaluationProcessingService
 
 						$note->setBody($formData['noteBody']);
 						$note->setCreated(new \DateTime());
-
-						if ($formData['visibleNote'] == 'Yes') {
-								$note->setVisibleToRequester(1);
-						} else {
-								$note->setVisibleToRequester(0);
-						}
+						$note->setVisibleToRequester(1);
 
 						// Persist the entity
 						$this->entityManager->persist($note);
@@ -1280,12 +1237,7 @@ class EvaluationProcessingService
 
 						$note->setBody($formData['noteBody']);
 						$note->setCreated(new \DateTime());
-
-						if ($formData['visibleNote'] == 'Yes') {
-								$note->setVisibleToRequester(1);
-						} else {
-								$note->setVisibleToRequester(0);
-						}
+						$note->setVisibleToRequester(1);
 
 						// Persist the entity
 						$this->entityManager->persist($note);
@@ -1357,12 +1309,7 @@ class EvaluationProcessingService
 
 						$note->setBody($formData['noteBody']);
 						$note->setCreated(new \DateTime());
-
-						if ($formData['visibleNote'] == 'Yes') {
-								$note->setVisibleToRequester(1);
-						} else {
-								$note->setVisibleToRequester(0);
-						}
+						$note->setVisibleToRequester(1);
 
 						// Persist the entity
 						$this->entityManager->persist($note);
@@ -1433,12 +1380,7 @@ class EvaluationProcessingService
 
 						$note->setBody($formData['noteBody']);
 						$note->setCreated(new \DateTime());
-
-						if ($formData['visibleNote'] == 'Yes') {
-								$note->setVisibleToRequester(1);
-						} else {
-								$note->setVisibleToRequester(0);
-						}
+						$note->setVisibleToRequester(1);
 
 						// Persist the entity
 						$this->entityManager->persist($note);
@@ -1507,12 +1449,7 @@ class EvaluationProcessingService
 
 						$note->setBody($formData['noteBody']);
 						$note->setCreated(new \DateTime());
-
-						if ($formData['visibleNote'] == 'Yes') {
-								$note->setVisibleToRequester(1);
-						} else {
-								$note->setVisibleToRequester(0);
-						}
+						$note->setVisibleToRequester(1);
 
 						// Persist the entity
 						$this->entityManager->persist($note);
@@ -1638,12 +1575,7 @@ class EvaluationProcessingService
 
 						$note->setBody($formData['noteBody']);
 						$note->setCreated(new \DateTime());
-
-						if ($formData['visibleNote'] == 'Yes') {
-								$note->setVisibleToRequester(1);
-						} else {
-								$note->setVisibleToRequester(0);
-						}
+						$note->setVisibleToRequester(1);
 
 						// Persist the entity
 						$this->entityManager->persist($note);
@@ -1781,12 +1713,7 @@ class EvaluationProcessingService
 
 					$note->setBody($formData['noteBody']);
 					$note->setCreated(new \DateTime());
-
-					if ($formData['visibleNote'] == 'Yes') {
-							$note->setVisibleToRequester(1);
-					} else {
-							$note->setVisibleToRequester(0);
-					}
+					$note->setVisibleToRequester(1);
 
 					// Persist the entity
 					$this->entityManager->persist($note);
@@ -2070,12 +1997,7 @@ class EvaluationProcessingService
 
 						$note->setBody($formData['noteBody']);
 						$note->setCreated(new \DateTime());
-
-						if ($formData['visibleNote'] == 'Yes') {
-								$note->setVisibleToRequester(1);
-						} else {
-								$note->setVisibleToRequester(0);
-						}
+						$note->setVisibleToRequester(1);
 
 						// Persist the entity
 						$this->entityManager->persist($note);

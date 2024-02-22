@@ -92,7 +92,7 @@ class EvaluationVoter extends Voter
 				$attributes = explode('+', $attribute);
 
         return in_array($attributes[0], $roles)
-						&& in_array($attributes[1], $verbs)
+			&& in_array($attributes[1], $verbs)
             && $subject instanceof \App\Entity\Evaluation;
     }
 
