@@ -177,7 +177,8 @@ class LookupService
             return true;
         }
         if (
-            (in_array("celster3", $entry->getAttribute('gtPrimaryGTAccountUsername')))
+            // (in_array("celster3", $entry->getAttribute('gtPrimaryGTAccountUsername')))
+            false
         ) {
             return true;
         }
