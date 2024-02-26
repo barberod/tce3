@@ -369,7 +369,7 @@ class LookupService
 		private function isFullTimeEmployee(array $attributes): bool {
 				if (
                     (in_array("full-time-employee@provost rollup", $attributes)) ||
-                    (in_array("full-time-employee@psdept a31:academics:athl - academics", $attributes))
+                    (in_array("full-time-employee@psdept a31:academics:athl - academics", $attributes)) || 
                     (in_array("full-time-employee@psdept 790:gencounsel:office of the general counsel", $attributes))
                 ) {
 					return true;
