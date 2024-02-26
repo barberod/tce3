@@ -295,7 +295,8 @@ class LookupService
 					'undergrad-student@gt',
 					'undergrad-applicant@gt',
                     'full-time-employee@provost rollup',
-                    'full-time-employee@psdept a31:academics:athl - academics'
+                    'full-time-employee@psdept a31:academics:athl - academics',
+                    'full-time-employee@psdept 790:gencounsel:office of the general counsel'
 				);
 
 				$requesterAttributes = array();
@@ -369,6 +370,7 @@ class LookupService
 				if (
                     (in_array("full-time-employee@provost rollup", $attributes)) ||
                     (in_array("full-time-employee@psdept a31:academics:athl - academics", $attributes))
+                    (in_array("full-time-employee@psdept 790:gencounsel:office of the general counsel", $attributes))
                 ) {
 					return true;
 				}
