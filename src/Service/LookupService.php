@@ -292,7 +292,9 @@ class LookupService
 					'grad-applicant@gt',
 					'graduate-student@gt',
 					'undergrad-student@gt',
-					'undergrad-applicant@gt'
+					'undergrad-applicant@gt',
+                    'full-time-employee@provost rollup',
+                    'full-time-employee@psdept a31:academics:athl - academics'
 				);
 
 				$requesterAttributes = array();
@@ -363,8 +365,11 @@ class LookupService
 		}
 
 		private function isFullTimeEmployee(array $attributes): bool {
-				if (in_array("full-time-employee@gt", $attributes)) {
-						return true;
+				if (
+                    (in_array("full-time-employee@provost rollup", $attributes)) ||
+                    (in_array("full-time-employee@psdept a31:academics:athl - academics", $attributes))
+                ) {
+					return true;
 				}
 				return false;
 		}
