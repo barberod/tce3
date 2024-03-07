@@ -208,7 +208,7 @@
             {% endif %}
             </div>
 
-            {% if evaluation.draftEquiv1Course|trim is not empty and context != "requester" %}
+            {% if (evaluation.draftEquiv1Course|trim is not empty) and (context != 'requester') %}
             <div class="col-12 d-flex flex-column mb-4">
                 <label for="recordInput10" class="form-label text-muted mb-0">Draft Equiv(s)</label>
                 <div class="font-monospace text-muted fst-italic" id="recordInput10">
@@ -231,7 +231,7 @@
                     {% endif %}
                 </div>
             </div>
-            {% elseif evaluation.phase == "Registrar 2" or evaluation.phase == "Hold" or evaluation.phase == "Complete" %}
+            {% elseif (evaluation.phase == "Registrar 2" or evaluation.phase == "Hold" or evaluation.phase == "Complete") and (context != 'requester') %}
             <div class="col-12 d-flex flex-column mb-4">
                 <label for="recordInput10" class="form-label text-muted mb-0">Draft Equiv(s)</label>
                 <div class="font-monospace text-muted fst-italic" id="recordInput10">ET-NOGT</div>
