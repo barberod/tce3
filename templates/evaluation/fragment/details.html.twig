@@ -40,7 +40,7 @@
             </div>
 
             <div class="col-12 col-lg-6 d-flex flex-column mb-4">
-            {% if evaluation.assignee is not empty %}
+            {% if evaluation.assignee is not empty && context != "requester" %}
                 <label for="recordInput6" class="form-label mb-0">Assignee</label>
                 <div class="font-monospace" id="recordInput6">
                     {{ evaluation.assignee.displayName }}<br>

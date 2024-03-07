@@ -128,8 +128,18 @@ class LookupService
         }
 
         if (
-            (in_array("student@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
-            (in_array("undergrad-applicant@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
+            $this->isAdmin($entry) || 
+            $this->isManager($entry) || 
+            $this->isCoordinator($entry) ||
+            $this->isObserver($entry) ||
+            $this->isAssignee($entry)
+        ) {
+            return true;
+        }
+
+        if (
+            (in_array("undergrad-student@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
+            (in_array("credit-applicant-accepted@gt", $entry->getAttribute('eduPersonScopedAffiliation'))) ||
             (in_array("credit-applicant-confirmed@gt", $entry->getAttribute('eduPersonScopedAffiliation')))
         ) {
             return true;
