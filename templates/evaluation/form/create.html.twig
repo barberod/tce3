@@ -98,6 +98,25 @@
             </div>
             <div class="col-12">
                 <div class="card border-primary mb-3">
+                    <h2 class="card-header bg-primary border-primary h5">Note</h2>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 col-lg-5">
+                                <div class="mb-4">
+                                    {{ form_row(form.addNote) }}
+                                </div>
+                                <div id="noteFieldSet">
+                                    <div class="mb-4">
+                                        {{ form_row(form.noteBody) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card border-primary mb-3">
                     <h2 class="card-header bg-primary border-primary h5">Important</h2>
                     <div class="card-body">
                         <div class="row">

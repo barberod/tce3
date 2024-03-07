@@ -2,21 +2,16 @@
 
 namespace App\Form;
 
-use App\Entity\Institution;
 use App\Service\FormOptionsService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 class EvaluationCreateType extends AbstractType
 {
@@ -210,6 +205,22 @@ class EvaluationCreateType extends AbstractType
 					])
 					->add('labDocument', FileType::class, [
 						'label' => 'Lab Document',
+						'required' => false,
+					])
+					->add('addNote', ChoiceType::class, [
+						'label' => 'Add a note?',
+						'choices' => [
+							'No' => 'No',
+							'Yes' => 'Yes',
+						],
+						'expanded' => false,
+						'multiple' => false,
+						'required' => false,
+						'placeholder' => '- Select one -',
+						'data' => 'No',
+					])
+					->add('noteBody', TextareaType::class, [
+						'label' => 'Note',
 						'required' => false,
 					])
 					->add('attest', ChoiceType::class, [

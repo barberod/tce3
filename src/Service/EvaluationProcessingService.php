@@ -160,6 +160,31 @@ class EvaluationProcessingService
 				$filesService->saveLabDocument($evaluation, $formData);
 			}
 
+			// Create a note
+			if ($formData['addNote'] == 'Yes') {
+				$note = new Note();
+				$note->setEvaluation($evaluation);
+
+				if ($this->security->getUser() instanceof User) {
+					$note->setAuthor($this->security->getUser());
+				} elseif ($this->security->getUser() instanceof CasUser) {
+					$userAtHand = $this->entityManager->getRepository(User::class)
+						->findOneBy(['username' => $this->security->getUser()->getUserIdentifier()]);
+					$note->setAuthor($userAtHand);
+				} else {
+					$note->setAuthor(null);
+				}
+
+				$note->setBody($formData['noteBody']);
+				$note->setCreated(new \DateTime());
+
+				$note->setVisibleToRequester(1);
+
+				// Persist the entity
+				$this->entityManager->persist($note);
+				$this->entityManager->flush(); // Save changes to the database
+			}
+
 			// Create a new instance of the Trail entity
 			$trail = new Trail();
 
