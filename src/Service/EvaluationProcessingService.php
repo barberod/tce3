@@ -10,6 +10,7 @@ use App\Entity\Trail;
 use App\Entity\User;
 use App\Service\EmailService;
 use App\Service\EvaluationFilesService;
+use App\Service\EvaluationValidationService;
 use Doctrine\ORM\EntityManagerInterface;
 use EcPhp\CasBundle\Security\Core\User\CasUser;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -32,8 +33,14 @@ class EvaluationProcessingService
 		 *
 		 * @param array $formData
 		 */
-		public function createEvaluation(array $formData): void
+		public function createEvaluation(array $formData): array
 		{
+			$validationService = new EvaluationValidationService();
+			if ($validationService->validateCreateEvaluation($formData)) {
+				$validationErrors = $validationService->validateCreateEvaluation($formData);
+				return $validationErrors;
+			}
+
 			// Create a new instance of the Evaluation entity
 			$evaluation = new Evaluation();
 
@@ -214,6 +221,8 @@ class EvaluationProcessingService
 			// Send email
 			$emailService = new EmailService($this->entityManager);
 			$emailService->emailToRequesterUponNewRequest($evaluation->getRequester()->getUsername(), $evaluation);
+
+			return [];
 		}
 
 		/**

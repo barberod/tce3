@@ -12,248 +12,387 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class EvaluationCreateType extends AbstractType
 {
-		private FormOptionsService $formOptionsService;
+	private FormOptionsService $formOptionsService;
+	private array $labConstraints;
 
-		public function __construct(
-			FormOptionsService $formOptionsService
-		) {
-				$this->formOptionsService = $formOptionsService;
-		}
+	public function __construct(
+		FormOptionsService $formOptionsService
+	) {
+		$this->formOptionsService = $formOptionsService;
+		$this->labConstraints = [];
+	}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-				$builder
-					->add('submissionDateTime', DateTimeType::class, [
-						'label' => 'Current DateTime',
-						'disabled' => true,
-						'data' => new \DateTime(),
-						'with_seconds' => false,
-						'widget' => 'single_text',
-						'input' => 'datetime',
-						'required' => false,
-					])
-					->add('requiredForAdmission', ChoiceType::class, [
-						'label' => 'Is this course required for admission?',
-						'choices' => [
-							'No' => 'No',
-							'Yes' => 'Yes',
-						],
-						'expanded' => false,
-						'multiple' => false,
-						'required' => false,
-						'placeholder' => '- Select one -',
-						'data' => 'No',
-					])
-					->add('hasLab', ChoiceType::class, [
-						'label' => 'Does this course have an associated lab?',
-						'choices' => [
-							'No' => 'No',
-							'Yes' => 'Yes',
-						],
-						'expanded' => false,
-						'multiple' => false,
-						'required' => false,
-						'placeholder' => '- Select one -',
-						'data' => 'No',
-					])
-					->add('locatedUsa', ChoiceType::class, [
-						'label' => 'Is the institution located in the United States?',
-						'choices' => [
-							'No' => 'No',
-							'Yes' => 'Yes',
-						],
-						'expanded' => false,
-						'multiple' => false,
-						'required' => false,
-						'placeholder' => '- Select one -',
-						'data' => 'Yes',
-					])
-					->add('state', ChoiceType::class, [
-						'choices' => $this->formOptionsService->getUsStateOptions(),
-						'placeholder' => 'Select a state',
-						'expanded' => false,
-						'multiple' => false,
-						'required' => false,
-					])
-					->add('institution', ChoiceType::class, [
+		$builder
+			->add('submissionDateTime', DateTimeType::class, [
+				'label' => 'Current DateTime',
+				'disabled' => true,
+				'data' => new \DateTime(),
+				'with_seconds' => false,
+				'widget' => 'single_text',
+				'input' => 'datetime',
+				'required' => false,
+			])
+			->add('requiredForAdmission', ChoiceType::class, [
+				'label' => 'Is this course required for admission?',
+				'choices' => [
+					'No' => 'No',
+					'Yes' => 'Yes',
+				],
+				'expanded' => false,
+				'multiple' => false,
+				'required' => false,
+				'placeholder' => '- Select one -',
+				'data' => 'No',
+				'constraints' => [
+					new NotBlank(),
+				],
+			])
+			->add('hasLab', ChoiceType::class, [
+				'label' => 'Does this course have an associated lab?',
+				'choices' => [
+					'No' => 'No',
+					'Yes' => 'Yes',
+				],
+				'expanded' => false,
+				'multiple' => false,
+				'required' => false,
+				'placeholder' => '- Select one -',
+				'data' => 'No',
+				'constraints' => [
+					new NotBlank(),
+				],
+			])
+			->add('locatedUsa', ChoiceType::class, [
+				'label' => 'Is the institution located in the United States?',
+				'choices' => [
+					'No' => 'No',
+					'Yes' => 'Yes',
+				],
+				'expanded' => false,
+				'multiple' => false,
+				'required' => false,
+				'placeholder' => '- Select one -',
+				'data' => 'Yes',
+				'constraints' => [
+					new NotBlank(),
+				],
+			])
+			->add('state', ChoiceType::class, [
+				'choices' => $this->formOptionsService->getUsStateOptions(),
+				'placeholder' => 'Select a state',
+				'expanded' => false,
+				'multiple' => false,
+				'required' => false,
+			])
+			->add('institution', ChoiceType::class, [
+				'label' => 'Institution',
+				'placeholder' => 'Select an institution',
+				'expanded' => false,
+				'multiple' => false,
+				'required' => false,
+				'choices' => [], // Initially empty, will be dynamically populated
+			])
+			->add('institutionListed', ChoiceType::class, [
+				'label' => 'Is the institution listed?',
+				'choices' => [
+					'No' => 'No',
+					'Yes' => 'Yes',
+				],
+				'expanded' => false,
+				'multiple' => false,
+				'required' => false,
+				'placeholder' => '- Select one -',
+				'data' => 'Yes',
+			])
+			->add('country', ChoiceType::class, [
+				'choices' => $this->formOptionsService->getCountryOptions(),
+				'label' => 'Country',
+				'expanded' => false,
+				'multiple' => false,
+				'placeholder' => 'Select a country',
+				'required' => false,
+			])
+			->add('institutionName', TextType::class, [
+				'label' => 'Name of Institution',
+				'required' => false,
+				'help' => 'Example: "Oxford University"',
+			])
+			->add('coursePrefix', TextType::class, [
+				'label' => 'Course Prefix',
+				'required' => false,
+				'help' => 'Example: "BIOL"',
+				'constraints' => [
+					new Length(['min' => 3]),
+				],
+			])
+			->add('courseNumber', TextType::class, [
+				'label' => 'Course Number',
+				'required' => false,
+				'help' => 'Example: "1012"',
+				'constraints' => [
+					new NotBlank(),
+				],
+			])
+			->add('courseTitle', TextType::class, [
+				'label' => 'Course Title',
+				'required' => false,
+				'help' => 'Example: "General Biology"',
+				'constraints' => [
+					new NotBlank(),
+				],
+			])
+			->add('courseSemester', TextType::class, [
+				'label' => 'Academic Term',
+				'required' => false,
+				'help' => 'Example: "Fall 2023"',
+				'constraints' => [
+					new NotBlank(),
+				],
+			])
+			->add('courseCreditBasis', ChoiceType::class, [
+				'label' => 'Credit System',
+				'choices' => [
+					'Semester Hours' => 'Semester',
+					'Quarter Hours' => 'Quarter',
+					'Other/Units' => 'Other',
+				],
+				'expanded' => false,
+				'multiple' => false,
+				'required' => false,
+				'placeholder' => '- Select one -',
+				'constraints' => [
+					new NotBlank(),
+				],
+			])
+			->add('courseCreditHours', ChoiceType::class, [
+				'label' => 'Credit Hours',
+				'choices' => $this->formOptionsService->getCreditHourOptions(),
+				'expanded' => false,
+				'multiple' => false,
+				'required' => false,
+				'placeholder' => '- Select one -',
+				'constraints' => [
+					new NotBlank(),
+				],
+			])
+			->add('courseSyllabus', FileType::class, [
+				'label' => 'Course Syllabus',
+				'required' => false,
+				'constraints' => [
+					new NotBlank(),
+				],
+			])
+			->add('courseDocument', FileType::class, [
+				'label' => 'Course Document',
+				'required' => false,
+			])
+			->add('labPrefix', TextType::class, [
+				'label' => 'Lab Prefix',
+				'required' => false,
+				'help' => 'Example: "BIOL"',
+			])
+			->add('labNumber', TextType::class, [
+				'label' => 'Lab Number',
+				'required' => false,
+				'help' => 'Example: "1013"',
+			])
+			->add('labTitle', TextType::class, [
+				'label' => 'Lab Title',
+				'required' => false,
+				'help' => 'Example: "General Biology Laboratory"',
+			])
+			->add('labSemester', TextType::class, [
+				'label' => 'Academic Term',
+				'required' => false,
+				'help' => 'Example: "Spring 2024"',
+			])
+			->add('labCreditBasis', ChoiceType::class, [
+				'label' => 'Credit System',
+				'choices' => [
+					'Semester Hours' => 'Semester',
+					'Quarter Hours' => 'Quarter',
+					'Other/Units' => 'Other',
+				],
+				'expanded' => false,
+				'multiple' => false,
+				'required' => false,
+				'placeholder' => '- Select one -',
+			])
+			->add('labCreditHours', ChoiceType::class, [
+				'label' => 'Credit Hours',
+				'choices' => $this->formOptionsService->getCreditHourOptions(),
+				'expanded' => false,
+				'multiple' => false,
+				'required' => false,
+				'placeholder' => '- Select one -',
+			])
+			->add('labSyllabus', FileType::class, [
+				'label' => 'Lab Syllabus',
+				'required' => false,
+			])
+			->add('labDocument', FileType::class, [
+				'label' => 'Lab Document',
+				'required' => false,
+			])
+			->add('addNote', ChoiceType::class, [
+				'label' => 'Add a note?',
+				'choices' => [
+					'No' => 'No',
+					'Yes' => 'Yes',
+				],
+				'expanded' => false,
+				'multiple' => false,
+				'required' => false,
+				'placeholder' => '- Select one -',
+				'data' => 'No',
+			])
+			->add('noteBody', TextareaType::class, [
+				'label' => 'Note',
+				'required' => false,
+			])
+			->add('attest', ChoiceType::class, [
+				'label' => 'Attestation',
+				'choices' => [
+					'Yes' => 'Yes',
+				],
+				'expanded' => false,
+				'multiple' => false,
+				'required' => false,
+				'placeholder' => '---',
+				'constraints' => [
+					new NotBlank(),
+				],
+			])
+		;
+
+		// Add event listener to handle dynamic population of university choices based on the selected state
+		$builder->addEventListener(
+			FormEvents::PRE_SUBMIT,
+			function (FormEvent $event) {
+				$form = $event->getForm();
+				$formData = $event->getData();
+
+				if (isset($formData['state'])) {
+					$institutions = $this->formOptionsService->getInstitutionsByUSState($formData['state']);
+					$form->add('institution', ChoiceType::class, [
 						'label' => 'Institution',
 						'placeholder' => 'Select an institution',
 						'expanded' => false,
 						'multiple' => false,
 						'required' => false,
-						'choices' => [], // Initially empty, will be dynamically populated
-					])
-					->add('institutionListed', ChoiceType::class, [
-						'label' => 'Is the institution listed?',
-						'choices' => [
-							'No' => 'No',
-							'Yes' => 'Yes',
-						],
-						'expanded' => false,
-						'multiple' => false,
-						'required' => false,
-						'placeholder' => '- Select one -',
-						'data' => 'Yes',
-					])
-					->add('country', ChoiceType::class, [
-						'choices' => $this->formOptionsService->getCountryOptions(),
-						'label' => 'Country',
-						'expanded' => false,
-						'multiple' => false,
-						'placeholder' => 'Select a country',
-						'required' => false,
-					])
-					->add('institutionName', TextType::class, [
-						'label' => 'Name of Institution',
-						'required' => false,
-						'help' => 'Example: "Oxford University"',
-					])
-					->add('coursePrefix', TextType::class, [
-						'label' => 'Course Prefix',
-						'required' => false,
-						'help' => 'Example: "BIOL"',
-					])
-					->add('courseNumber', TextType::class, [
-						'label' => 'Course Number',
-						'required' => false,
-						'help' => 'Example: "1012"',
-					])
-					->add('courseTitle', TextType::class, [
-						'label' => 'Course Title',
-						'required' => false,
-						'help' => 'Example: "General Biology"',
-					])
-					->add('courseSemester', TextType::class, [
-						'label' => 'Academic Term',
-						'required' => false,
-						'help' => 'Example: "Fall 2023"',
-					])
-					->add('courseCreditBasis', ChoiceType::class, [
-						'label' => 'Credit System',
-						'choices' => [
-							'Semester Hours' => 'Semester',
-							'Quarter Hours' => 'Quarter',
-							'Other/Units' => 'Other',
-						],
-						'expanded' => false,
-						'multiple' => false,
-						'required' => false,
-						'placeholder' => '- Select one -',
-					])
-					->add('courseCreditHours', ChoiceType::class, [
-						'label' => 'Credit Hours',
-						'choices' => $this->formOptionsService->getCreditHourOptions(),
-						'expanded' => false,
-						'multiple' => false,
-						'required' => false,
-						'placeholder' => '- Select one -',
-					])
-					->add('courseSyllabus', FileType::class, [
-						'label' => 'Course Syllabus',
-						'required' => false,
-					])
-					->add('courseDocument', FileType::class, [
-						'label' => 'Course Document',
-						'required' => false,
-					])
-					->add('labPrefix', TextType::class, [
-						'label' => 'Lab Prefix',
-						'required' => false,
-						'help' => 'Example: "BIOL"',
-					])
-					->add('labNumber', TextType::class, [
-						'label' => 'Lab Number',
-						'required' => false,
-						'help' => 'Example: "1013"',
-					])
-					->add('labTitle', TextType::class, [
-						'label' => 'Lab Title',
-						'required' => false,
-						'help' => 'Example: "General Biology Laboratory"',
-					])
-					->add('labSemester', TextType::class, [
-						'label' => 'Academic Term',
-						'required' => false,
-						'help' => 'Example: "Spring 2024"',
-					])
-					->add('labCreditBasis', ChoiceType::class, [
-						'label' => 'Credit System',
-						'choices' => [
-							'Semester Hours' => 'Semester',
-							'Quarter Hours' => 'Quarter',
-							'Other/Units' => 'Other',
-						],
-						'expanded' => false,
-						'multiple' => false,
-						'required' => false,
-						'placeholder' => '- Select one -',
-					])
-					->add('labCreditHours', ChoiceType::class, [
-						'label' => 'Credit Hours',
-						'choices' => $this->formOptionsService->getCreditHourOptions(),
-						'expanded' => false,
-						'multiple' => false,
-						'required' => false,
-						'placeholder' => '- Select one -',
-					])
-					->add('labSyllabus', FileType::class, [
-						'label' => 'Lab Syllabus',
-						'required' => false,
-					])
-					->add('labDocument', FileType::class, [
-						'label' => 'Lab Document',
-						'required' => false,
-					])
-					->add('addNote', ChoiceType::class, [
-						'label' => 'Add a note?',
-						'choices' => [
-							'No' => 'No',
-							'Yes' => 'Yes',
-						],
-						'expanded' => false,
-						'multiple' => false,
-						'required' => false,
-						'placeholder' => '- Select one -',
-						'data' => 'No',
-					])
-					->add('noteBody', TextareaType::class, [
-						'label' => 'Note',
-						'required' => false,
-					])
-					->add('attest', ChoiceType::class, [
-						'label' => 'Attestation',
-						'choices' => [
-							'Yes' => 'Yes',
-						],
-						'expanded' => false,
-						'multiple' => false,
-						'required' => false,
-						'placeholder' => '---',
-					])
-				;
+						'choices' => $institutions,
+					]);
+				}
 
-				// Add event listener to handle dynamic population of university choices based on the selected state
-				$builder->addEventListener(
-					FormEvents::PRE_SUBMIT,
-					function (FormEvent $event) {
-							$form = $event->getForm();
-							$data = $event->getData();
+				$validationResponse = [
+					'validationErrors' => [],
+					'feedback' => [],
+				];
 
-							if (isset($data['state'])) {
-									$institutions = $this->formOptionsService->getInstitutionsByUSState($data['state']);
-									$form->add('institution', ChoiceType::class, [
-										'label' => 'Institution',
-										'placeholder' => 'Select an institution',
-										'expanded' => false,
-										'multiple' => false,
-										'required' => false,
-										'choices' => $institutions,
-									]);
-							}
+				// Req Admin
+
+				if (!isset($formData['requiredForAdmission']) || empty($formData['requiredForAdmission'])) {
+					$validationResponse['validationErrors']['requiredForAdmission'] = false;
+					$validationResponse['feedback']['requiredForAdmission'] = '<div class="invalid-feedback">Required</div>';
+				}
+		
+				// Institution
+		
+				if (!isset($formData['locatedUsa']) || empty($formData['locatedUsa'])) {
+					$validationResponse['validationErrors']['locatedUsa'] = false;
+					$validationResponse['feedback']['locatedUsa'] = '<div class="invalid-feedback">Required</div>';
+		
+				} else if ($formData['locatedUsa'] == 'Yes') {
+					if (!isset($formData['institutionListed']) || empty($formData['institutionListed'])) {
+						$validationResponse['validationErrors']['institutionListed'] = false;
+						$validationResponse['feedback']['institutionListed'] = '<div class="invalid-feedback">Required</div>';
+		
+					} else if ($formData['institutionListed'] == 'No') {
+						if (!isset($formData['institutionName']) || empty($formData['institutionName'])) {
+							$validationResponse['validationErrors']['institutionName'] = false;
+							$validationResponse['feedback']['institutionName'] = '<div class="invalid-feedback">Required</div>';
+						}
+					} else if ($formData['institutionListed'] == 'Yes') {
+						if (!isset($formData['institution']) || empty($formData['institution'])) {
+							$validationResponse['validationErrors']['institution'] = false;
+							$validationResponse['feedback']['institution'] = '<div class="invalid-feedback">Required</div>';
+		
+						}
 					}
-				);
+		
+				} else if ($formData['locatedUsa'] == 'No') {
+					if (!isset($formData['institutionName']) || empty($formData['institutionName'])) {
+						$validationResponse['validationErrors']['institutionName'] = false;
+						$validationResponse['feedback']['institutionName'] = '<div class="invalid-feedback">Required</div>';
+					}
+		
+					if (!isset($formData['country']) || empty($formData['country'])) {
+						$validationResponse['validationErrors']['country'] = false;
+						$validationResponse['feedback']['country'] = '<div class="invalid-feedback">Required</div>';
+					}
+				}
+		
+				// Course
+		
+				if (!isset($formData['courseSemester']) || empty($formData['courseSemester'])) {
+					$validationResponse['validationErrors']['courseSemester'] = false;
+					$validationResponse['feedback']['courseSemester'] = '<div class="invalid-feedback">Required</div>';
+				}
+		
+				if (!isset($formData['courseCreditBasis']) || empty($formData['courseCreditBasis'])) {
+					$validationResponse['validationErrors']['courseCreditBasis'] = false;
+					$validationResponse['feedback']['courseCreditBasis'] = '<div class="invalid-feedback">Required</div>';
+				}
+		
+				if (!isset($formData['courseCreditHours']) || empty($formData['courseCreditHours'])) {
+					$validationResponse['validationErrors']['courseCreditHours'] = false;
+					$validationResponse['feedback']['courseCreditHours'] = '<div class="invalid-feedback">Required</div>';
+				}
+		
+				// Lab
+		
+				if ($formData['hasLab'] == 'Yes') {
+					if (!isset($formData['labSemester']) || empty($formData['labSemester'])) {
+						$validationResponse['validationErrors']['labSemester'] = false;
+						$validationResponse['feedback']['labSemester'] = '<div class="invalid-feedback">Required</div>';
+					}
+		
+					if (!isset($formData['labCreditBasis']) || empty($formData['labCreditBasis'])) {
+						$validationResponse['validationErrors']['labCreditBasis'] = false;
+						$validationResponse['feedback']['labCreditBasis'] = '<div class="invalid-feedback">Required</div>';
+					}
+		
+					if (!isset($formData['labCreditHours']) || empty($formData['labCreditHours'])) {
+						$validationResponse['validationErrors']['labCreditHours'] = false;
+						$validationResponse['feedback']['labCreditHours'] = '<div class="invalid-feedback">Required</div>';
+					}
+				}
+		
+				// Course Syllabus
+		
+				if (!isset($formData['courseSyllabus']) || empty($formData['courseSyllabus'])) {
+					$validationResponse['validationErrors']['courseSyllabus'] = false;
+					$validationResponse['feedback']['courseSyllabus'] = '<div class="invalid-feedback">Required</div>';
+				}
+		
+				// Lab Syllabus
+		
+				if ($formData['hasLab'] == 'Yes') {
+					if (!isset($formData['labSyllabus']) || empty($formData['labSyllabus'])) {
+						$validationResponse['validationErrors']['labSyllabus'] = false;
+						$validationResponse['feedback']['labSyllabus'] = '<div class="invalid-feedback">Required</div>';
+					}
+				}
+			}
+		);
     }
 }

@@ -42,6 +42,7 @@ use App\Service\EvaluationFilesService;
 use App\Service\EvaluationFormDefaultsService;
 use App\Service\EvaluationOptionsService;
 use App\Service\EvaluationProcessingService;
+use App\Service\EvaluationValidationService;
 use App\Service\FormOptionsService;
 use App\Service\LookupService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -371,6 +372,13 @@ class CoordinatorPageController extends AbstractController
 		{
 			$form = $this->createForm(EvaluationCreateType::class);
 			$form->handleRequest($request);
+
+			$validationResponse = [];
+			if ($form->isSubmitted()) {
+				$evaluationValidationService = new EvaluationValidationService();
+				$validationResponse = $evaluationValidationService->validateCreateEvaluation($form->getData());
+			}
+
 			if ($form->isSubmitted() && $form->isValid()) {
 				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
 				$evaluationProcessingService->createEvaluation($form->getData());
@@ -383,6 +391,7 @@ class CoordinatorPageController extends AbstractController
 				'prepend' => 'Create Evaluation',
 				'form' => $form->createView(),
 				'postData' => $form->getData(),
+				'validation' => $validationResponse ?? [],
 			]);
 		}
 

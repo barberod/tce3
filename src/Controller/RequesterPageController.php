@@ -8,11 +8,11 @@ use App\Form\EvaluationAppendAsRequesterType;
 use App\Form\EvaluationCreateType;
 use App\Form\EvaluationResubmitType;
 use App\Form\EvaluationUpdateType;
-use App\Form\ScratchFormType;
 use App\Repository\EvaluationRepository;
 use App\Service\EvaluationFilesService;
 use App\Service\EvaluationOptionsService;
 use App\Service\EvaluationProcessingService;
+use App\Service\EvaluationValidationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
@@ -86,6 +86,13 @@ class RequesterPageController extends AbstractController
 		{
 			$form = $this->createForm(EvaluationCreateType::class);
 			$form->handleRequest($request);
+
+			$validationResponse = [];
+			if ($form->isSubmitted()) {
+				$evaluationValidationService = new EvaluationValidationService();
+				$validationResponse = $evaluationValidationService->validateCreateEvaluation($form->getData());
+			}
+
 			if ($form->isSubmitted() && $form->isValid()) {
 				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
 				$evaluationProcessingService->createEvaluation($form->getData());
@@ -98,6 +105,7 @@ class RequesterPageController extends AbstractController
 				'prepend' => 'Create Evaluation',
 				'form' => $form->createView(),
 				'postData' => $form->getData(),
+				'validation' => $validationResponse ?? [],
 			]);
 		}
 
