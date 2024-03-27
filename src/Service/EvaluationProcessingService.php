@@ -30,17 +30,9 @@ class EvaluationProcessingService
 
 		/**
 		 * Create
-		 *
-		 * @param array $formData
 		 */
-		public function createEvaluation(array $formData): array
+		public function createEvaluation(array $formData): void
 		{
-			$validationService = new EvaluationValidationService();
-			if ($validationService->validateCreateEvaluation($formData)) {
-				$validationErrors = $validationService->validateCreateEvaluation($formData);
-				return $validationErrors;
-			}
-
 			// Create a new instance of the Evaluation entity
 			$evaluation = new Evaluation();
 
@@ -221,8 +213,6 @@ class EvaluationProcessingService
 			// Send email
 			$emailService = new EmailService($this->entityManager);
 			$emailService->emailToRequesterUponNewRequest($evaluation->getRequester()->getUsername(), $evaluation);
-
-			return [];
 		}
 
 		/**
