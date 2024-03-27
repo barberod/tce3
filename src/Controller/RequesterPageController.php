@@ -87,8 +87,6 @@ class RequesterPageController extends AbstractController
 			$form = $this->createForm(EvaluationCreateType::class);
 			$form->handleRequest($request);
 
-			$validationResponse = [];
-
 			if ($form->isSubmitted() && $form->isValid()) {
 				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
 				$evaluationProcessingService->createEvaluation($form->getData());

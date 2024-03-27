@@ -20,13 +20,11 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class EvaluationCreateType extends AbstractType
 {
 	private FormOptionsService $formOptionsService;
-	private array $labConstraints;
 
 	public function __construct(
 		FormOptionsService $formOptionsService
 	) {
 		$this->formOptionsService = $formOptionsService;
-		$this->labConstraints = [];
 	}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -52,9 +50,6 @@ class EvaluationCreateType extends AbstractType
 				'required' => false,
 				'placeholder' => '- Select one -',
 				'data' => 'No',
-				'constraints' => [
-					new NotBlank(),
-				],
 			])
 			->add('hasLab', ChoiceType::class, [
 				'label' => 'Does this course have an associated lab?',
@@ -67,9 +62,6 @@ class EvaluationCreateType extends AbstractType
 				'required' => false,
 				'placeholder' => '- Select one -',
 				'data' => 'No',
-				'constraints' => [
-					new NotBlank(),
-				],
 			])
 			->add('locatedUsa', ChoiceType::class, [
 				'label' => 'Is the institution located in the United States?',
@@ -82,9 +74,6 @@ class EvaluationCreateType extends AbstractType
 				'required' => false,
 				'placeholder' => '- Select one -',
 				'data' => 'Yes',
-				'constraints' => [
-					new NotBlank(),
-				],
 			])
 			->add('state', ChoiceType::class, [
 				'choices' => $this->formOptionsService->getUsStateOptions(),
@@ -130,33 +119,21 @@ class EvaluationCreateType extends AbstractType
 				'label' => 'Course Prefix',
 				'required' => false,
 				'help' => 'Example: "BIOL"',
-				'constraints' => [
-					new Length(['min' => 3]),
-				],
 			])
 			->add('courseNumber', TextType::class, [
 				'label' => 'Course Number',
 				'required' => false,
 				'help' => 'Example: "1012"',
-				'constraints' => [
-					new NotBlank(),
-				],
 			])
 			->add('courseTitle', TextType::class, [
 				'label' => 'Course Title',
 				'required' => false,
 				'help' => 'Example: "General Biology"',
-				'constraints' => [
-					new NotBlank(),
-				],
 			])
 			->add('courseSemester', TextType::class, [
 				'label' => 'Academic Term',
 				'required' => false,
 				'help' => 'Example: "Fall 2023"',
-				'constraints' => [
-					new NotBlank(),
-				],
 			])
 			->add('courseCreditBasis', ChoiceType::class, [
 				'label' => 'Credit System',
@@ -169,9 +146,6 @@ class EvaluationCreateType extends AbstractType
 				'multiple' => false,
 				'required' => false,
 				'placeholder' => '- Select one -',
-				'constraints' => [
-					new NotBlank(),
-				],
 			])
 			->add('courseCreditHours', ChoiceType::class, [
 				'label' => 'Credit Hours',
@@ -180,16 +154,10 @@ class EvaluationCreateType extends AbstractType
 				'multiple' => false,
 				'required' => false,
 				'placeholder' => '- Select one -',
-				'constraints' => [
-					new NotBlank(),
-				],
 			])
 			->add('courseSyllabus', FileType::class, [
 				'label' => 'Course Syllabus',
 				'required' => false,
-				'constraints' => [
-					new NotBlank(),
-				],
 			])
 			->add('courseDocument', FileType::class, [
 				'label' => 'Course Document',
@@ -268,9 +236,6 @@ class EvaluationCreateType extends AbstractType
 				'multiple' => false,
 				'required' => false,
 				'placeholder' => '---',
-				'constraints' => [
-					new NotBlank(),
-				],
 			])
 		;
 
@@ -291,106 +256,6 @@ class EvaluationCreateType extends AbstractType
 						'required' => false,
 						'choices' => $institutions,
 					]);
-				}
-
-				$validationResponse = [
-					'validationErrors' => [],
-					'feedback' => [],
-				];
-
-				// Req Admin
-
-				if (!isset($formData['requiredForAdmission']) || empty($formData['requiredForAdmission'])) {
-					$validationResponse['validationErrors']['requiredForAdmission'] = false;
-					$validationResponse['feedback']['requiredForAdmission'] = '<div class="invalid-feedback">Required</div>';
-				}
-		
-				// Institution
-		
-				if (!isset($formData['locatedUsa']) || empty($formData['locatedUsa'])) {
-					$validationResponse['validationErrors']['locatedUsa'] = false;
-					$validationResponse['feedback']['locatedUsa'] = '<div class="invalid-feedback">Required</div>';
-		
-				} else if ($formData['locatedUsa'] == 'Yes') {
-					if (!isset($formData['institutionListed']) || empty($formData['institutionListed'])) {
-						$validationResponse['validationErrors']['institutionListed'] = false;
-						$validationResponse['feedback']['institutionListed'] = '<div class="invalid-feedback">Required</div>';
-		
-					} else if ($formData['institutionListed'] == 'No') {
-						if (!isset($formData['institutionName']) || empty($formData['institutionName'])) {
-							$validationResponse['validationErrors']['institutionName'] = false;
-							$validationResponse['feedback']['institutionName'] = '<div class="invalid-feedback">Required</div>';
-						}
-					} else if ($formData['institutionListed'] == 'Yes') {
-						if (!isset($formData['institution']) || empty($formData['institution'])) {
-							$validationResponse['validationErrors']['institution'] = false;
-							$validationResponse['feedback']['institution'] = '<div class="invalid-feedback">Required</div>';
-		
-						}
-					}
-		
-				} else if ($formData['locatedUsa'] == 'No') {
-					if (!isset($formData['institutionName']) || empty($formData['institutionName'])) {
-						$validationResponse['validationErrors']['institutionName'] = false;
-						$validationResponse['feedback']['institutionName'] = '<div class="invalid-feedback">Required</div>';
-					}
-		
-					if (!isset($formData['country']) || empty($formData['country'])) {
-						$validationResponse['validationErrors']['country'] = false;
-						$validationResponse['feedback']['country'] = '<div class="invalid-feedback">Required</div>';
-					}
-				}
-		
-				// Course
-		
-				if (!isset($formData['courseSemester']) || empty($formData['courseSemester'])) {
-					$validationResponse['validationErrors']['courseSemester'] = false;
-					$validationResponse['feedback']['courseSemester'] = '<div class="invalid-feedback">Required</div>';
-				}
-		
-				if (!isset($formData['courseCreditBasis']) || empty($formData['courseCreditBasis'])) {
-					$validationResponse['validationErrors']['courseCreditBasis'] = false;
-					$validationResponse['feedback']['courseCreditBasis'] = '<div class="invalid-feedback">Required</div>';
-				}
-		
-				if (!isset($formData['courseCreditHours']) || empty($formData['courseCreditHours'])) {
-					$validationResponse['validationErrors']['courseCreditHours'] = false;
-					$validationResponse['feedback']['courseCreditHours'] = '<div class="invalid-feedback">Required</div>';
-				}
-		
-				// Lab
-		
-				if ($formData['hasLab'] == 'Yes') {
-					if (!isset($formData['labSemester']) || empty($formData['labSemester'])) {
-						$validationResponse['validationErrors']['labSemester'] = false;
-						$validationResponse['feedback']['labSemester'] = '<div class="invalid-feedback">Required</div>';
-					}
-		
-					if (!isset($formData['labCreditBasis']) || empty($formData['labCreditBasis'])) {
-						$validationResponse['validationErrors']['labCreditBasis'] = false;
-						$validationResponse['feedback']['labCreditBasis'] = '<div class="invalid-feedback">Required</div>';
-					}
-		
-					if (!isset($formData['labCreditHours']) || empty($formData['labCreditHours'])) {
-						$validationResponse['validationErrors']['labCreditHours'] = false;
-						$validationResponse['feedback']['labCreditHours'] = '<div class="invalid-feedback">Required</div>';
-					}
-				}
-		
-				// Course Syllabus
-		
-				if (!isset($formData['courseSyllabus']) || empty($formData['courseSyllabus'])) {
-					$validationResponse['validationErrors']['courseSyllabus'] = false;
-					$validationResponse['feedback']['courseSyllabus'] = '<div class="invalid-feedback">Required</div>';
-				}
-		
-				// Lab Syllabus
-		
-				if ($formData['hasLab'] == 'Yes') {
-					if (!isset($formData['labSyllabus']) || empty($formData['labSyllabus'])) {
-						$validationResponse['validationErrors']['labSyllabus'] = false;
-						$validationResponse['feedback']['labSyllabus'] = '<div class="invalid-feedback">Required</div>';
-					}
 				}
 			}
 		);
