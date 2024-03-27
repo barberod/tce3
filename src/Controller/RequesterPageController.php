@@ -88,10 +88,6 @@ class RequesterPageController extends AbstractController
 			$form->handleRequest($request);
 
 			$validationResponse = [];
-			if ($form->isSubmitted()) {
-				$evaluationValidationService = new EvaluationValidationService();
-				$validationResponse = $evaluationValidationService->validateCreateEvaluation($form->getData());
-			}
 
 			if ($form->isSubmitted() && $form->isValid()) {
 				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
@@ -104,8 +100,7 @@ class RequesterPageController extends AbstractController
 				'page_title' => 'Create Evaluation',
 				'prepend' => 'Create Evaluation',
 				'form' => $form->createView(),
-				'postData' => $form->getData(),
-				'validation' => $validationResponse ?? [],
+				'postData' => $form->getData()
 			]);
 		}
 

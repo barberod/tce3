@@ -373,12 +373,6 @@ class CoordinatorPageController extends AbstractController
 			$form = $this->createForm(EvaluationCreateType::class);
 			$form->handleRequest($request);
 
-			$validationResponse = [];
-			if ($form->isSubmitted()) {
-				$evaluationValidationService = new EvaluationValidationService();
-				$validationResponse = $evaluationValidationService->validateCreateEvaluation($form->getData());
-			}
-
 			if ($form->isSubmitted() && $form->isValid()) {
 				$evaluationProcessingService = new EvaluationProcessingService($this->entityManager, $this->security);
 				$evaluationProcessingService->createEvaluation($form->getData());
@@ -390,8 +384,7 @@ class CoordinatorPageController extends AbstractController
 				'page_title' => 'Create Evaluation',
 				'prepend' => 'Create Evaluation',
 				'form' => $form->createView(),
-				'postData' => $form->getData(),
-				'validation' => $validationResponse ?? [],
+				'postData' => $form->getData()
 			]);
 		}
 
