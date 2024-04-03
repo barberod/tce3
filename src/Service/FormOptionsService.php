@@ -62,6 +62,7 @@ class FormOptionsService
 				'FREE' => 'FREE',
 				'FREN' => 'FREN',
 				'GEOG' => 'GEOG',
+				'GRMN' => 'GRMN',
 				'HIST' => 'HIST',
 				'HTS' => 'HTS',
 				'HUM' => 'HUM',
